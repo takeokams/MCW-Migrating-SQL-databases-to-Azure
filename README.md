@@ -1,40 +1,40 @@
-# Migrating SQL databases to Azure
+# SQL データベースを Azure に移行する
 
-Tailspin Toys, a subsidiary of Wide World Importers (WWI), is the developer of several popular online video games. Founded in 2010, the company has experienced exponential growth since releasing the first installment of their most popular game franchise to include online multiplayer gameplay. They have since built upon this success by adding online capabilities to the majority of their game portfolio.
+Wide World Importers (WWI) の子会社である Tailspin Toys は、いくつかの人気のあるオンライン ゲームを開発した企業です。2010 年に設立された同社は、オンラインの多人数ゲームを含んだ、非常に人気のあるゲーム シリーズの第一弾リリース以降、急激な成長を遂げました。以来、同社はゲーム ポートフォリオの大部分にオンライン機能を追加することで、その成功を積み重ねてきました。
 
-To facilitate online gameplay, they host gaming services on-premises using rented hardware. Adding online gameplay has dramatically increased the popularity of their games, but the rapid increase in demand for their services has made supporting the current setup problematic.
+オンライン ゲームの提供を円滑に行うために、同社はレンタルのハードウェアを使って、オンプレミスでゲーム サービスをホストしています。オンライン ゲームの追加によって、同社のゲームの人気は劇的に上昇しましたが、サービスへの需要が急速に増大したため、現在の構成のサポートに問題が生じるようになりました。
 
-WWI is interested in learning more about how migrating to the cloud could help them improve their overall processes, as well as address the concerns and issues they have with their on-premises setup. They are looking for a proof-of-concept (PoC) for migrating the VMs and databases of a single game into the cloud. Their end goal is to migrate their whole service to Azure, so they would also like to understand better what the overall architecture might look after migrating to the cloud.
+WWI は、クラウドへの移行により、どのように全体的なプロセスを改善でき、どのようにオンプレミスのセットアップで抱えている懸念事項や問題を解決できるかについてさらに詳しく知ることに関心を抱いています。現在は、1 つのゲームの VM とデータベースをクラウドに移行するための概念実証 (PoC) を実施しようとしています。また、最終目標はサービス全体を Azure に移行することであるため、クラウドへの移行後に全体的なアーキテクチャがどのようになるかをさらに詳しく理解したいと考えています。
 
-June 2020
+2020 年 6 月
 
-## Target audience
+## 対象者
 
-- Database administrators
-- SQL/Database developers
-- Application developers
+- データベース管理者
+- SQL/データベース開発者
+- アプリケーション開発者
 
-## Abstracts
+## 要約
 
-### Workshop
+### ワークショップ
 
-In this workshop, you learn how to develop a plan for migrating on-premises VMs and SQL Server 2008 R2 databases into a combination of IaaS and PaaS services in Azure. You perform assessments to reveal any feature parity and compatibility issues between the customer's SQL Server 2008 R2 databases and the managed database offerings in Azure. You then design a solution for migrating their existing on-premises services, including VMs and databases, into Azure, with minimal or no down-time. Finally, you demonstrate some of the advanced SQL features available in Azure to improve security and performance in the customer's applications.
+このワークショップでは、オンプレミスの VM と SQL Server 2008 R2 データベースを Azure 内の IaaS サービスと PaaS サービスの組み合わせに移行する計画を作成する方法について学びます。お客様の SQL Server 2008 R2 データベースと Azure のマネージド データベース オファリングとの間で、機能パリティや互換性の問題がないかを明らかにするために、評価を実施します。次に、最小限のダウンタイムまたはゼロ ダウンタイムで VM およびデータベースを含む既存のオンプレミス サービスを Azure に移行するためのソリューションを設計します。最後に、お客様のアプリケーションのセキュリティとパフォーマンスを向上させる、Azure で利用可能な高度な SQL 機能のいくつかのデモを実施します。
 
-At the end of this workshop, you will be better able to design and implement a cloud migration solution for business-critical applications and databases.
+このワークショップを完了すると、ビジネス クリティカルなアプリケーションおよびデータベースのクラウド移行ソリューションをより効果的に設計および実装できるようになります。
 
-### Whiteboard design session
+### ホワイトボード設計セッション
 
-In this whiteboard design session, you work in a group to develop a plan for migrating on-premises VMs and SQL Server 2008 R2 databases into a combination of IaaS and PaaS services in Azure. You provide guidance on performing assessments to reveal any feature parity and compatibility issues between the customer's SQL Server 2008 R2 databases and the managed database offerings in Azure. You then design a solution for migrating their on-premises services, including VMs and databases, into Azure, with minimal or no down-time. Finally, you provide guidance on how to enable some of the advanced SQL features available in Azure to improve security and performance in the customer's applications.
+このホワイトボード設計セッションでは、オンプレミスの VM と SQL Server 2008 R2 データベースを Azure 内の IaaS サービスと PaaS サービスの組み合わせに移行する計画をグループで作成します。トレーナーは、評価を実施して、顧客の SQL Server 2008 R2 データベースと Azure のマネージド データベース オファリングとの間の機能のパリティと互換性の問題を明らかにするためのガイダンスを提供します。次に、最小限のダウンタイムまたはゼロ ダウンタイムで顧客の VM およびデータベースを含むオンプレミス サービスを Azure に移行するためのソリューションを設計します。最後に、Azure で高度な SQL 機能のいくつかを有効にして、顧客のアプリケーションにおけるセキュリティとパフォーマンスを向上する方法についてのガイダンスを提供します。
 
-At the end of this whiteboard design session, you will be better able to design a cloud migration solution for business-critical applications and databases.
+このホワイトボード設計セッションを完了すると、ビジネスクリティカルなアプリケーションとデータベースのクラウド移行計画をより効果的に設計できるようになります。
 
-### Hands-on lab
+### ハンズオンラボ
 
-In this hands-on lab, you implement a proof-of-concept (PoC) for migrating an on-premises SQL Server 2008 R2 database into Azure SQL Managed Instance (SQL MI). You perform assessments to reveal any feature parity and compatibility issues between the on-premises SQL Server 2008 R2 database and the managed database offerings in Azure. You then migrate the customer's on-premises gamer information web application and database into Azure, with minimal to no down-time. Finally, you enable some of the advanced SQL features available in SQL MI to improve security and performance in the customer's application.
+このハンズオン ラボでは、オンプレミスの SQL Server 2008 R2 データベースを Azure SQL Managed Instance (SQL MI) に移行するための概念実証 (PoC) を実施します。オンプレミスの SQL Server 2008 R2 データベースと Azure のマネージド データベース オファリングとの間で、機能パリティや互換性の問題がないかを明らかにするために、評価を実施します。続いて、ダウンタイムを最小限またはゼロに抑えながら、お客様のオンプレミスのプレイヤー情報 Web アプリケーションとデータベースを Azure に移行します。最後に、SQL MI で利用できる高度な SQL 機能の一部を有効にして、お客様のアプリケーションのセキュリティとパフォーマンスを向上させます。
 
-At the end of this hands-on lab, you will be better able to implement a cloud migration solution for business-critical applications and databases.
+このハンズオン ラボを完了すると、ビジネスクリティカルなアプリケーションおよびデータベースのクラウド移行ソリューションをより効果的に実装できるようになります。
 
-## Azure services and related products
+## Azure サービスと関連製品
 
 - Azure SQL Managed Instance (SQL MI)
 - Azure SQL Database (SQL DB)
@@ -42,28 +42,32 @@ At the end of this hands-on lab, you will be better able to implement a cloud mi
 - Microsoft Data Migration Assistant (DMA)
 - Azure App Service
 - SQL Server
-- SQL Server on VM
+- VM 上の SQL Server
 - SQL Server Management Studio (SSMS)
-- Azure virtual machines
-- Visual Studio 2019
-- Azure virtual network
-- Azure virtual network gateway
-- Azure Blob Storage account
+- Azure 仮想マシン
+- \[Visual Studio 2019\]
+- Azure 仮想ネットワーク
+- Azure 仮想ネットワーク ゲートウェイ
+- Azure Blob Storage アカウント
 
-## Related references
+## 関連リファレンス
 
 - [MCW](https://github.com/Microsoft/MCW)
 
-## Help & Support
+## ヘルプおよびサポート
 
-We welcome feedback and comments from Microsoft SMEs & learning partners who deliver MCWs.
+マイクロソフト SME および MCW を提供する学習パートナーからのフィードバックおよびコメントをお待ちしております。
 
-**_Having trouble?_**
+**日本語版について**
 
-- First, verify you have followed all written lab instructions (including the Before the Hands-on lab document).
-- Next, submit an issue with a detailed description of the problem.
-- Do not submit pull requests. Our content authors will make all changes and submit pull requests for approval.
+このリポジトリは、2020年6月時点の[MCW-Migrating-SQL-databases-to-Azure](https://github.com/microsoft/MCW-Migrating-SQL-databases-to-Azure)の日本語訳です。
 
-If you are planning to present a workshop, _review and test the materials early_! We recommend at least two weeks prior.
+**_お困りですか?_**
 
-### Please allow 5 - 10 business days for review and resolution of issues.
+- まず、ラボに記載されているすべての指示 (「ハンズオン ラボの前に」のドキュメントを含む) に従っていることを確認します。
+- 次に、問題を、その詳細な説明とともに送信します。
+- pull 要求を送信しないでください。コンテンツ作成者がすべての変更を行い、pull 要求を送信して承認を求めます。
+
+ワークショップ開催を計画している場合、_早めに資料をレビューおよびテストしてください。_少なくとも 2 週間前には実施することをお勧めします。
+
+### レビューと問題の解決には 5 ～ 10 営業日かかります。

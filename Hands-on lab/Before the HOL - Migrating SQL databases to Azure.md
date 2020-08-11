@@ -1,167 +1,163 @@
-![Microsoft Cloud Workshops](https://github.com/Microsoft/MCW-Template-Cloud-Workshop/raw/master/Media/ms-cloud-workshop.png "Microsoft Cloud Workshops")
+![マイクロソフト クラウド ワークショップ](https://github.com/Microsoft/MCW-Template-Cloud-Workshop/raw/master/Media/ms-cloud-workshop.png "マイクロソフト クラウド ワークショップ")
 
 <div class="MCWHeader1">
 Migrating SQL databases to Azure
 </div>
-
 <div class="MCWHeader2">
 Before the hands-on lab setup guide
 </div>
-
 <div class="MCWHeader3">
 June 2020
 </div>
+このドキュメントに記載されている情報 (URL 等のインターネット Web サイトに関する情報を含む) は、将来予告なしに変更されることがあります。特に断りがない限り、ここで使用している会社、組織、製品、ドメイン名、電子メール アドレス、ロゴ、人物、場所、イベントの例は、架空のものであり、実在する会社、組織、製品、ドメイン名、電子メール アドレス、ロゴ、人物、場所、イベントなどとは一切関係ありません。お客様ご自身の責任において、適用されるすべての著作権関連法規に従ったご使用を願います。このドキュメントのいかなる部分も、米国 Microsoft Corporation の書面による許諾を受けることなく、その目的を問わず、どのような形態であっても、複製または譲渡することは禁じられています。ここでいう形態とは、複写や記録など、電子的な、または物理的なすべての手段を含みます。ただしこれは、著作権法上のお客様の権利を制限するものではありません。
 
-Information in this document, including URL and other Internet Web site references, is subject to change without notice. Unless otherwise noted, the example companies, organizations, products, domain names, e-mail addresses, logos, people, places, and events depicted herein are fictitious, and no association with any real company, organization, product, domain name, e-mail address, logo, person, place or event is intended or should be inferred. Complying with all applicable copyright laws is the responsibility of the user. Without limiting the rights under copyright, no part of this document may be reproduced, stored in or introduced into a retrieval system, or transmitted in any form or by any means (electronic, mechanical, photocopying, recording, or otherwise), or for any purpose, without the express written permission of Microsoft Corporation.
+マイクロソフトは、このドキュメントに記載されている内容に関し、特許、特許申請、商標、著作権、またはその他の無体財産権を有する場合があります。別途マイクロソフトのライセンス契約上に明示の規定のない限り、このドキュメントはこれらの特許、商標、著作権、またはその他の無体財産権に関する権利をお客様に許諾するものではありません。
 
-Microsoft may have patents, patent applications, trademarks, copyrights, or other intellectual property rights covering subject matter in this document. Except as expressly provided in any written license agreement from Microsoft, the furnishing of this document does not give you any license to these patents, trademarks, copyrights, or other intellectual property.
+製造元や製品の名前、URL は情報の提供のみを目的としており、マイクロソフトは、これらの製造元、またはマイクロソフトの技術での製品の使用について、明示的、黙示的、または法的にいかなる表示または保証も行いません。製造元または製品の使用は、マイクロソフトによるその製造元または製品の推奨を意味するものではありません。サード パーティのサイトへのリンクが提供されている場合があります。このようなサイトはマイクロソフトの管理下にはなく、マイクロソフトは、リンクされたサイトの内容またはリンクされたサイトに含まれるリンク、あるいはこのようなサイトの変更または更新について責任を負いません。マイクロソフトは、リンクされたサイトから受信された Web キャストまたは他のいかなる形態の転送にも責任を負いません。マイクロソフトは、これらのリンクを便宜のみを目的として提供しており、いかなるリンクの使用も、マイクロソフトによるサイトまたはそこに含まれる製品の推奨を意味するものではありません。
 
-The names of manufacturers, products, or URLs are provided for informational purposes only and Microsoft makes no representations and warranties, either expressed, implied, or statutory, regarding these manufacturers or the use of the products with any Microsoft technologies. The inclusion of a manufacturer or product does not imply endorsement of Microsoft of the manufacturer or product. Links may be provided to third party sites. Such sites are not under the control of Microsoft and Microsoft is not responsible for the contents of any linked site or any link contained in a linked site, or any changes or updates to such sites. Microsoft is not responsible for webcasting or any other form of transmission received from any linked site. Microsoft is providing these links to you only as a convenience, and the inclusion of any link does not imply endorsement of Microsoft of the site or the products contained therein.
+© 2020 Microsoft Corporation.All rights reserved.
 
-© 2020 Microsoft Corporation. All rights reserved.
+Microsoft および <https://www.microsoft.com/en-us/legal/intellectualproperty/Trademarks/Usage/General.aspx> に記載されている商標は、Microsoft グループの商標です。その他すべての商標は、該当する各社が所有しています。
 
-Microsoft and the trademarks listed at <https://www.microsoft.com/en-us/legal/intellectualproperty/Trademarks/Usage/General.aspx> are trademarks of the Microsoft group of companies. All other trademarks are property of their respective owners.
-
-**Contents**
+**目次**
 
 <!-- TOC -->
 
-- [Migrating SQL databases to Azure before the hands-on lab setup guide](#migrating-sql-databases-to-azure-before-the-hands-on-lab-setup-guide)
-  - [Requirements](#requirements)
-  - [Before the hands-on lab](#before-the-hands-on-lab)
-    - [Task 1: Create a resource group](#task-1-create-a-resource-group)
-    - [Task 2: Register the Microsoft DataMigration resource provider](#task-2-register-the-microsoft-datamigration-resource-provider)
-    - [Task 3: Run ARM template to provision lab resources](#task-3-run-arm-template-to-provision-lab-resources)
+- [ハンズオン ラボ前の Azure への SQL データベースの移行の準備ガイド](#ハンズオン-ラボ前の-azure-への-sql-データベースの移行の準備ガイド)
+    - [必要条件](#必要条件)
+    - [ハンズオン ラボの前に](#ハンズオン-ラボの前に)
+        - [タスク 1: リソース グループを作成する](#タスク-1-リソース-グループを作成する)
+        - [タスク 2: Microsoft DataMigration リソース プロバイダーを登録する](#タスク-2-microsoft-datamigration-リソース-プロバイダーを登録する)
+        - [タスク 3: ARM テンプレートを実行してラボ リソースをプロビジョニングする](#タスク-3-arm-テンプレートを実行してラボ-リソースをプロビジョニングする)
 
 <!-- /TOC -->
+# ハンズオン ラボ前の Azure への SQL データベースの移行の準備ガイド
 
-# Migrating SQL databases to Azure before the hands-on lab setup guide
+## 必要条件
 
-## Requirements
+- Microsoft Azure サブスクリプションが従量課金制または MSDN であること。
+  - 無料評価版サブスクリプションでは動作しません。
 
-- Microsoft Azure subscription must be pay-as-you-go or MSDN.
-  - Trial subscriptions will _not_ work.
+> **重要**: このハンズオン ラボを完了するためには、Azure Active Directory アプリケーションやサービス プリンシパルを作成したり、サブスクリプションのロールを割り当てたりするための十分な権限を、Azure AD テナント内に持っている必要があります。
 
-> **Important**: You must have sufficient rights within your Azure AD tenant to create an Azure Active Directory application and service principal and assign roles on your subscription to complete this hands-on lab.
+## ハンズオン ラボの前に
 
-## Before the hands-on lab
+所要時間: 15 分
 
-Duration: 15 minutes
+この演習では、ハンズオン ラボの以降の部分で使用する環境をセットアップします。ここで挙げられた手順のすべては、ハンズオン ラボの "参加前" に行う必要があります。
 
-In this exercise, you set up your environment for use in the rest of the hands-on lab. You should follow all steps provided _before_ attending the Hands-on lab.
+> **重要**: 多くの Azure リソースにおいて、グローバルに一意の名前を付ける必要があります。これらのステップ全体を通して、リソース名の一部として "SUFFIX" という単語が使用されています。リソースに一意の名前を付けるには、これをマイクロソフトのエイリアス、イニシャル、または別の値に置き換える必要があります。
 
-> **Important**: Many Azure resources require globally unique names. Throughout these steps, the word "SUFFIX" appears as part of resource names. You should replace this with your Microsoft alias, initials, or another value to ensure resources are uniquely named.
+### タスク 1: リソース グループを作成する
 
-### Task 1: Create a resource group
+1. [Azure portal](https://portal.azure.com) で、\[Azure services\] リストから \[**Resource groups**\] を選択します。
+   
+   ![\[Azure services\] リストで \[Resource groups\] が強調表示されている。](media/azure-services-resource-groups.png "[Azure services]")
 
-1. In the [Azure portal](https://portal.azure.com), select **Resource groups** from the Azure services list.
+2. \[Resource groups\] ブレードで、\[**+Add**\] を選択します。
+   
+   ![\[Resource groups\] ブレードのツールバーの \[+Add\] が強調表示されている。](media/resource-groups-add.png "[Resource groups]")
 
-   ![Resource groups is highlighted in the Azure services list.](media/azure-services-resource-groups.png "Azure services")
+3. \[Create a resource group\] の \[**Basics**\] タブで、以下を入力します。
+   
+   - **Subscription**: このハンズオン ラボで使用するサブスクリプションを選択します。
+   - **Resource group**: 新しいリソース グループの名前として「`hands-on-lab-SUFFIX`」と入力します。
+   - **Region**: このハンズオン ラボで使用するリージョンを選択します。
+   
+   ![\[Create a resource group\] の \[Basics\] タブに上記の値が入力されている。](media/create-resource-group.png "[Create a resource group]")
 
-2. On the Resource groups blade, select **+Add**.
+4. \[**Review + Create**\] を選択します。
 
-   ![+Add is highlighted in the toolbar on Resource groups blade.](media/resource-groups-add.png "Resource groups")
+5. \[**Review + create**\] タブで、"Validation passed" というメッセージが表示されていることを確認した後、\[**Create**\] を選択します。
 
-3. On the Create a resource group **Basics** tab, enter the following:
+### タスク 2: Microsoft DataMigration リソース プロバイダーを登録する
 
-   - **Subscription**: Select the subscription you are using for this hands-on lab.
-   - **Resource group**: Enter `hands-on-lab-SUFFIX` as the name of the new resource group.
-   - **Region**: Select the region you are using for this hands-on lab.
+このタスクでは、Azure サブスクリプションに `Microsoft.DataMigration` リソース プロバイダーを登録します。このリソース プロバイダーの登録は、サブスクリプション内での Azure Database Migration Service の作成を可能にするために必要となります。
 
-   ![The values specified above are entered into the Create a resource group Basics tab.](media/create-resource-group.png "Create resource group")
+1. [Azure portal](https://portal.azure.com) で、\[Azure services\] リストから \[**Subscriptions**\] を選択します。
+   
+   ![\[Azure services\] リストの \[Subscriptions\] が強調表示されている。](media/azure-services-subscriptions.png "[Azure services]")
 
-4. Select **Review + Create**.
+2. リストから、このハンズオン ラボで使用するサブスクリプションを選択します。
+   
+   ![\[Subscriptions\] のリストで対象サブスクリプションが強調表示されている。](media/azure-subscriptions.png "[Subscriptions] のリスト")
 
-5. On the **Review + create** tab, ensure the Validation passed message is displayed and then select **Create**.
+3. \[Subscriptions\] ブレードで、左側のメニューから \[**Resource providers**\] を選択した後、フィルター ボックスに「migration」と入力します。
+   
+   ![\[Subscriptions\] ブレードの左側のメニューの \[Resource providers\] が強調表示されている。\[Resource providers\] ブレードのフィルター ボックスに「migration」と入力されている。](media/azure-portal-subscriptions-resource-providers-register-microsoft-datamigration.png "リソース プロバイダーの登録")
 
-### Task 2: Register the Microsoft DataMigration resource provider
+4. `Microsoft.DataMigration` プロバイダーの \[Status\] が `NotRegistered` になっている場合、ツールバーの \[**Register**\] を選択します。
+   
+   ![\[Resource providers\] のツールバーの \[Register\] ボタンが強調表示されている。](media/azure-subscriptions-resource-providers-toolbar.png "[Resource providers] のツールバー")
 
-In this task, you register the `Microsoft.DataMigration` resource provider with your Azure subscription. Registration of this resource provider is necessary to allow the creation of an Azure Database Migration Service within your subscription.
+5. 登録が完了するまで数分程度かかる場合があります。必ず、\[Status\] が \[**Registered**\] に設定されていることを確認してから、次に進んでください。ツールバーの \[**Refresh**\] を選択して、\[Status\] を更新して確認する必要がある場合があります。
+   
+   ![Microsoft.DataMigration リソース プロバイダーの横の \[Registered\] が強調表示されている。](media/resource-providers-datamigration-registered.png "Microsoft DataMigration リソース プロバイダー")
 
-1. In the [Azure portal](https://portal.azure.com), select **Subscriptions** from the Azure services list.
+### タスク 3: ARM テンプレートを実行してラボ リソースをプロビジョニングする
 
-   ![Subscriptions is highlighted in the Azure services list.](media/azure-services-subscriptions.png "Azure services")
+このタスクでは、Azure Resource Manager (ARM) テンプレートを実行して、このハンズオン ラボに必要なリソースを作成します。VM と SQL MI 間の通信を容易にするために、さまざまなコンポーネントが新しい仮想ネットワーク (VNet) 内に展開されます。ARM テンプレートは、ポート 3389 を開いて、JumpBox への RDP 接続を許可するなど、SQL MI と VM に関連付けられたネットワーク セキュリティ グループに受信および送信セキュリティ規則も追加します。ARM テンプレートは、リソースを作成するだけでなく、各 VM で PowerShell スクリプトを実行して、ソフトウェアをインストールし、サーバーを設定します。ARM テンプレートが作成するリソースには、以下のようなものがあります。
 
-2. Select the subscription you are using for this hands-on lab from the list.
+- 3 つのサブネット (ManagedInstance、Management、および Gateway) を持つ仮想ネットワーク
+- Gateway サブネットに関連付けられた仮想ネットワーク ゲートウェイ
+- ルート テーブル
+- ManagedInstance サブネットに追加される Azure SQL Managed Instance (SQL MI)
+- Visual Studio 2019 Community Edition と SQL Server Management Studio を備えた JumpBox (SSMS がインストールされ、Management サブネットに追加される)
+- Data Migration Assistant (DMA) がインストールされ、Management サブネットに追加される SQL Server 2008 R2 VM
+- Azure Database Migration Service (DMS)
+- Azure App Service Plan と App Service (Web App)
+- Azure Blob Storage アカウント
 
-   ![The target subscription is highlighted in the subscriptions list.](media/azure-subscriptions.png "Subscriptions list")
+> **注**: ラボ リソースを手動でプロビジョニングおよび設定する手順については、[手動によるリソースのセットアップ ガイド](./Manual-resource-setup.md)を参照してください。
 
-3. On the Subscription blade, select **Resource providers** from the left-hand menu and then enter "migration" into the filter box.
+1. [Azure portal](https://portal.azure.com/) で、\[**Show portal menu**\] アイコンを選択した後、メニューから \[**+Create a resource**\] を選択します。
+   
+   ![\[Show portal menu\] アイコンが強調表示され、ポータル メニューが表示されている。ポータル メニューの \[Create a resource\] が強調表示されている。](media/create-a-resource.png "[Create a resource]")
 
-   ![Resource providers is highlighted in the left-hand menu of the Subscription blade. On the Resource providers blade, migration is entered into the filter box.](media/azure-portal-subscriptions-resource-providers-register-microsoft-datamigration.png "Resource provider registration")
+2. ARM テンプレートを実行する前に、サブスクリプションで SQL MI をプロビジョニングできることを簡単に確認しておくことをお勧めします。[Azure portal](https://portal.azure.com) で、\[**+Create a resource**\] を選択して、Marketplace 検索ボックスに「sql managed instance」と入力した後、結果から \[**Azure SQL Managed Instance**\] を選択します。
+   
+   ![Azure のナビゲーション ペインで \[+Create a resource\] が選択され、Marketplace 検索ボックスに「sql managed instance」と入力されている。結果で \[Azure SQL Managed Instance\] が選択されている。](media/create-resource-sql-mi.png "SQL Managed Instance の作成")
 
-4. If the status of the `Microsoft.DataMigration` provider is `NotRegistered`, select **Register** in the toolbar.
+3. \[Azure SQL Managed Instance\] ブレードで、\[**Create**\] を選択します。
+   
+   ![\[Azure SQL Managed Instance\] ブレードの \[Create\] ボタンが強調表示されている。](media/sql-mi-create.png "Azure SQL Managed Instance の作成")
 
-   ![The Register button is highlighted in the Resource Providers toolbar.](media/azure-subscriptions-resource-providers-toolbar.png "Resource providers toolbar")
+4. \[SQL Managed Instance\] ブレードで、"Managed instance creation is not available for the chosen subscription type..." というメッセージを探します。このメッセージは、\[SQL Managed Instance\] ブレードの下部に表示されます。
+   
+   ![選択されたサブスクリプションで SQL MI を作成できないことを知らせるメッセージが表示されている。](media/sql-mi-creation-not-available.png "SQL MI を作成できないことを知らせるメッセージ")
+   
+   > **注**: "Managed instance creation is not available for the chosen subscription type" というメッセージが表示されている場合、[SQL Managed Instance のクォータを増加させる](https://docs.microsoft.com/azure/sql-database/sql-database-managed-instance-resource-limits#obtaining-a-larger-quota-for-sql-managed-instance)手順を実行してから、次のステップに進みます。
 
-5. It can take a couple of minutes for the registration to complete. Make sure you see the status set to **Registered** before moving on. You may need to select **Refresh** on the toolbar to see the updated status.
-
-   ![Registered is highlighted next to the Microsoft.DataMigration resource provider.](media/resource-providers-datamigration-registered.png "Microsoft DataMigration Resource Provider")
-
-### Task 3: Run ARM template to provision lab resources
-
-In this task, you run an Azure Resource Manager (ARM) template to create the resources required for this hands-on lab. The components are deployed inside a new virtual network (VNet) to facilitate communication between the VMs and SQL MI. The ARM template also adds inbound and outbound security rules to the network security groups associated with SQL MI and the VMs, including opening port 3389 to allow RDP connections to the JumpBox. In addition to creating resources, the ARM template also executes PowerShell scripts on each of the VMs to install software and configure the servers. The resources created by the ARM template include:
-
-- A virtual network with three subnets, ManagedInstance, Management, and a Gateway subnet.
-- A virtual network gateway, associated with the Gateway subnet.
-- A route table.
-- Azure SQL Managed Instance (SQL MI), added to the ManagedInstance subnet.
-- A JumpBox with Visual Studio 2019 Community Edition and SQL Server Management Studio (SSMS installed, added to the Management subnet).
-- A SQL Server 2008 R2 VM with the Data Migration Assistant (DMA) installed, added to the Management subnet.
-- Azure Database Migration Service (DMS).
-- Azure App Service Plan and App Service (Web App).
-- Azure Blob Storage account.
-
-> **Note**: You can review the steps to manually provision and configure the lab resources in the [Manual resource setup guide](./Manual-resource-setup.md).
-
-1. In the [Azure portal](https://portal.azure.com/), select the **Show portal menu** icon and then select **+Create a resource** from the menu.
-
-   ![The Show portal menu icon is highlighted, and the portal menu is displayed. Create a resource is highlighted in the portal menu.](media/create-a-resource.png "Create a resource")
-
-2. Before running the ARM template, it is beneficial to quickly verify that you can provision SQL MI in your subscription. In the [Azure portal](https://portal.azure.com), select **+Create a resource**, enter "sql managed instance" into the Search the Marketplace box, and then select **Azure SQL Managed Instance** from the results.
-
-   ![+Create a resource is selected in the Azure navigation pane, and "sql managed instance" is entered into the Search the Marketplace box. Azure SQL Managed Instance is selected in the results.](media/create-resource-sql-mi.png "Create SQL Managed Instance")
-
-3. Select **Create** on the Azure SQL Managed Instance blade.
-
-   ![The Create button is highlighted on the Azure SQL Managed Instance blade.](media/sql-mi-create.png "Create Azure SQL Managed Instance")
-
-4. On the SQL managed instance blade, look for a message stating that "Managed instance creation is not available for the chosen subscription type...", which will be displayed near the bottom of the SQL managed instance blade.
-
-   ![A message is displayed stating that SQL MI creation not available in the selected subscription.](media/sql-mi-creation-not-available.png "SQL MI creation not available")
-
-   > **Note**: If you see the message stating that Managed Instance creation is not available for the chosen subscription type, follow the instructions for [obtaining a larger quota for SQL Managed Instance](https://docs.microsoft.com/azure/sql-database/sql-database-managed-instance-resource-limits#obtaining-a-larger-quota-for-sql-managed-instance) before proceeding with the following steps.
-
-5. You are now ready to begin the ARM template deployment. To open a custom deployment screen in the Azure portal, select the Deploy to Azure button below:
-
+5. これで、ARM テンプレートの展開を開始する準備が整いました。下の \[Deploy to Azure\] ボタンを選択して、Azure portal で \[Custom deployment\] 画面を開きます。
+   
    <a href ="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FMCW-Migrating-SQL-databases-to-Azure%2Fmaster%2FHands-on%20lab%2Flab-files%2FARM-template%2Fazure-deploy.json" target="_blank" title="Deploy to Azure">
    <img src="http://azuredeploy.net/deploybutton.png"/>
    </a>
 
-   > **Note**: Running the ARM template occasionally results in a `ResourceDeploymentFailure` error, with a code of `VnetSubnetConflictedWithIntendedPolicy`. This error is not caused by an issue with the ARM template and appears to be the result of backend resource deployment issues in Azure. At this time, the workaround is first to try the deployment in a different region. If that does not work, try going through the [Manual resource setup guide](./Manual-resource-setup.md) to create the SQL MI database.
+   > **注**: ARM テンプレートを実行すると、`VnetSubnetConflictedWithIntendedPolicy` のコードで `ResourceDeploymentFailure` エラーが発生する場合があります。このエラーは、ARM テンプレートの問題によるものではなく、Azure のバックエンド リソースの展開に関する問題の結果として発生するものと考えられます。現時点における回避策として、まず、異なるリージョンでの展開を試してみます。うまくいかない場合は、[手動によるリソースのセットアップ ガイド](./Manual-resource-setup.md)を読んで、SQL MI データベースの作成を試してみます。
 
-6. On the custom deployment screen in the Azure portal, enter the following:
+6. Azure portal の \[Custom deployment\] 画面で、以下を入力します。
+   
+   - **Subscription**: このハンズオン ラボで使用するサブスクリプションを選択します。
+   - **Resource group**: ドロップダウン リストから \[hands-on-lab-SUFFIX\] リソース グループを選択します。
+   - **Location**: \[hands-on-lab-SUFFIX\] リソース グループで使用した場所を選択します。
+   - **Managed Instance Name**: 既定値 "**sqlmi**" をそのまま使用します。実際の名前はグローバルに一意である必要があるため、リソース グループから一意の文字列が生成され、プロビジョニング中に名前に追加されます。
+   - **Admin Username**: 既定値 "**sqlmiuser**" をそのまま使用します。
+   - **Admin Password**: 既定値 "**Password.1234567890**" をそのまま使用します。
+   - **V Cores**: 既定値 "**16**" をそのまま使用します。
+   - **Storage Size in GB**: 既定値 "**32**" をそのまま使用します。
+   - チェックボックスをオンにして、Azure Marketplace の使用条件に同意します。
+   
+   ![\[Custom deployment\] ブレードが表示され、\[Custom deployment\] ブレードで上記の情報が入力されている。](media/azure-custom-deployment.png "[Custom deployment] ブレード")
 
-   - **Subscription**: Select the subscription you are using for this hands-on lab.
-   - **Resource group**: Select the hands-on-lab-SUFFIX resource group from the dropdown list.
-   - **Location**: Select the location you used for the hands-on-lab-SUFFIX resource group.
-   - **Managed Instance Name**: Accept the default value, **sqlmi**. The actual name must be globally unique, so a unique string is generated from your Resource Group and appended to the name during provisioning.
-   - **Admin Username**: Accept the default value, **sqlmiuser**.
-   - **Admin Password**: Accept the default value, **Password.1234567890**.
-   - **V Cores**: Accept the default value, **16**.
-   - **Storage Size in GB**: Accept the default value, **32**.
-   - Check the box to agree to the Azure Marketplace terms and conditions.
+7. \[**Purchase**\] を選択して、JumpBox VM と SQL Managed Instance のプロビジョニングを開始します。
+   
+   > **注**: SQL MI が含まれているため、カスタム ARM テンプレートの展開が完了するまで 6 時間以上かかる場合があります。ただし、大半のリソースの展開は、数分以内に完了します。JumpBox および SQL Server 2008 R2 VM は、15 分程度で完了するはずです。
 
-   ![The Custom deployment blade is displayed, and the information above is entered on the Custom deployment blade.](media/azure-custom-deployment.png "Custom deployment blade")
+8. 展開の進捗状況を監視するには、Azure portal で \[hands-on-lab-SUFFIX\] リソース グループにナビゲートした後、左側のメニューから \[**Deployments**\] を選択します。展開に **Microsoft.Template** という名前が付けられています。それを選択して、テンプレートの各項目の進捗状況を確認します。
+   
+   ![\[hands-on-lab-SUFFIX\] リソース グループの左側のメニューでメニュー項目 \[Deployments\] が選択され、展開名 Microsoft.Template が強調表示されている。](media/resource-group-deployments.png "リソース グループの展開")
 
-7. Select **Purchase** to start provisioning the JumpBox VM and SQL Managed Instance.
+> 数時間後に再び確認して、SQL MI のプロビジョニングの進捗状況を監視します。プロビジョニングが 7 時間以上続いている場合は、Azure portal でサポート チケットを発行して、プロビジョニング プロセスのブロック解除を Microsoft サポートに依頼する必要がある可能性があります。
 
-   > **Note**: The deployment of the custom ARM template can take over 6 hours due to the inclusion of SQL MI. However, the deployment of most of the resources completes within a few minutes. The JumpBox and SQL Server 2008 R2 VMs should finish in about 15 minutes.
-
-8. You can monitor the progress of the deployment by navigating to the hands-on-lab-SUFFIX resource group in the Azure portal, and then selecting **Deployments** from the left-hand menu. The deployment is named **Microsoft.Template**. Select that to view the progress of each item in the template.
-
-   ![The Deployments menu item is selected in the left-hand menu of the hands-on-lab-SUFFIX resource group and the Microsoft.Template deployment is highlighted.](media/resource-group-deployments.png "Resource group deployments")
-
-> Check back in a few hours to monitor the progress of your SQL MI provisioning. If the provisioning goes on for longer than 7 hours, you may need to issue a support ticket in the Azure portal to request the provisioning process be unblocked by Microsoft support.
-
-You should follow all steps provided _before_ attending the Hands-on lab.
+ここで挙げられた手順のすべては、ハンズオン ラボの "参加前" に行う必要があります。

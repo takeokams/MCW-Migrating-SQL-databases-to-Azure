@@ -1,731 +1,731 @@
-# Manual resource deployment and setup guide
+# 手動によるリソースの展開およびセットアップ ガイド
 
-This guide provides step-by-step instructions to manually provision and the configure resources created by the ARM template referenced in the before the hands-on lab guide.
+このガイドでは、ハンズオン ラボ前のガイドで言及した、ARM テンプレートが作成したリソースを、手動でプロビジョニングおよび設定する手順について順を追って説明します。
 
-June 2020
+2020 年 6 月
 
-**Contents**:
+**目次:** 
 
-- [Manual resource deployment and setup guide](#manual-resource-deployment-and-setup-guide)
-  - [Task 1: Create a virtual network](#task-1-create-a-virtual-network)
-  - [Task 2: Create a VPN gateway](#task-2-create-a-vpn-gateway)
-  - [Task 3: Provision SQL MI](#task-3-provision-sql-mi)
-  - [Task 4: Create the JumpBox VM](#task-4-create-the-jumpbox-vm)
-  - [Task 5: Create SQL Server 2008 R2 virtual machine](#task-5-create-sql-server-2008-r2-virtual-machine)
-  - [Task 6: Create Azure Database Migration Service](#task-6-create-azure-database-migration-service)
-  - [Task 7: Provision a Web App](#task-7-provision-a-web-app)
-  - [Task 8: Create an Azure Blob Storage account](#task-8-create-an-azure-blob-storage-account)
-  - [Task 9: Connect to the JumpBox](#task-9-connect-to-the-jumpbox)
-  - [Task 10: Install required software on the JumpBox](#task-10-install-required-software-on-the-jumpbox)
-  - [Task 11: Connect to SqlServer2008 VM](#task-11-connect-to-sqlserver2008-vm)
-  - [Task 12: Configure the WWI TailspinToys database on the SqlServer2008 VM](#task-12-configure-the-wwi-tailspintoys-database-on-the-sqlserver2008-vm)
+- [手動によるリソースの展開およびセットアップ ガイド](#手動によるリソースの展開およびセットアップ-ガイド)
+    - [タスク 1: 仮想ネットワークを作成する](#タスク-1-仮想ネットワークを作成する)
+    - [タスク 2: VPN ゲートウェイを作成する](#タスク-2-vpn-ゲートウェイを作成する)
+    - [タスク 3: SQL MI をプロビジョニングする](#タスク-3-sql-mi-をプロビジョニングする)
+    - [タスク 4: JumpBox VM を作成する](#タスク-4-jumpbox-vm-を作成する)
+    - [タスク 5: SQL Server 2008 R2 仮想マシンを作成する](#タスク-5-sql-server-2008-r2-仮想マシンを作成する)
+    - [タスク 6: Azure Database Migration Service を作成する](#タスク-6-azure-database-migration-service-を作成する)
+    - [タスク 7: Web App をプロビジョニングする](#タスク-7-web-app-をプロビジョニングする)
+    - [タスク 8: Azure Blob Storage アカウントを作成する](#タスク-8-azure-blob-storage-アカウントを作成する)
+    - [タスク 9: JumpBox に接続する](#タスク-9-jumpbox-に接続する)
+    - [タスク 10: JumpBox に必要なソフトウェアをインストールする](#タスク-10-jumpbox-に必要なソフトウェアをインストールする)
+    - [タスク 11: SqlServer2008 VM に接続する](#タスク-11-sqlserver2008-vm-に接続する)
+    - [タスク 12: SqlServer2008 VM 上で WWI TailspinToys データベースを構成する](#タスク-12-sqlserver2008-vm-上で-wwi-tailspintoys-データベースを構成する)
 
-> **Important**: Many Azure resources require globally unique names. Throughout these steps, you will see the word "SUFFIX" as part of resource names. You should replace this with your Microsoft alias, initials, or another value to ensure resources are uniquely named.
+> **重要**: 多くの Azure リソースにおいて、グローバルに一意の名前を付ける必要があります。これらのステップ全体を通して、リソース名の一部として "SUFFIX" という単語が使用されています。リソースに一意の名前を付けるには、これをマイクロソフトのエイリアス、イニシャル、または別の値に置き換える必要があります。
 
-## Task 1: Create a virtual network
+## タスク 1: 仮想ネットワークを作成する
 
-In this task, you create and configure a virtual network (VNet), which will contain your SQL managed instance, JumpBox VM, and a few other resources use throughout this hands-on lab. Once provisioned, you will associate the route table with the ManagedInstance subnet, and add a Management subnet to the VNet.
+このタスクでは、仮想ネットワーク (VNet) を作成および設定します。これには、SQL Managed Instance、JumpBox VM、およびこのハンズオン ラボ全体を通して使用される他のいくつかのリソースが含まれます。プロビジョニング後、ルート テーブルを ManagedInstance サブネットに関連付け、Management サブネットを VNet に追加します。
 
-1. In the [Azure portal](https://portal.azure.com/), select the **Show portal menu** icon and then select **+Create a resource** from the menu.
+1. [Azure portal](https://portal.azure.com/) で、\[**Show portal menu**\] アイコンを選択した後、メニューから \[**+Create a resource**\] を選択します。
+   
+   ![ポータル メニュー表示アイコンが強調表示され、ポータル メニューが表示されている。ポータル メニューの \[Create a resource\] が強調表示されている。](media/create-a-resource.png "[Create a resource]")
 
-   ![The Show portal menu icon is highlighted, and the portal menu is displayed. Create a resource is highlighted in the portal menu.](media/create-a-resource.png "Create a resource")
+2. Marketplace 検索ボックスに「virtual network」と入力した後、結果から \[**Virtual Network**\] を選択します。
+   
+   ![Marketplace 検索ボックスに「virtual network」と入力されている。結果で \[Virtual Network\] が選択されている。](media/create-resource-vnet.png "仮想ネットワークの作成")
 
-2. Enter "virtual network" into the Search the Marketplace box, and then select **Virtual Network** from the results.
+3. \[Virtual Network\] ブレードで、\[**Create**\] を選択します。
+   
+   ![\[Virtual Network\] ブレードの \[Create\] ボタンが強調表示されている。](media/vnet-create.png "仮想ネットワークの作成")
 
-   !["Virtual Network" is entered into the Search the Marketplace box. Virtual Network is selected in the results.](media/create-resource-vnet.png "Create virtual Network")
-
-3. Select **Create** on the Virtual Network blade.
-
-   ![The Create button is highlighted on the Virtual Network blade.](media/vnet-create.png "Create Virtual Network")
-
-4. On the Create virtual network **Basics** tab, enter the following:
-
+4. \[Create virtual network\] の \[**Basics**\] タブで、以下を入力します。
+   
    Project details:
-
-   - **Subscription**: Select the subscription you are using for this hands-on lab.
-   - **Resource group**: Select the **hands-on-lab-SUFFIX** resource group from the list.
-
+   
+   - **Subscription**: このハンズオン ラボで使用するサブスクリプションを選択します。
+   - **Resource group**: リストから \[**hands-on-lab-SUFFIX**\] リソース グループを選択します。
+   
    Instance details:
+   
+   - **Name**: 「`hands-on-lab-SUFFIX-vnet`」と入力します。
+   - **Region**: このハンズオン ラボのリソースで使用するリージョンを選択します。
+   
+   ![\[Create virtual network\] の \[Basics\] タブの該当フィールドに上記の値が入力されている。](media/create-virtual-network-basics-tab.png "[Create virtual network] の [Basics] タブ")
 
-   - **Name**: Enter `hands-on-lab-SUFFIX-vnet`
-   - **Region**: Select the region you are using for resources in this hands-on lab.
+5. \[**Next: IP Addresses\] を選択します。**
 
-   ![The values specified above are entered into the appropriate fields on the Create Virtual Network Basics tab.](media/create-virtual-network-basics-tab.png "Create virtual network Basics tab")
+6. \[**IP Addresses**\] タブで、サブネット下の \[**default**\] を選択し、以下のようにサブネットのプロパティを編集します。
+   
+   - **Subnet** **name**: 「`ManagedInstance`」と入力します。
+   - **Address space**: 既定値をそのまま使用します。**10.X.0.0/24** の形式で、/24 のサブネット マスクが使用され、VNet の IPv4 アドレス空間で示されているアドレス空間内に含まれているはずです。
+   - \[**Save**\] を選択します。
+   
+   ![\[Create virtual network\] の \[IP Addresses\] タブの該当フィールドに上記の値が入力されている。](media/create-virtual-network-ip-addresses-tab.png "[Create virtual network] の [IP Addresses] タブ")
 
-5. Select **Next: IP Addresses**.
+7. \[**Review + create**\] を選択します。残りのタブに関しては既定値が使用されるため、スキップして構いません。
 
-6. On the **IP Addresses** tab, select **default** under subnets and edit the subnet's properties as follows:
+8. \[**Review + create**\] タブで、"**Validation passed**" というメッセージが表示されていることを確認し、\[**Create**\] を選択します。仮想ネットワークのプロビジョニングが完了するまで数秒かかります。
 
-   - **Subnet Name**: Enter `ManagedInstance`
-   - **Address space**: Accept the default value. This should have a subnet mask of /24, and be within the address space indicated in the VNet's IPv4 address space, in the format **10.X.0.0/24**.
-   - Select **Save**.
+9. 完了すると、Azure portal で \[Deployment succeeded\] 通知が届きます。通知内の \[**Go to resource**\] を選択します。
+   
+   ![Azure portal の \[Deployment succeeded\] 通知内の \[Go to resource\] ボタンが強調表示されている。](media/vnet-go-to-resource.png "[Deployment succeeded] 通知")
 
-   ![On the Create virtual IP Addresses tab, the values specified above are entered into the appropriate fields.](media/create-virtual-network-ip-addresses-tab.png "Create virtual network IP addresses tab")
+10. \[Virtual network\] ブレードで、左側のメニューの \[Settings\] 下の \[**Subnets**\] を選択した後、上部のメニューから \[**+ Subnet**\] を選択します。
+    
+    ![\[Virtual network\] ブレードの左側のメニュー項目の \[Subnets\] が強調表示および選択され、上部のメニューの \[+ Subnet\] が強調表示されている。](media/vnet-subnets-add.png "サブネットの追加")
 
-7. Select **Review + create**. The default values will be used for the remaining tabs, so they can be skipped.
+11. \[Add subnet\] ブレードで、以下を入力します。
+    
+    - **Name**: 「`Management`」と入力します。
+    - **Address range**: 既定値をそのまま使用します。/24 のサブネット マスクが使用され、VNet のアドレス範囲内に含まれているはずです。
+    - **NAT gateway**: \[**None**\] が設定された状態のままにします。
+    - **Network security group**: \[**None**\] が設定された状態のままにします。
+    - **Route table**: \[**None**\] が設定された状態のままにします。
+    - **Service endpoints**: \[**0 selected**\] が設定された状態のままにします。
+    - **Subnet delegation**: \[**None**\] が設定された状態のままにします。
+    
+    ![\[Add subnet\] ブレードの \[Name\] フィールドに「Management」と入力され、残りの設定には既定値が指定されている。](media/add-subnet-management.png "[Add subnet]")
 
-8. On the **Review + create** tab, ensure the **Validation passed** message is displayed and select **Create**. It will take a few seconds for the virtual network to provision.
+12. \[**OK**\] を選択します。
 
-9. When it completes, you will get a notification in the Azure portal that the deployment succeeded. Select **Go to resource** within the notification.
+13. \[**Subnets**\] ブレードに戻り、\[**+ Gateway subnet**\] を選択します。
+    
+    ![左側のメニューの \[Subnets\] が選択および強調表示されている。\[Subnets\] ブレードの \[+ Gateway subnet\] が強調表示されている。](media/vnet-add-gateway-subnet.png "[Subnets]")
 
-   ![The Go to resource button is highlighted in the deployment succeeded notification in the Azure portal.](media/vnet-go-to-resource.png "Deployment succeeded notification")
+14. ゲートウェイ サブネット名として `GatewaySubnet` という値が \[**Name**\] に自動入力されます。この値は、Azure がサブネットをゲートウェイ サブネットとして認識するのに必要となります。\[Address range\] については自動入力された値をそのまま使用し、\[Route table\]、\[Service endpoints\]、および \[Subnet delegation\] については既定値が設定された状態のままにします。
+    
+    ![既定値が指定された \[Add subnet\] フォームが表示されている。](media/vnet-add-gateway-subnet-form.png "[Add subnet]")
+    
+    > **注**: 既定のアドレス範囲を使用すると、/24 の CIDR ブロックでゲートウェイ サブネットが作成されます。これにより、将来の新たな設定要件に対応するのに十分な IP アドレスが提供されます。
 
-10. On the Virtual network blade, select **Subnets** under Settings in the left-hand menu, and then select **+ Subnet** from the top menu.
+15. \[**OK**\] を選択します。
 
-    ![The Subnets item is highlighted and selected in the left-hand menu of the Virtual network blade, and + Subnet is highlighted in the top menu.](media/vnet-subnets-add.png "Add subnet")
+## タスク 2: VPN ゲートウェイを作成する
 
-11. On the Add subnet blade, enter the following:
+このタスクでは、仮想ネットワーク ゲートウェイをセットアップします。
 
-    - **Name**: Enter `Management`
-    - **Address range**: Accept the default value, which should be a subnet mask of /24, within the address range of your VNet.
-    - **NAT gateway**: Leave set to **None**.
-    - **Network security group**: Leave set to **None**.
-    - **Route table**: Leave set to **None**.
-    - **Service endpoints**: Leave set to **0 selected**.
-    - **Subnet delegation**: Leave set to **None**.
+1. [Azure portal](https://portal.azure.com/) で、\[**Show portal menu**\] アイコンを選択した後、メニューから \[**+Create a resource**\] を選択します。
+   
+   ![ポータル メニュー表示アイコンが強調表示され、ポータル メニューが表示されている。ポータル メニューの \[Create a resource\] が強調表示されている。](media/create-a-resource.png "[Create a resource]")
 
-    ![On the Add subnet blade, Management is entered into the name field, and the default values are specified for the remaining settings.](media/add-subnet-management.png "Add subnet")
+2. Marketplace 検索ボックスに「virtual network gateway」と入力して、結果から \[**Virtual network gateway**\] を選択します。
+   
+   ![Marketplace 検索ボックスに「virtual network gateway」と入力され、結果で \[Virtual network gateway\] が選択されている。](media/create-resource-virtual-network-gateway.png "[Create a resource]")
 
-12. Select **OK**.
+3. \[Virtual network gateway\] ブレードで、\[**Create**\] を選択します。
+   
+   ![\[Virtual network gateway\] ブレードの \[Create\] ボタンが強調表示されている。](media/virtual-network-gateway-create.png "[Virtual network gateway]")
 
-13. Back on the **Subnets** blade, select **+ Gateway Subnet**.
-
-    ![Subnets is selected and highlighted in the left-hand menu. On the Subnets blade, +Gateway subnet is highlighted.](media/vnet-add-gateway-subnet.png "Subnets")
-
-14. The **Name** for gateway subnet is automatically filled in with the value `GatewaySubnet`. This value is required in order for Azure to recognize the subnet as the gateway subnet. Accept the auto-filled Address range value, and leave Route table, Service endpoints, and Subnet delegation set to their default values.
-
-    ![The Add subnet form is displayed, with the default values.](media/vnet-add-gateway-subnet-form.png "Add subnet")
-
-    > **Note**: The default address range creates a gateway subnet with a CIDR block of /24. This provides enough IP addresses to accommodate additional future configuration requirements.
-
-15. Select **OK**.
-
-## Task 2: Create a VPN gateway
-
-In this task, you set up a Virtual Network Gateway.
-
-1. In the [Azure portal](https://portal.azure.com/), select the **Show portal menu** icon and then select **+Create a resource** from the menu.
-
-   ![The Show portal menu icon is highlighted, and the portal menu is displayed. Create a resource is highlighted in the portal menu.](media/create-a-resource.png "Create a resource")
-
-2. Enter "virtual network gateway" into the Search the Marketplace box, and select **Virtual network gateway** from the results.
-
-   !["Virtual network gateway" is entered into the Search the Marketplace box, and Virtual network gateway is highlighted in the results.](media/create-resource-virtual-network-gateway.png "Create a resource")
-
-3. Select **Create** on the Virtual network gateway blade.
-
-   ![The Create button is highlighted on the Virtual network gateway blade.](media/virtual-network-gateway-create.png "Virtual network gateway")
-
-4. On the Create virtual network gateway **Basics** tab, enter the following:
-
+4. \[Create virtual network gateway\] の \[**Basics**\] タブで、以下を入力します。
+   
    - Project details:
-
-     - **Subscription**: Select the subscription you are using for this hands-on lab.
-     - **Resource group**: This will be derived from the virtual network's resource group.
-
+     
+     - **Subscription**: このハンズオン ラボで使用するサブスクリプションを選択します。
+     - **Resource group**: 仮想ネットワークのリソース グループに基づいて指定されます。
+   
    - Instance details:
-
-     - **Name**: Enter `hands-on-lab-SUFFIX-vnet-gateway`
-     - **Region**: Select the location you are using for resources in this hands-on lab.
-     - **Gateway type**: Choose **VPN**.
-     - **VPN type**: Choose **Route-based**.
-     - **SKU**: Select **VpnGw1**.
-     - **Virtual network**: Select the **hands-on-lab-SUFFIX-vnet**.
-
+     
+     - **Name**: 「`hands-on-lab-SUFFIX-vnet-gateway`」と入力します。
+     - **Region**: このハンズオン ラボのリソースで使用する場所を選択します。
+     - **Gateway type**: \[**VPN**\] を選択します。
+     - **VPN type**: \[**Route-based**\] を選択します。
+     - **SKU**: \[**VpnGw1**\] を選択します。
+     - **Virtual network**: \[**hands-on-lab-SUFFIX-vnet**\] を選択します。
+   
    - Public IP address:
+     
+     - **Public IP address**: \[**Create new**\] を選択します。
+     - **Public IP address name**: 「**vnet-gateway-ip**」と入力します。
+     - **Enable active-active mode**: \[**Disabled**\] を選択します。
+     - **Configure BGP ASN**: \[**Disabled**\] を選択します。
+   
+   ![\[Create virtual network gateway\] の \[Basics\] タブの該当フィールドに上記の値が入力されている。](media/virtual-network-gateway-create-basics.png "[Create virtual network gateway]")
 
-     - **Public IP address**: Choose **Create new**.
-     - **Public IP address name**: Enter **vnet-gateway-ip**.
-     - **Enable active-active mode**: Choose **Disabled**.
-     - **Configure BGP ASN**: Choose **Disabled**.
+5. \[**Review + create**\] を選択します。
 
-   ![The values specified above are entered into the appropriate fields in the Create virtual network gateway Basics tab.](media/virtual-network-gateway-create-basics.png "Create virtual network gateway")
+6. \[**Review + create**\] タブで、"Validation passed" というメッセージが表示されていることを確認した後、\[**Create**\] を選択します。
+   
+   ![\[Review + create\] タブで、"Validation passed" というメッセージが表示されている。](media/virtual-network-gateway-create-summary.png "[Create virtual network gateway]")
 
-5. Select **Review + create**.
+7. 仮想ネットワーク ゲートウェイのプロビジョニングが完了するまで最長で 45 分かかる場合があります。
 
-6. On the **Review + create** tab, ensure the _Validation passed_ message is displayed and then select **Create**.
+## タスク 3: SQL MI をプロビジョニングする
 
-   ![The validation passed message is displayed on the Review + create tab.](media/virtual-network-gateway-create-summary.png "Create virtual network gateway")
+このタスクでは、Azure SQL Managed Instance を作成します。
 
-7. It can take up to 45 minutes for the Virtual network gateway to provision.
+1. [Azure portal](https://portal.azure.com/) で、\[**Show portal menu**\] アイコンを選択した後、メニューから \[**+Create a resource**\] を選択します。
+   
+   ![ポータル メニュー表示アイコンが強調表示され、ポータル メニューが表示されている。ポータル メニューの \[Create a resource\] が強調表示されている。](media/create-a-resource.png "[Create a resource]")
 
-## Task 3: Provision SQL MI
+2. Marketplace 検索ボックスに「sql managed instance」と入力した後、結果から \[**Azure SQL Managed Instance**\] を選択します。
+   
+   ![Marketplace 検索ボックスに「sql managed instance」と入力されている。結果で \[Azure SQL Managed Instance\] が選択されている。](media/create-resource-sql-mi.png "SQL Managed Instance の作成")
 
-In this task, you create an Azure SQL Managed Instance.
+3. \[Azure SQL Managed Instance\] ブレードで、\[**Create**\] を選択します。
+   
+   ![\[Azure SQL Managed Instance\] ブレードの \[Create\] ボタンが強調表示されている。](media/sql-mi-create.png "Azure SQL Managed Instance の作成")
 
-1. In the [Azure portal](https://portal.azure.com/), select the **Show portal menu** icon and then select **+Create a resource** from the menu.
-
-   ![The Show portal menu icon is highlighted, and the portal menu is displayed. Create a resource is highlighted in the portal menu.](media/create-a-resource.png "Create a resource")
-
-2. Enter "sql managed instance" into the Search the Marketplace box, and then select **Azure SQL Managed Instance** from the results.
-
-   !["Sql managed instance" is entered into the Search the Marketplace box. Azure SQL Managed Instance is selected in the results.](media/create-resource-sql-mi.png "Create SQL Managed Instance")
-
-3. Select **Create** on the Azure SQL Managed Instance blade.
-
-   ![The Create button is highlighted on the Azure SQL Managed Instance blade.](media/sql-mi-create.png "Create Azure SQL Managed Instance")
-
-4. On the Create Azure SQL Database Managed Instance Basics tab, enter the following:
-
+4. \[Create Azure SQL Database Managed Instance\] の \[Basics\] タブで、以下を入力します。
+   
    - Project details:
-
-     - **Subscription**: Select the subscription you are using for this hands-on lab.
-     - **Resource group**: Select **hands-on-lab-SUFFIX** from the list.
-
+     
+     - **Subscription**: このハンズオン ラボで使用するサブスクリプションを選択します。
+     - **Resource group**: リストから \[**hands-on-lab-SUFFIX**\] を選択します。
+   
    - Managed Instance details:
-
-     - **Managed instance name**: Enter `sqlmi-SUFFIX`
-     - **Region**: Select the region you are using for resources in this hands-on lab.
-     - **Compute + storage**: Select **Configure Managed Instance**, and on the Configure performance blade, select **Business Critical**, **Gen5**, and set the vCores to **16** and the Storage to **32**, and then select **Apply**.
-
-     ![On the Configure performance blade, Business Critical is selected, Gen5 is selected, and the vCores are set to 16, and the Storage size is set to 32.](media/sql-mi-configure-performance.png "Configure performance")
-
+     
+     - **Managed instance name**: 「`sqlmi-SUFFIX`」と入力します。
+     - **Region**: このハンズオン ラボのリソースで使用するリージョンを選択します。
+     - **Compute + storage**: \[**Configure Managed Instance**\] を選択して、\[Configure performance\] ブレードで \[**Business Critical**\]、\[**Gen5**\] を選択し、\[vCores\] を **16**、\[Storage\] を **32** に設定した後、\[**Apply**\] を選択します。
+     
+     ![\[Configure performance\] ブレードで、\[Business Critical\]、\[Gen5\] が選択され、\[vCores\] が 16 に設定され、\[Storage\] サイズが 32 に設定されている。](media/sql-mi-configure-performance.png "[Configure performance]")
+   
    - Administrator account:
+     
+     - **Managed instance admin login**: 「`sqlmiuser`」と入力します。
+     - **Password**: 「`Password.1234567890`」と入力します。
+     
+     ![\[Create Azure SQL Database Managed Instance\] の \[Basics\] タブの該当フィールドに上記の値が入力されている。](media/sql-managed-instance-basics-tab.png "[Create Azure SQL Database Managed Instance]")
+     
+     > **注**: "Managed instance creation is not available for the chosen subscription type" というメッセージが表示されている場合、[SQL Managed Instance のクォータを増加させる](https://docs.microsoft.com/azure/sql-database/sql-database-managed-instance-resource-limits#obtaining-a-larger-quota-for-sql-managed-instance)手順を実行します。
+     
+     ![選択されたサブスクリプションで SQL MI を作成できないことを知らせるメッセージが表示されている。](media/sql-mi-creation-not-available.png "SQL MI を作成できないことを知らせるメッセージ")
 
-     - **Managed instance admin login**: Enter `sqlmiuser`
-     - **Password**: Enter `Password.1234567890`
+5. \[**Next: Networking\] を選択して、\[**Networking**\] タブで、以下の構成を設定します。**
+   
+   - **Virtual network**: ドロップダウン リストから \[**hands-on-lab-SUFFIX-vnet/ManagedInstance**\] を選択します。
+   - **Prepare subnet for Managed Instance**: \[**Automatic**\] を選択します。
+   - **Connection type**: \[**Proxy (Default)**\] が選択された状態のままにします。
+   - **Enable public endpoint**: \[**Disable**\] を選択します。
+   
+   ![\[Create Azure SQL Database Managed Instance\] の \[Networking\] タブのフォームに上記の設定が入力されている。](media/sql-managed-instance-networking-tab.png "[Create Azure SQL Database Managed Instance]")
 
-     ![On the Create SQL Managed Instance Basics tab, the values specified above are entered into the appropriate fields.](media/sql-managed-instance-basics-tab.png "Create SQL Managed Instance")
+6. \[**Next: Review + create\] を選択して、\[**Review + create**\] タブで構成を確認した後、\[**Create**\] を選択します。**
+   
+   > **注**: これがサブネットに展開する最初のインスタンスである場合、SQL Managed Instance のプロビジョニングが完了するまで 4 時間以上かかる場合があります。プロビジョニングの処理中、残りのタスクに進んでも構いません。展開プロセスが 6 時間を超える場合は、サポート チケットを送信して、セットアップ完了のサポートを依頼する必要がある可能性があります。
 
-     > **Note**: If you see a message stating that Managed Instance creation is not available for the chosen subscription type, follow the instructions for [obtaining a larger quota for SQL Managed Instance](https://docs.microsoft.com/azure/sql-database/sql-database-managed-instance-resource-limits#obtaining-a-larger-quota-for-sql-managed-instance).
+## タスク 4: JumpBox VM を作成する
 
-     ![A message is displayed stating that SQL MI creation not available in the selected subscription.](media/sql-mi-creation-not-available.png "SQL MI creation not available")
+このタスクでは、Azure で仮想マシン (VM) をプロビジョニングします。使用する VM イメージには、最新バージョンの Visual Studio Community 2019 がインストールされます。
 
-5. Select **Next: Networking**, and on the **Networking** tab set the following configuration:
+1. [Azure portal](https://portal.azure.com/) で、\[**Show portal menu**\] アイコンを選択した後、メニューから \[**+Create a resource**\] を選択します。
+   
+   ![ポータル メニュー表示アイコンが強調表示され、ポータル メニューが表示されている。ポータル メニューの \[Create a resource\] が強調表示されている。](media/create-a-resource.png "[Create a resource]")
 
-   - **Virtual network**: Select **hands-on-lab-SUFFIX-vnet/ManagedInstance** from the dropdown list.
-   - **Prepare subnet for Managed Instance**: Select **Automatic**.
-   - **Connection type**: Leave **Proxy (Default)** selected.
-   - **Enable public endpoint**: Select **Disable**.
+2. Marketplace 検索ボックスに「visual studio 2019」と入力した後、結果から \[**Visual Studio 2019 Latest**\] を選択します。
+   
+   ![Marketplace 検索ボックスに「visual studio 2019」と入力されている。検索結果で \[Visual Studio 2019 Latest\] が選択されている。](./media/create-resource-visual-studio-vm.png "Visual Studio 2019 仮想マシンの作成")
 
-   ![On the Create SQL Managed Instance Networking tab, the configuration specified above is entered into the form.](media/sql-managed-instance-networking-tab.png "Create SQL Managed Instance")
+3. \[Visual Studio 2019\] ブレードで、\[Select a software plan\] ドロップダウン リストから \[**Visual Studio 2019 Community (latest release) on Windows Server 2019 (x64)**\] を選択した後、\[**Create**\] を選択します。
+   
+   ![\[Visual Studio 2019\] ブレードの \[Select a software plan\] ドロップダウン リストの \[Visual Studio 2019 Community (latest release) on Windows Server 2019 (x64)\] が強調表示されている。](media/visual-studio-create.png "[Visual Studio 2019]")
 
-6. Select **Next: Review + create**, and on the **Review + create** tab, review the configuration and then select **Create**.
-
-   > **Note**: Provisioning of SQL Managed Instance can take 4+ hours if this is the first instance being deployed into a subnet. You can move on to the remaining tasks while the provisioning is in process. If the deployment process goes beyond 6 hours, you may need to submit a support ticket to request assistance in completing the setup.
-
-## Task 4: Create the JumpBox VM
-
-In this task, you provision a virtual machine (VM) in Azure. The VM image used has the latest version of Visual Studio Community 2019 installed.
-
-1. In the [Azure portal](https://portal.azure.com/), select the **Show portal menu** icon and then select **+Create a resource** from the menu.
-
-   ![The Show portal menu icon is highlighted, and the portal menu is displayed. Create a resource is highlighted in the portal menu.](media/create-a-resource.png "Create a resource")
-
-2. Enter "visual studio 2019" into the Search the Marketplace box, and then select **Visual Studio 2019 Latest** from the results.
-
-   !["Visual studio 2019" is entered into the Search the Marketplace box. Visual Studio 2019 Latest is selected in the search results.](./media/create-resource-visual-studio-vm.png "Create Visual Studio 2019 virtual machine")
-
-3. On the Visual Studio 2019 blade, select **Visual Studio 2019 Community (latest release) on Windows Server 2019 (x64)** from the Select a software plan drop-down list and then select **Create**.
-
-   ![Visual Studio 2019 Community (latest release) on Windows Server 2019 (x64) is highlighted in the Select a software plan list on the Visual Studio 2019 blade.](media/visual-studio-create.png "Visual Studio 2019")
-
-4. On the Create a virtual machine **Basics** tab set the following configuration:
-
+4. \[Create a virtual machine\] の \[**Basics**\] タブで、以下の構成を設定します。
+   
    - Project details:
-
-     - **Subscription**: Select the subscription you are using for this hands-on lab.
-     - **Resource Group**: Select the **hands-on-lab-SUFFIX** resource group from the list of existing resource groups.
-
+     
+     - **Subscription**: このハンズオン ラボで使用するサブスクリプションを選択します。
+     - **Resource group**: 既存のリソース グループのリストから \[**hands-on-lab-SUFFIX**\] リソース グループを選択します。
+   
    - Instance details:
-
-     - **Virtual machine name**: Enter `JumpBox`
-     - **Region**: Select the region you are using for resources in this hands-on lab.
-     - **Availability options**: Select **No infrastructure redundancy required**.
-     - **Image**: Leave **Visual Studio 2019 Community (latest release) on Windows Server 2019 (x64)** selected.
-     - **Azure Spot instance**: Choose **No**.
-     - **Size**: Accept the default size of **Standard_D4s_v3**.
-
+     
+     - **Virtual machine name**: 「`JumpBox`」と入力します。
+     - **Region**: このハンズオン ラボのリソースで使用するリージョンを選択します。
+     - **Availability options**: \[**No infrastructure redundancy required**\] を選択します。
+     - **Image**: \[**Visual Studio 2019 Community (latest release) on Windows Server 2019 (x64)**\] が選択された状態のままにします。
+     - **Azure Spot instance**: \[**No**\] を選択します。
+     - **Size**: 既定のサイズ "**Standard\_D4s\_v3**" をそのまま使用します。
+   
    - Administrator account:
-
-     - **Username**: Enter `sqlmiuser`
-     - **Password**: Enter `Password.1234567890`
-
+     
+     - **Username**: 「`sqlmiuser`」と入力します。
+     - **Password**: 「`Password.1234567890`」と入力します。
+   
    - Inbound port rules:
+     
+     - **Public inbound ports**: \[**Allow selected ports**\] を選択します。
+     - **Select inbound ports**: リストで \[**RDP (3389)**\] を選択します。
+   
+   ![\[Basics\] タブのスクリーンショット。各フィールドは前述のように設定されている。](media/lab-virtual-machine-basics-tab.png "[Create a virtual machine] の [Basics] タブ")
 
-     - **Public inbound ports**: Choose **Allow selected ports**.
-     - **Select inbound ports**: Select **RDP (3389)** in the list.
+5. \[**Next: Disks\] を選択して、次のステップに進みます。**
 
-   ![Screenshot of the Basics tab, with fields set to the previously mentioned settings.](media/lab-virtual-machine-basics-tab.png "Create a virtual machine Basics tab")
+6. \[**Disks**\] タブで、\[OS disk type\] が \[**Premium SSD**\] に設定されていることを確認した後、\[**Next: Networking\] を選択します。**
+   
+   ![\[Create a virtual machine\] の \[Disks\] タブの \[OS disk type\] が \[Premium SSD\] に設定されている。](media/lab-virtual-machine-disks-tab.png "[Create a virtual machine] の [Disks] タブ")
 
-5. Select **Next: Disks** to move to the next step.
+7. \[**Networking**\] タブで、次の構成を設定します。
+   
+   - **Virtual network**: \[**hands-on-lab-SUFFIX-vnet**\] を選択します。
+   - **Subnet**: \[**Management**\] サブネットを選択します。
+   - **Public IP**: \[**(new) JumpBox-ip**\] が選択された状態のままにします。
+   - **NIC network security group**: \[**Basic**\] を選択します。
+   - **Public inbound ports**: \[**Allow selected ports**\] が選択された状態のままにします。
+   - **Select inbound ports**: \[**RDP**\] が選択された状態のままにします。
+   
+   ![\[Create a virtual machine\] の \[Networking\] タブの該当フィールドに上記の設定が入力されている。](media/lab-virtual-machine-networking-tab.png "[Create a virtual machine] の [Networking] タブ")
 
-6. On the **Disks** tab, ensure the OS disk type is set to **Premium SSD**, and then select **Next: Networking**.
+8. \[**Review + create**\] を選択して、構成を検証します。残りのタブはスキップできます。その場合、既定値が使用されます。
 
-   ![On the Create a virtual machine Disks tab, the OS disk type is set to Standard SSD.](media/lab-virtual-machine-disks-tab.png "Create a virtual machine Disks tab")
+9. \[**Review + create**\] タブで、"Validation passed" というメッセージが表示されていることを確認した後、\[**Create**\] を選択して仮想マシンをプロビジョニングします。
+   
+   !["Validation passed" というメッセージが表示された \[Review + create\] タブが表示されている。](media/lab-virtual-machine-review-create-tab.png "[Create a virtual machine] の [Review + create] タブ")
 
-7. On the **Networking** tab, set the following configuration:
+10. VM のプロビジョニングが完了するまで 15 分程度かかります。待っている間に次のタスクに進んでも構いません。
 
-   - **Virtual network**: Select the **hands-on-lab-SUFFIX-vnet**.
-   - **Subnet**: Select the **Management** subnet.
-   - **Public IP**: Leave **(new) JumpBox-ip** selected.
-   - **NIC network security group**: Select **Basic**.
-   - **Public inbound ports**: Leave **Allow selected ports** selected.
-   - **Select inbound ports**: Leave **RDP** selected.
+## タスク 5: SQL Server 2008 R2 仮想マシンを作成する
 
-   ![On the Create a virtual machine Networking tab, the settings specified above are entered into the appropriate fields.](media/lab-virtual-machine-networking-tab.png "Create a virtual machine Networking tab")
+このタスクでは、SQL Server 2008 R2 の "オンプレミス" インスタンスをホストする別の仮想マシン (VM) を Azure でプロビジョニングします。この VM は、SQL Server 2008 R2 SP3 Standard on Windows Server 2008 R2 イメージを使用します。
 
-8. Select **Review + create** to validate the configuration. The remaining tabs can be skipped, and default values will be used.
+> **注**: SQL Server 2008 R2 は Windows Server 2016 ではサポートされないため、旧バージョンの Windows Server を使用しています。
 
-9. On the **Review + create** tab, ensure the Validation passed message is displayed, and then select **Create** to provision the virtual machine.
+1. [Azure portal](https://portal.azure.com/) で、\[**Show portal menu**\] アイコンを選択した後、メニューから \[**+Create a resource**\] を選択します。
+   
+   ![ポータル メニュー表示アイコンが強調表示され、ポータル メニューが表示されている。ポータル メニューの \[Create a resource\] が強調表示されている。](media/create-a-resource.png "[Create a resource]")
 
-   ![The Review + create tab is displayed, with a Validation passed message.](media/lab-virtual-machine-review-create-tab.png "Create a virtual machine Review + create tab")
+2. Marketplace 検索ボックスに「SQL Server 2008 R2 SP3 on Windows Server 2008 R2」と入力します。
 
-10. It takes approximately 15 minutes for the VM to finish provisioning. You can move on to the next task while you wait.
+3. \[**SQL Server 2008 R2 SP3 on Windows Server 2008 R2**\] ブレードで、ソフトウェア プランとして \[**SQL Server R2 SP3 Standard on Windows Server 2008 R2**\] を選択した後、\[**Create**\] を選択します。
+   
+   ![ソフトウェア プランとして Standard エディションが選択された \[SQL Server 2008 R2 SP3 on Windows Server 2008 R2\] ブレードが表示されている。\[Create\] ボタンが強調表示されている。](media/create-resource-sql-server-2008-r2.png "SQL Server 2008 R2 リソースの作成")
 
-## Task 5: Create SQL Server 2008 R2 virtual machine
-
-In this task, you provision another virtual machine (VM) in Azure, which will host your "on-premises" instance of SQL Server 2008 R2. The VM uses the SQL Server 2008 R2 SP3 Standard on Windows Server 2008 R2 image.
-
-> **Note**: An older version of Windows Server is being used because SQL Server 2008 R2 is not supported on Windows Server 2016.
-
-1. In the [Azure portal](https://portal.azure.com/), select the **Show portal menu** icon and then select **+Create a resource** from the menu.
-
-   ![The Show portal menu icon is highlighted, and the portal menu is displayed. Create a resource is highlighted in the portal menu.](media/create-a-resource.png "Create a resource")
-
-2. Enter "SQL Server 2008 R2 SP3 on Windows Server 2008 R2" into the Search the Marketplace box.
-
-3. On the **SQL Server 2008 R2 SP3 on Windows Server 2008 R2** blade, select **SQL Server R2 SP3 Standard on Windows Server 2008 R2** for the software plan and then select **Create**.
-
-   ![The SQL Server 2008 R2 SP3 on Windows Server 2008 R2 blade is displayed with the standard edition selected for the software plan. The Create button highlighted.](media/create-resource-sql-server-2008-r2.png "Create SQL Server 2008 R2 Resource")
-
-4. On the Create a virtual machine **Basics** tab set the following configuration:
-
-   - Project Details:
-
-     - **Subscription**: Select the subscription you are using for this hands-on lab.
-     - **Resource Group**: Select the **hands-on-lab-SUFFIX** resource group from the list of existing resource groups.
-
+4. \[Create a virtual machine\] の \[**Basics**\] タブで、以下の構成を設定します。
+   
+   - Project details:
+     
+     - **Subscription**: このハンズオン ラボで使用するサブスクリプションを選択します。
+     - **Resource group**: 既存のリソース グループのリストから \[**hands-on-lab-SUFFIX**\] リソース グループを選択します。
+   
    - Instance Details:
+     
+     - **Virtual machine name**: 「`SqlServer2008`」と入力します。
+     - **Region**: このハンズオン ラボのリソースで使用するリージョンを選択します。
+     - **Availability options**: \[**No infrastructure redundancy required**\] を選択します。
+     - **Image**: \[**SQL Server 2008 R2 SP3 Standard on Windows Server 2008 R2**\] が選択された状態のままにします。
+     - **Azure Spot instance**: \[**No**\] を選択します。
+     - **Size**: 既定のサイズ "**Standard\_D4s\_v3**" をそのまま使用します。
+   
+   - Administrator account:
+     
+     - **Username**: 「`sqlmiuser`」と入力します。
+     - **Password**: 「`Password.1234567890`」と入力します。
+   
+   - Inbound port rules:
+     
+     - **Public inbound ports**: \[**Allow selected ports**\] を選択します。
+     - **Select inbound ports**: リストで \[**RDP (3389)**\] を選択します。
+   
+   ![\[Basics\] タブのスクリーンショット。各フィールドは前述のように設定されている。](media/sql-server-2008-r2-vm-basics-tab.png "[Create a virtual machine] の [Basics] タブ")
 
-     - **Virtual machine name**: Enter `SqlServer2008`
-     - **Region**: Select the region you are using for resources in this hands-on lab.
-     - **Availability options**: Select **No infrastructure redundancy required**.
-     - **Image**: Leave **SQL Server 2008 R2 SP3 Standard on Windows Server 2008 R2** selected.
-     - **Azure Spot instance**: Choose **No**.
-     - **Size**: Accept the default size of **Standard_D4s_v3**.
+5. \[**Next: Disks**\] を選択し、\[OS disk type\] が \[**Premium SSD**\] に設定されていることを確認した後、\[**Next: Networking**\] を選択します。
+   
+   ![\[Create a virtual machine\] の \[Disks\] タブの \[OS disk type\] が \[Premium SSD\] に設定されている。](media/lab-virtual-machine-disks-tab.png "[Create a virtual machine] の [Disks] タブ")
 
-   - Administrator Account:
+6. \[**Networking**\] タブで、次の構成を設定します。
+   
+   - **Virtual network**: \[**hands-on-lab-vnet**\] を選択します。
+   - **Subnet**: \[**Management**\] サブネットを選択します。
+   - **Public IP**: \[**(new) SqlServer2008-ip**\] が選択された状態のままにします。
+   - **NIC network security group**: \[**Basic**\] を選択します。
+   - **Public inbound ports**: \[**Allow selected ports**\] が選択された状態のままにします。
+   - **Select inbound ports**: \[**RDP**\] が選択された状態のままにします。
+   
+   ![\[Create a virtual machine\] の \[Networking\] タブの該当フィールドに上記の設定が入力されている。](media/sql-virtual-machine-networking-tab.png "[Create a virtual machine] の [Networking] タブ")
 
-     - **Username**: Enter `sqlmiuser`
-     - **Password**: Enter `Password.1234567890`
+7. 上部のメニューから \[**SQL Server settings**\] タブを選択します。
+   
+   ![\[Create a virtual machine\] のタブ リストの \[SQL Server settings\] タブが強調表示されている。](media/sql-server-2008-r2-vm-sql-settings-tab.png "[Create a virtual machine] の [SQL Server settings] タブ")
+   
+   > **注**: \[Management\] および \[Advanced\] タブはスキップできます。その場合、既定値が使用されます。
 
-   - Inbound Port Rules:
-
-     - **Public inbound ports**: Choose **Allow selected ports**.
-     - **Select inbound ports**: Select **RDP (3389)** in the list.
-
-   ![Screenshot of the Basics tab, with fields set to the previously mentioned settings.](media/sql-server-2008-r2-vm-basics-tab.png "Create a virtual machine Basics tab")
-
-5. Select **Next: Disks**, ensure the OS disk type is set to **Premium SSD**, and then select **Next: Networking**.
-
-   ![On the Create a virtual machine Disks tab, the OS disk type is set to Standard SSD.](media/lab-virtual-machine-disks-tab.png "Create a virtual machine Disks tab")
-
-6. On the **Networking** tab, set the following configuration:
-
-   - **Virtual network**: Select the **hands-on-lab-vnet**.
-   - **Subnet**: Select the **Management** subnet.
-   - **Public IP**: Leave **(new) SqlServer2008-ip** selected.
-   - **NIC network security group**: Select **Basic**.
-   - **Public inbound ports**: Leave **Allow selected ports** selected.
-   - **Select inbound ports**: Leave **RDP (3389)** selected.
-
-   ![On the Create a virtual machine Networking tab, the settings specified above are entered into the appropriate fields.](media/sql-virtual-machine-networking-tab.png "Create a virtual machine Networking tab")
-
-7. Select the **SQL Server settings** tab from the top menu.
-
-   ![The SQL Server settings tab is highlighted in the create a virtual machine tabs list.](media/sql-server-2008-r2-vm-sql-settings-tab.png "Create a virtual machine SQL Server settings tab")
-
-   > **Note**: The Management and Advanced tabs can be skipped, and default values will be used.
-
-8. On the **SQL Server settings** tab, set the following:
-
-   - Security & Networking:
-
-     - **SQL connectivity**: Select **Public (Internet)**
-     - **Port**: Set to `1433`
-
+8. \[**SQL Server settings**\] タブで、以下を設定します。
+   
+   - Security \& Networking:
+     
+     - **SQL connectivity**: \[**Public (Internet)**\] を選択します。
+     - **Port**: 「`1433`」に設定します。
+   
    - SQL Authentication:
+     
+     - **SQL Authentication**: \[**Enable**\] を選択します。
+     - **Login name**: 「`sqlmiuser`」と入力します。
+     - **Password**: 「`Password.1234567890`」と入力します。
+     
+     ![\[SQL Server settings\] タブに上記の値が入力されている。](media/sql-server-2008-r2-vm-sql-settings.png "[SQL Server settings]")
 
-     - **SQL Authentication**: Select **Enable**.
-     - **Login name**: Enter `sqlmiuser`
-     - **Password**: Enter `Password.1234567890`
+9. \[**Review + create**\] を選択して、構成を検証します。
 
-     ![The previously specified values are entered into the SQL Server settings tab.](media/sql-server-2008-r2-vm-sql-settings.png "SQL Server settings")
+10. \[**Review + create**\] タブで、"Validation passed" というメッセージが表示されていることを確認した後、\[**Create**\] を選択して仮想マシンをプロビジョニングします。
+    
+    !["Validation passed" というメッセージが表示された \[Review + create\] タブが表示されている。](media/sql-virtual-machine-review-create-tab.png "[Create a virtual machine] の [Review + create] タブ")
 
-9. Select **Review + create** to validate the configuration.
+11. SQL VM のプロビジョニングが完了するまで 10 分程度かかります。待っている間に次のタスクに進んでも構いません。
 
-10. On the **Review + create** tab, ensure the Validation passed message is displayed, and then select **Create** to provision the virtual machine.
+## タスク 6: Azure Database Migration Service を作成する
 
-    ![The Review + create tab is displayed, with a Validation passed message.](media/sql-virtual-machine-review-create-tab.png "Create a virtual machine Review + create tab")
+このタスクでは、Azure Database Migration Service (DMS) のインスタンスをプロビジョニングします。
 
-11. It takes approximately 10 minutes for the SQL VM to finish provisioning. You can move on to the next task while you wait.
+> **重要**: このサービスを利用するには、Azure のサブスクリプション内で `Microsoft.DataMigration` リソース プロバイダーを登録しておく必要があります。これを完了する手順については、ハンズオン ラボ前のガイドを参照してください。
 
-## Task 6: Create Azure Database Migration Service
+1. [Azure portal](https://portal.azure.com/) で、\[**Show portal menu**\] アイコンを選択した後、メニューから \[**+Create a resource**\] を選択します。
+   
+   ![ポータル メニュー表示アイコンが強調表示され、ポータル メニューが表示されている。ポータル メニューの \[Create a resource\] が強調表示されている。](media/create-a-resource.png "[Create a resource]")
 
-In this task, you provision an instance of the Azure Database Migration Service (DMS).
+2. Marketplace 検索ボックスに「database migration」と入力し、結果から \[**Azure Database Migration Service**\] を選択して、\[Azure Database Migration Service\] ブレードで \[**Create**\] を選択します。
+   
+   ![Marketplace 検索ボックスに「database migration」と入力されている。結果で \[Azure Database Migration Service\] が選択されている。](media/create-resource-azure-database-migration-service.png "Azure Database Migration Service の作成")
 
-> **Important**: This service requires that you have registered the `Microsoft.DataMigration` resource provider within your subscription in Azure. You can find the steps to complete this in the Before the HOL guide.
-
-1. In the [Azure portal](https://portal.azure.com/), select the **Show portal menu** icon and then select **+Create a resource** from the menu.
-
-   ![The Show portal menu icon is highlighted, and the portal menu is displayed. Create a resource is highlighted in the portal menu.](media/create-a-resource.png "Create a resource")
-
-2. Enter "database migration" into the Search the Marketplace box, select **Azure Database Migration Service** from the results, and select **Create** on the Azure Database Migration Service blade.
-
-   !["Database migration" is entered into the Search the Marketplace box. Azure Database Migration Service is selected in the results.](media/create-resource-azure-database-migration-service.png "Create Azure Database Migration Service")
-
-3. On the Create Migration Service **Basics** tab, enter the following:
-
+3. \[Create Migration Service\] の \[**Basics**\] タブで、以下を入力します。
+   
    - Project details:
-
-     - **Subscription**: Select the subscription you are using for this hands-on lab.
-     - **Resource Group**: Select the **hands-on-lab-SUFFIX** resource group from the list of existing resource groups.
-
+     
+     - **Subscription**: このハンズオン ラボで使用するサブスクリプションを選択します。
+     - **Resource group**: 既存のリソース グループのリストから \[**hands-on-lab-SUFFIX**\] リソース グループを選択します。
+   
    - Instance details:
+     
+     - **Migration service Name**: 「`wwi-dms`」と入力します。
+     - **Location**: このハンズオン ラボのリソースで使用する場所を選択します。
+     - **Service mode**: \[**Azure**\] を選択します。
+     - **Pricing tier**: \[**Configure tier**\] を選択し、\[**Premium**\] を選択して、\[**Apply**\] を選択します。
+     
+     ![該当フィールドに上記の値が入力された \[Create Migration Service\] の \[Basics\] タブが表示されている。](media/create-migration-service-basics-tab.png "[Create Migration Service]")
 
-     - **Migration service Name**: Enter `wwi-dms`
-     - **Location**: Select the location you are using for resources in this hands-on lab.
-     - **Service mode**: Select **Azure**.
-     - **Pricing tier**: Select **Configure tier**, choose **Premium**, and select **Apply**.
+4. \[**Next: Networking\] を選択します。**
 
-     ![The Create Migration Service Basics tab is displayed, with the values specified above entered into the appropriate fields.](media/create-migration-service-basics-tab.png "Create Migration Service")
+5. \[**Networking**\] タブの既存の仮想ネットワークのリストで、横にあるチェックボックスをオンにして、\[**hands-on-lab-SUFFIX-vnet/default**\] 仮想ネットワークを選択します。これにより、LabVM および SqlServer2008 仮想マシンと同じ VNet に DMS インスタンスが配置されます。
+   
+   ![\[Networking\] タブの既存の仮想ネットワークのリストで、\[hands-on-lab-vnet/default\] 仮想ネットワークが選択され、チェックボックスがオンになっている。](media/create-migration-service-networking-tab.png "[Create Migration Service]")
 
-4. Select **Next: Networking**.
+6. \[**Review + create**\] を選択します。
 
-5. On the **Networking** tab, select the **hands-on-lab-SUFFIX-vnet/default** virtual network by checking the box next to it in the list of existing virtual networks. This places the DMS instance into the same VNet as your LabVM and SqlServer2008 virtual machines.
+7. \[**Create**\] を選択します。
 
-   ![The hands-on-lab-vnet/default virtual network in checked and selected in the list of existing virtual networks on the Networking tab.](media/create-migration-service-networking-tab.png "Create Migration Service")
+8. Azure Data Migration サービスの展開が完了するまで 15 分かかる場合があります。待っている間に次のタスクに進んでも構いません。
 
-6. Select **Review + create**.
+## タスク 7: Web App をプロビジョニングする
 
-7. Select **Create**.
+このタスクでは、WWI Tailspin Toys の Web アプリケーションのホスティングに使用される App Service (Web App) をプロビジョニングします。
 
-8. It can take 15 minutes to deploy the Azure Data Migration Service. You can move on to the next task while you wait.
+1. [Azure portal](https://portal.azure.com/) で、\[**Show portal menu**\] アイコンを選択した後、メニューから \[**+Create a resource**\] を選択します。
+   
+   ![ポータル メニュー表示アイコンが強調表示され、ポータル メニューが表示されている。ポータル メニューの \[Create a resource\] が強調表示されている。](media/create-a-resource.png "[Create a resource]")
 
-## Task 7: Provision a Web App
+2. [Azure portal](https://portal.azure.com/) で、\[**+Create a resource**\] を選択し、Marketplace 検索ボックスに「web app」と入力して、結果から \[**Web App**\] を選択します。
+   
+   ![Azure のナビゲーション ペインで \[+Create a resource\] が選択され、Marketplace 検索ボックスに「web app」と入力されている。結果で \[Web App\] が選択されている。](media/create-resource-web-app.png "Web App の作成")
 
-In this task, you provision an App Service (Web app), which will be used for hosting the WWI Tailspin Toys web application.
+3. \[Web App\] ブレードで、\[**Create**\] を選択します。
+   
+   ![\[Web App\] ブレードの \[Create\] ボタンが強調表示されている。](media/create-web-app.png "Web App の作成")
 
-1. In the [Azure portal](https://portal.azure.com/), select the **Show portal menu** icon and then select **+Create a resource** from the menu.
-
-   ![The Show portal menu icon is highlighted, and the portal menu is displayed. Create a resource is highlighted in the portal menu.](media/create-a-resource.png "Create a resource")
-
-2. In the [Azure portal](https://portal.azure.com/), select **+Create a resource**, enter "web app" into the Search the Marketplace box, select **Web App** from the results.
-
-   ![+Create a resource is selected in the Azure navigation pane, and "web app" is entered into the Search the Marketplace box. Web App is selected in the results.](media/create-resource-web-app.png "Create Web App")
-
-3. On the Web App blade, select **Create**.
-
-   ![On the Web App blade, the Create button is highlighted.](media/create-web-app.png "Create Web App")
-
-4. On the Create Web App **Basics** tab, set the following configuration:
-
+4. \[Web App\] ブレードの \[**Basics**\] タブで、以下の構成を設定します。
+   
    - Project Details:
-
-     - **Subscription**: Select the subscription you are using for this hands-on lab.
-     - **Resource Group**: Select the **hands-on-lab-SUFFIX** resource group from the list of existing resource groups.
-
+     
+     - **Subscription**: このハンズオン ラボで使用するサブスクリプションを選択します。
+     - **Resource Group**: 既存のリソース グループのリストから \[**hands-on-lab-SUFFIX**\] リソース グループを選択します。
+   
    - Instance Details:
-
-     - **Name**: Enter `tailspintoysSUFFIX`, to create a globally unique name.
-     - **Publish**: Select **Code**.
-     - **Runtime stack**: Select **.NET Core 3.1 (LTS)**.
-     - **Operating System**: Select **Windows**.
-     - **Region**: Select the region you are using for resources in this hands-on lab.
-
+     
+     - **Name**: 「`tailspintoysSUFFIX`」と入力し、グローバルに一意の名前を作成します。
+     - **Publish**: \[**Code**\] を選択します。
+     - **Runtime stack**: \[**.NET Core 3.1 (LTS)**\] を選択します。
+     - **Operating System**: \[**Windows**\] を選択します。
+     - **Region**: このハンズオン ラボのリソースで使用するリージョンを選択します。
+   
    - App Service Plan:
+     
+     - **Plan**: 新しい App Service プランを作成するために、既定値をそのまま使用します。
+     - **Sku and size**: 既定値 "**Standard S1**" をそのまま使用します。
+     
+     ![\[Web App\] の \[Basics\] タブの該当フィールドに上記の値が入力されている。](media/create-web-app-basics-tab.png "[Web App] の [Basics] タブ")
 
-     - **Plan**: Accept the default value for creating a new App Service Plan.
-     - **Sku and size**: Accept the default value of **Standard S1**.
+5. \[**Review + create**\] を選択します。
 
-     ![The values specified above are entered into the appropriate fields in the Create Web App Basics tab.](media/create-web-app-basics-tab.png "Create Web App Basics tab")
+6. \[**Review + create**\] タブで、\[**Create**\] を選択します。
 
-5. Select **Review + create**.
+7. Web App の作成が完了するまで数分程度かかります。待っている間に次のタスクに進んでも構いません。
 
-6. On the **Review + create** tab, select **Create**.
+## タスク 8: Azure Blob Storage アカウントを作成する
 
-7. It takes a few minutes for the Web App creation to complete. You can move on to the next task while you wait.
+このタスクでは、Azure Storage アカウントを作成します。
 
-## Task 8: Create an Azure Blob Storage account
+1. [Azure portal](https://portal.azure.com/) で、\[**Show portal menu**\] アイコンを選択した後、メニューから \[**+Create a resource**\] を選択します。
+   
+   ![ポータル メニュー表示アイコンが強調表示され、ポータル メニューが表示されている。ポータル メニューの \[Create a resource\] が強調表示されている。](media/create-a-resource.png "[Create a resource]")
 
-In this task, you create an Azure Storage account.
+2. Marketplace 検索ボックスに「storage account」と入力し、結果から \[**Storage account - blob, file, table, queue**\] を選択した後、\[Storage account\] ブレードで \[**Create**\] を選択します。
+   
+   ![Marketplace 検索ボックスに「storage account」と入力されている。結果で \[Storage account\] が選択されている。](media/create-resource-storage-account.png "[Create storage account]")
 
-1. In the [Azure portal](https://portal.azure.com/), select the **Show portal menu** icon and then select **+Create a resource** from the menu.
-
-   ![The Show portal menu icon is highlighted, and the portal menu is displayed. Create a resource is highlighted in the portal menu.](media/create-a-resource.png "Create a resource")
-
-2. Enter "storage account" into the Search the Marketplace box, select **Storage account - blob, file, table, queue** from the results, and then select **Create** on the Storage account blade.
-
-   !["Storage account" is entered into the Search the Marketplace box. Storage account is selected in the results.](media/create-resource-storage-account.png "Create Storage account")
-
-3. On the Create storage account blade, enter the following:
-
+3. \[Create storage account\] ブレードで、以下を入力します。
+   
    - Project details:
-
-     - **Subscription**: Select the subscription you are using for this hands-on lab.
-     - **Resource Group**: Select the **hands-on-lab-SUFFIX** resource group from the list of existing resource groups.
-
+     
+     - **Subscription**: このハンズオン ラボで使用するサブスクリプションを選択します。
+     - **Resource Group**: 既存のリソース グループのリストから \[**hands-on-lab-SUFFIX**\] リソース グループを選択します。
+   
    - Instance details:
+     
+     - **Storage account name**: 「`sqlmistoreSUFFIX`」と入力します。
+     - **Location**: このハンズオン ラボのリソースで使用する場所を選択します。
+     - **Performance**: \[**Standard**\] を選択します。
+     - **Account kind**: \[**StorageV2 (general purpose v2)**\] を選択します。
+     - **Replication**: \[**Locally-redundant storage (LRS)**\] を選択します。
+     - **Access tier**: \[**Hot**\] を選択します。
+     
+     ![\[Create storage account\] ブレードの該当フィールドに上記の値が入力されている。](media/storage-create-account-basics-tab.png "ストレージ アカウントの作成")
 
-     - **Storage account name**: Enter `sqlmistoreSUFFIX`
-     - **Location**: Select the location you are using for resources in this hands-on lab.
-     - **Performance**: Choose **Standard**.
-     - **Account kind**: Select **StorageV2 (general purpose v2)**.
-     - **Replication**: Select **Locally-redundant storage (LRS)**.
-     - **Access tier**: Choose **Hot**.
+4. \[**Review + create**\] を選択します。
 
-     ![On the Create storage account blade, the values specified above are entered into the appropriate fields.](media/storage-create-account-basics-tab.png "Create storage account")
+5. \[**Review + create**\] ブレードで、"Validation passed" というメッセージが表示されていることを確認した後、\[**Create**\] を選択します。
+   
+   ![\[Review + create\] ブレードの上部に "Validation passed" というメッセージが表示されている。](media/storage-create-account-review.png "[Create Storage account]")
 
-4. Select **Review + create**.
+## タスク 9: JumpBox に接続する
 
-5. On the **Review + create** blade, ensure the Validate passed message is displayed and then select **Create**.
+このタスクでは、JumpBox 仮想マシン (VM) への RDP 接続を作成し、\[Internet Explorer Enhanced Security Configuration\] を無効にします。
 
-   ![On the Review + create blade, the Validation passed message is displayed at the top.](media/storage-create-account-review.png "Create storage account")
+> **注**: SQL MI のプロビジョニングが完了するまで待たずに、残りのタスクを完了しても構いません。
 
-## Task 9: Connect to the JumpBox
+1. JumpBox VM のプロビジョニングが完了したら、[Azure portal](https://portal.azure.com) に移動して、\[Azure services\] リストから \[**Resource groups**\] を選択します。
+   
+   ![\[Azure services\] リストの \[Resource groups\] が強調表示されている。](media/azure-services-resource-groups.png "[Azure services]")
 
-In this task, you create an RDP connection to your JumpBox virtual machine (VM) and disable Internet Explorer Enhanced Security Configuration.
+2. リストから hands-on-lab-SUFFIX リソース グループを選択します。
+   
+   ![Azure のナビゲーション ペインで \[Resource groups\] が選択され、"hands-on-lab-SUFFIX" リソース グループが強調表示されている。](./media/resource-groups.png "リソース グループのリスト")
 
-> **Note**: You do not need to wait for SQL MI to finish provisioning to complete the remaining tasks.
+3. リソース グループのリソースのリストで、\[JumpBox\] VM を選択します。
+   
+   ![hands-on-lab-SUFFIX リソース グループのリスースのリストが表示され、\[JumpBox\] が強調表示されている。](./media/resource-group-resources-jumpbox.png "リソース グループのリストの [JumpBox]")
 
-1. When your JumpBox VM provisioning completes, navigate to the [Azure portal](https://portal.azure.com) and select **Resource groups** from the Azure services list.
+4. \[JumpBox VM\] ブレードで、上部のメニューから \[**Connect**\]、\[**RDP**\] の順に選択します。
+   
+   ![\[JumpBox VM\] ブレードが表示され、上部のメニューの \[Connect\] および \[RDP\] ボタンが強調表示されている。](./media/connect-vm-rdp.png "JumpBox VM への接続")
 
-   ![Resource groups is highlighted in the Azure services list.](media/azure-services-resource-groups.png "Azure services")
+5. \[Connect with RDP\] ブレードで \[**Download RDP File**\] を選択した後、ダウンロードされた RDP ファイルを開きます。
+   
+   ![\[Connect with RDP\] ブレードが表示され、\[Download RDP File\] ボタンが強調表示されている。](./media/connect-to-virtual-machine-with-rdp.png "[Connect with RDP]")
 
-2. Select the hands-on-lab-SUFFIX resource group from the list.
+6. \[Remote Desktop Connection\] ダイアログで \[**Connect**\] を選択します。
+   
+   ![\[Remote Desktop Connection\] ダイアログ ボックスの \[Connect\] ボタンが強調表示されている。](./media/remote-desktop-connection.png "[Remote Desktop Connection] ダイアログ")
 
-   ![Resource groups is selected in the Azure navigation pane, and the "hands-on-lab-SUFFIX" resource group is highlighted.](./media/resource-groups.png "Resource groups list")
-
-3. In the list of resources for your resource group, select the JumpBox VM.
-
-   ![The list of resources in the hands-on-lab-SUFFIX resource group are displayed, and JumpBox is highlighted.](./media/resource-group-resources-jumpbox.png "JumpBox in resource group list")
-
-4. On your JumpBox VM blade, select **Connect** and **RDP** from the top menu.
-
-   ![The JumpBox VM blade is displayed, with the Connect and RDP button highlighted in the top menu.](./media/connect-vm-rdp.png "Connect to JumpBox VM")
-
-5. On the Connect with RDP blade, select **Download RDP File**, then open the downloaded RDP file.
-
-   ![The Connect with RDP blade is displayed, and the Download RDP File button is highlighted.](./media/connect-to-virtual-machine-with-rdp.png "Connect with RDP")
-
-6. Select **Connect** on the Remote Desktop Connection dialog.
-
-   ![In the Remote Desktop Connection Dialog Box, the Connect button is highlighted.](./media/remote-desktop-connection.png "Remote Desktop Connection dialog")
-
-7. Enter the following credentials when prompted, and then select **OK**:
-
+7. プロンプトが表示されたら、以下の資格情報を入力し、\[**OK**\] を選択します。
+   
    - **User name**: `sqlmiuser`
    - **Password**: `Password.1234567890`
+   
+   ![\[Enter your credentials\]　ダイアログに上記の資格情報が入力されている。\[Enter your credentials\]](media/rdc-credentials.png "[Enter your credentials]")
 
-   ![The credentials specified above are entered into the Enter your credentials dialog.](media/rdc-credentials.png "Enter your credentials")
+8. \[The identity of the remote computer cannot be verified\] というプロンプトが表示された場合、\[**Yes** \] を選択して接続しま す。
+   
+   ![\[Remote Desktop Connection\] ダイアログ ボックスで、このリモート コンピューターの ID が確認できないことを示し、このまま続行するか尋ねる警告メッセージが表示されている。下部の \[Yes\] ボタンが赤線で囲まれている。](./media/remote-desktop-connection-identity-verification-jumpbox.png "[Remote Desktop Connection] ダイアログ")
 
-8. Select **Yes** to connect, if prompted that the identity of the remote computer cannot be verified.
+9. ログインしたら、**サーバー マネージャー**を起動します。これは自動的に起動するはずですが、起動しない場合は \[スタート\] メニューを使用してアクセスできます。
 
-   ![In the Remote Desktop Connection dialog box, a warning states that the identity of the remote computer cannot be verified, and asks if you want to continue anyway. At the bottom, the Yes button is circled.](./media/remote-desktop-connection-identity-verification-jumpbox.png "Remote Desktop Connection dialog")
+10. \[**ローカル サーバー**\] を選択した後、\[**IE セキュリティ強化の構成**\] の横の \[**オン**\] を選択します。
+    
+    ![サーバー マネージャーのスクリーンショット。左側のペインでは、\[**ローカル サーバー**\] が選択されている。右側の \[プロパティ (LabVM 用)\] ペインでは、\[オン\] に設定された \[IE セキュリティ強化の構成\] が強調表示されている。](./media/windows-server-manager-ie-enhanced-security-configuration.png "サーバー マネージャー")
 
-9. Once logged in, launch the **Server Manager**. This should start automatically, but you can access it via the Start menu if it does not.
+11. \[Internet Explorer セキュリティ強化の構成\] ダイアログで、\[管理者\] と \[ユーザー\] の両方で \[**オフ**\] を選択した後、\[**OK**\] を選択します。
+    
+    ![\[管理者\] が \[オフ\] に設定された \[Internet Explorer セキュリティ強化の構成\] ダイアログ ボックスのスクリーンショット。](./media/internet-explorer-enhanced-security-configuration-dialog.png "[Internet Explorer セキュリティ強化の構成] ダイアログ ボックス")
 
-10. Select **Local Server**, then select **On** next to **IE Enhanced Security Configuration**.
+12. サーバー マネージャーを閉じます。ただし、次のタスクのために、JumpBox への接続は開いた状態のままにしておきます。
 
-    ![Screenshot of the Server Manager. In the left pane, Local Server is selected. In the right, Properties (For LabVM) pane, the IE Enhanced Security Configuration, which is set to On, is highlighted.](./media/windows-server-manager-ie-enhanced-security-configuration.png "Server Manager")
+## タスク 10: JumpBox に必要なソフトウェアをインストールする
 
-11. In the Internet Explorer Enhanced Security Configuration dialog, select **Off** under both Administrators and Users, and then select **OK**.
+このタスクでは、ラボ スターター ソリューションをダウンロードして、JumpBox に SQL Server Management Studio (SSMS) をインストールします。
 
-    ![Screenshot of the Internet Explorer Enhanced Security Configuration dialog box, with Administrators set to Off.](./media/internet-explorer-enhanced-security-configuration-dialog.png "Internet Explorer Enhanced Security Configuration dialog box")
+1. まず、["MCW Migrating SQL databases to Azure" GitHub リポジトリ"](https://github.com/microsoft/MCW-Migrating-SQL-databases-to-Azure/archive/master.zip)からラボ スターター ソリューションをダウンロードします。
 
-12. Close the Server Manager, but leave the connection to the JumpBox open for the next task.
+2. ダウンロードが許可されていないことを知らせるメッセージが表示された場合、Internet Explorer のブラウザー ウィンドウの右上にあるツール アイコンを選択した後、コンテキスト メニューから \[**インターネット オプション**\] を選択します。
+   
+   ![Internet Explorer のツールバーのツール アイコン、およびコンテキスト メニューの \[インターネット オプション\] が強調表示されている。](media/ie-tools-context-menu.png "Internet Explorer")
 
-## Task 10: Install required software on the JumpBox
+3. \[**インターネット オプション**\] ダイアログで、\[このゾーンのセキュリティのレベル\] ボックス内の \[**レベルのカスタマイズ**\] を選択します。
+   
+   ![\[インターネット オプション\] ダイアログの \[レベルのカスタマイズ\] ボタンが強調表示されている。](media/ie-internet-options.png "[Internet Options]")
 
-In this task, you download the lab starter solution and install SQL Server Management Studio (SSMS) on the JumpBox.
+4. \[セキュリティの設定 - インターネット ゾーン\] ダイアログで、\[**ダウンロード**\] の設定を見つけ、\[**有効**\] を選択した後、\[**OK**\] を選択します。
+   
+   ![\[セキュリティの設定\] ダイアログの \[ダウンロード\] プロパティが強調表示され、\[有効\] が選択されている。](media/ie-security-settings-internet-zone.png "[セキュリティの設定]")
 
-1. First, download the lab starter solution from the [MCW Migrating SQL databases to Azure GitHub repo](https://github.com/microsoft/MCW-Migrating-SQL-databases-to-Azure/archive/master.zip).
+5. \[インターネット オプション\] ダイアログで \[**OK**\] を選択した後、ダウンロードを再試行します。
 
-2. If you receive a message that downloads are not allowed, select the Tools icon at the top right of the Internet Explorer browser window, and then select **Internet options** from the context menu.
+6. プロンプトが表示されたら、ファイルの保存を選択した後、\[フォルダーを開く\] を選択します。
+   
+   ![Internet Explorer のダウンロード バーが表示され、\[フォルダーを開く\] が強調表示されている。](media/ie-download-open-folder.png "Internet Explorer")
 
-   ![The Tools icon is highlighted in the Internet Explorer toolbar, and Internet Options is highlighted in the context menu.](media/ie-tools-context-menu.png "Internet Explorer")
+7. ダウンロードが完了したら、ZIP ファイルを `C:\hands-on-lab` に展開します。
+   
+   ![\[圧縮 Zip ファイルの展開\] ダイアログの展開先フィールドに「C:\\hands-on-lab」と入力されている。](media/extract-compressed-zip.png "圧縮 ZIP の展開")
+   
+   > **重要**: 必ず、上記のパス、または同様の短いパスを使用してください。そうしないと、長いファイル パスが原因で、一部のファイルを開く際にエラーが発生するおそれがあります。
 
-3. In the **Internet Options** dialog, select **Custom level** in the Security level for this zone box.
+8. 次に、JumpBox に SQL Server Management Studio (SSMS) をインストールします。JumpBox で Web ブラウザーを開き、<https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms> にナビゲートした後、\[**Download SQL Server Management Studio (SSMS).x**\] リンクを選択して、最新バージョンの SSMS をダウンロードします。
+   
+   ![上記のページの \[Download SQL Server Management Studio (SSMS)\] リンクが強調表示されている。](media/download-ssms.png "SSMS のダウンロード")
+   
+   > **注**: バージョンは頻繁に変更されるため、バージョン番号がスクリーンショットと一致しない場合は、最新バージョンをダウンロードおよびインストールしてください。
 
-   ![The Custom level button is highlighted in the Internet Options dialog.](media/ie-internet-options.png "Internet Options")
+9. ダウンロードしたインストーラーを実行します。
 
-4. In the Security Settings - Internet Zone dialog, locate the **Downloads** settings and choose **Enable**, then select **OK**.
+10. ウェルカム画面で、\[**インストール**\] を選択して、インストールを開始します。
+    
+    ![SSMS のインストールのウェルカム画面の \[インストール\] ボタンが強調表示されている。](media/ssms-install.png "SSMS のインストール")
 
-   ![The Downloads property is highlighted in the Security Settings dialog, and Enable is selected.](media/ie-security-settings-internet-zone.png "Security Settings")
+11. インストールが完了したら、\[**閉じる**\] を選択します。
+    
+    ![SSMS の \[設定が完了しました\] ダイアログの \[閉じる\] が強調表示されている。](media/ssms-install-close.png "[設定が完了しました]")
 
-5. Select **OK** on the Internet Options dialog, and then attempt the download again.
+## タスク 11: SqlServer2008 VM に接続する
 
-6. When prompted, choose to save the file and then select Open folder.
+このタスクでは、SqlServer2008 VM への RDP 接続を開き、Internet Explorer Enhanced Security Configuration を無効にし、受信 TCP トラフィックに対してポート 1433 を開くファイアウォール規則を追加します。また、Microsoft Data Migration Assistant (DMA) もインストールします。
 
-   ![The download bar is displayed in Internet Explorer, and Open folder is highlighted.](media/ie-download-open-folder.png "Internet Explorer")
+1. JumpBox で行ったように、Azure portal で SqlServer2008 VM のブレードに移動し、左側のメニューから \[**Overview**\] を選択した後、上部のメニューで \[**Connect**\]、\[**RDP**\] の順に選択します。
+   
+   ![\[SqlServer2008 Virtual machine\] ブレードが表示され、上部のメニューの \[Connect\] ボタンが強調表示されている。](./media/connect-vm-rdp.png "SqlServer2008 VM への接続")
 
-7. Once it is download, extract the ZIP file to `C:\hands-on-lab`.
+2. \[Connect with RDP\] ブレードで \[**Download RDP File**\] を選択した後、ダウンロードされた RDP ファイルを開きます。
 
-   ![In the Extract Compressed Zip File dialog, C:\hands-on-lab is entered into the destination field.](media/extract-compressed-zip.png "Extract Compressed Zip")
+3. \[Remote Desktop Connection\] ダイアログで \[**Connect**\] を選択します。
+   
+   ![\[Remote Desktop Connection\] ダイアログ ボックスの \[Connect\] ボタンが強調表示されている。](./media/remote-desktop-connection-sql-2008.png "[Remote Desktop Connection] ダイアログ")
 
-   > **Important**: Ensure you use the path above, or something similarly short. Failure to do so could result in errors opening some of the files due to a long file path.
-
-8. Next, install SQL Server Management Studio (SSMS) on the JumpBox. Open a web browser on your JumpBox, navigate to <https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms> and then select the **Download SQL Server Management Studio (SSMS).x** link to download the latest version of SSMS.
-
-   ![The Download SQL Server Management Studio (SSMS) link is highlighted on the page specified above.](media/download-ssms.png "Download SSMS")
-
-   > **Note**: Versions change frequently, so if the version number you see does not match the screenshot, download and install the most recent version.
-
-9. Run the downloaded installer.
-
-10. On the Welcome screen, select **Install** to begin the installation.
-
-    ![The Install button is highlighted on the SSMS installation welcome screen.](media/ssms-install.png "Install SSMS")
-
-11. Select **Close** when the installation completes.
-
-    ![The Close button is highlighted on the SSMS Setup Completed dialog.](media/ssms-install-close.png "Setup completed")
-
-## Task 11: Connect to SqlServer2008 VM
-
-In this task, you open an RDP connection to the SqlServer2008 VM, disable Internet Explorer Enhanced Security Configuration, and add a firewall rule to open port 1433 to inbound TCP traffic. You also install the Microsoft Data Migration Assistant (DMA).
-
-1. As you did for the JumpBox, navigate to the SqlServer2008 VM blade in the Azure portal, select **Overview** from the left-hand menu, and then select **Connect** and **RDP** on the top menu.
-
-   ![The SqlServer2008 VM blade is displayed, with the Connect button highlighted in the top menu.](./media/connect-vm-rdp.png "Connect to SqlServer2008 VM")
-
-2. On the Connect with RDP blade, select **Download RDP File**, then open the downloaded RDP file.
-
-3. Select **Connect** on the Remote Desktop Connection dialog.
-
-   ![In the Remote Desktop Connection Dialog Box, the Connect button is highlighted.](./media/remote-desktop-connection-sql-2008.png "Remote Desktop Connection dialog")
-
-4. Enter the following credentials when prompted, and then select **OK**:
-
+4. プロンプトが表示されたら、以下の資格情報を入力し、\[**OK**\] を選択します。
+   
    - **User name**: `sqlmiuser`
    - **Password**: `Password.1234567890`
+   
+   ![\[Enter your crede ntials\]　ダイアログに上記の資格情報が入力されている。](media/rdc-credentials-sql-2008.png "[Enter your credentials]")
 
-   ![The credentials specified above are entered into the Enter your credentials dialog.](media/rdc-credentials-sql-2008.png "Enter your credentials")
+5. \[The identity of the remote computer cannot be verified\] というプロンプトが表示された場合、\[**Yes** \] を選択して接続しま す。
+   
+   ![\[Remote Desktop Connection\] ダイアログ ボックスで、このリモート コンピューターの ID が確認できないことを示し、このまま続行するか尋ねる警告メッセージが表示されている。下部の \[Yes\] ボタンが赤線で囲まれている。](./media/remote-desktop-connection-identity-verification-sqlserver2008.png "[Remote Desktop Connection] ダイアログ")
 
-5. Select **Yes** to connect, if prompted that the identity of the remote computer cannot be verified.
+6. ログインしたら、**サーバー マネージャー**を起動します。これは自動的に起動するはずですが、起動しない場合は \[スタート\] メニューを使用してアクセスできます。
 
-   ![In the Remote Desktop Connection dialog box, a warning states that the identity of the remote computer cannot be verified, and asks if you want to continue anyway. At the bottom, the Yes button is circled.](./media/remote-desktop-connection-identity-verification-sqlserver2008.png "Remote Desktop Connection dialog")
+7. **サーバー マネージャー**のビューで、\[セキュリティ情報\] 下の \[**IE ESC の構成**\] を選択します。
+   
+   ![サーバー マネージャーのスクリーンショット。左側のペインでは、\[ローカル サーバー\] が選択されている。右側の \[プロパティ (LabVM 用)\] ペインでは、\[オン\] に設定された \[IE セキュリティ強化の構成\] が強調表示されている。](./media/windows-server-2008-manager-ie-enhanced-security-configuration.png "サーバー マネージャー")
 
-6. Once logged in, launch the **Server Manager**. This should start automatically, but you can access it via the Start menu if it does not.
+8. \[Internet Explorer セキュリティ強化の構成\] ダイアログで、\[管理者\] と \[ユーザー\] の両方で \[**オフ**\] を選択した後、\[**OK**\] を選択します。
+   
+   ![\[管理者\] が \[オフ\] に設定された \[Internet Explorer セキュリティ強化の構成\] ダイアログ ボックスのスクリーンショット。](./media/2008-internet-explorer-enhanced-security-configuration-dialog.png "[Internet Explorer セキュリティ強化の構成] ダイアログ ボックス")
 
-7. On the **Server Manager** view, select **Configure IE ESC** under Security Information.
+9. サーバー マネージャーに戻り、\[**構成**\] および \[**セキュリティ強化機能搭載 Windows ファイアウォール**\] を展開した後、\[**受信の規則**\] を選択します。
+   
+   ![サーバー マネージャーで、\[構成\] および \[**セキュリティ強化機能搭載 Windows ファイアウォール**\] が展開され、\[受信の規則\] が選択および強調表示されている。](media/windows-firewall-inbound-rules.png "Windows ファイアウォール")
 
-   ![Screenshot of the Server Manager. In the left pane, Local Server is selected. In the right, Properties (For LabVM) pane, the IE Enhanced Security Configuration, which is set to On, is highlighted.](./media/windows-server-2008-manager-ie-enhanced-security-configuration.png "Server Manager")
+10. \[**受信の規則**\] を右クリックした後、コンテキスト メニューから \[**新しいルール**\] を選択します。
+    
+    ![\[受信の規則\] が選択され、コンテキスト メニューの \[新しいルール\] が強調表示されている。](media/windows-firewall-with-advanced-security-new-inbound-rule.png "[新しいルール]")
 
-8. In the Internet Explorer Enhanced Security Configuration dialog, select **Off** under both Administrators and Users, and then select **OK**.
+11. \[新規の受信の規則ウィザード\] の \[ルールの種類\] で、\[**ポート**\] を選択した後、\[**次へ**\] を選択します。
+    
+    ![\[新規の受信の規則ウィザード\] の左側で \[ルールの種類\] が選択および強調表示され、右側で \[ポート\] が選択および強調表示されている。](media/windows-2008-new-inbound-rule-wizard-rule-type.png "[ポート] の選択")
 
-   ![Screenshot of the Internet Explorer Enhanced Security Configuration dialog box, with Administrators set to Off.](./media/2008-internet-explorer-enhanced-security-configuration-dialog.png "Internet Explorer Enhanced Security Configuration dialog box")
+12. \[プロトコルおよびポート\] ダイアログで、既定の \[**TCP**\] を使用し、\[特定のローカル ポート\] テキスト ボックスに「**1433**」と入力した後、\[**次へ**\] を選択します。
+    
+    ![\[新規の受信の規則ウィザード\] の左側で \[プロトコルおよびポート\] が選択され、右側で \[特定のローカル ポート\] ボックスが選択され、「1433」と入力されている。](media/windows-2008-new-inbound-rule-wizard-protocol-and-ports.png "特定のローカル ポートの選択")
 
-9. Back in the Server Manager, expand **Configuration** and **Windows Firewall with Advanced Security**, and then select **Inbound Rules**.
+13. \[アクション\] ダイアログで、\[**接続を許可する**\] を選択した後、\[**次へ**\] を選択します。
+    
+    ![\[新規の受信の規則ウィザード\] の左側で \[アクション\] が選択され、右側で \[接続を許可する\] が選択されている。](media/windows-2008-new-inbound-rule-wizard-action.png "アクションの指定")
 
-   ![In Server Manager, Configuration and Windows Firewall with Advanced Security are expanded, Inbound Rules is selected and highlighted.](media/windows-firewall-inbound-rules.png "Windows Firewall")
+14. \[プロファイル\] のステップで、\[**ドメイン**\]、\[**プライベート**\]、および \[**パブリック**\] のチェックボックスをオンにした後、\[**次へ**\] を選択します。
+    
+    ![\[新規の受信の規則ウィザード\] の左側で \[プロファイル\] が選択され、右側で \[ドメイン\]、\[プライベート\]、および \[パブリック\] が選択されていまる。](media/windows-2008-new-inbound-rule-wizard-profile.png "[ドメイン]、[プライベート]、および [パブリック\] の選択")
 
-10. Right-click on **Inbound Rules** and then select **New Rule** from the context menu.
+15. \[名前\] 画面で、\[名前\] ボックスに「**SqlServer**」と入力して、\[**完了**\] を選択します。
+    
+    ![\[新規の受信の規則ウィザード\] の左側で \[名前\] が選択され、右側で \[名前\] ボックスに「SqlServer」と入力されている。](media/windows-2008-new-inbound-rule-wizard-name.png "名前の指定")
 
-    ![Inbound Rules is selected, and New Rule is highlighted in the context menu.](media/windows-firewall-with-advanced-security-new-inbound-rule.png "New Rule")
+16. サーバー マネージャーを閉じます。
 
-11. In the New Inbound Rule Wizard, under Rule Type, select **Port**, then select **Next**.
+17. 次に、SqlServer2008 VM の Web ブラウザーで <https://www.microsoft.com/en-us/download/details.aspx?id=53595> にナビゲートした後、\[**ダウンロード**\] ボタンを選択して、Microsoft Data Migration Assistant v5.x をインストールします。
+    
+    ![Data Migration Assistant のダウンロード ページの \[ダウンロード\] ボタンが強調表示されている。](media/dma-download.png "Data Migration Assistant のダウンロード")
+    
+    > **注**: バージョンは頻繁に変更されるため、バージョン番号がスクリーンショットと一致しない場合は、最新バージョンをダウンロードおよびインストールしてください。
 
-    ![Rule Type is selected and highlighted on the left side of the New Inbound Rule Wizard, and Port is selected and highlighted on the right.](media/windows-2008-new-inbound-rule-wizard-rule-type.png "Select Port")
+18. ダウンロードしたインストーラーを実行します。
 
-12. In the Protocol and Ports dialog, use the default **TCP**, and enter **1433** in the Specific local ports text box, and then select **Next**.
+19. 途中、ライセンス条項とプライバシー ポリシーに同意しながら、各画面で \[**Next**\] を選択します。
 
-    ![Protocol and Ports is selected on the left side of the New Inbound Rule Wizard, and 1433 is in the Specific local ports box, which is selected on the right.](media/windows-2008-new-inbound-rule-wizard-protocol-and-ports.png "Select a specific local port")
+20. \[Privacy Policy\] 画面で、\[**Install**\] を選択して、インストールを開始します。
 
-13. In the Action dialog, select **Allow the connection** and then select **Next**.
+21. 最後の画面で、\[**Finish**\] を選択して、インストーラーを閉じます。
+    
+    ![\[Microsoft Data Migration Assistant Setup\] ダイアログで、\[Finish\] ボタンが選択されている。](./media/data-migration-assistant-setup-finish.png "Microsoft Data Migration Assistant の実行")
 
-    ![Action is selected on the left side of the New Inbound Rule Wizard, and Allow the connection is selected on the right.](media/windows-2008-new-inbound-rule-wizard-action.png "Specify the action")
+## タスク 12: SqlServer2008 VM 上で WWI TailspinToys データベースを構成する
 
-14. In the Profile step, check **Domain**, **Private**, and **Public**, then select **Next**.
+このタスクでは、SQL Server 2008 R2 インスタンスで Wide World Importers の `TailspinToys` データベースを復元および設定します。
 
-    ![Profile is selected on the left side of the New Inbound Rule Wizard, and Domain, Private, and Public are selected on the right.](media/windows-2008-new-inbound-rule-wizard-profile.png "Select Domain, Private, and Public")
+1. SqlServer2008 VM で、[WWI TailspinToys データベースのバックアップ](https://raw.githubusercontent.com/microsoft/Migrating-SQL-databases-to-Azure/master/Hands-on%20lab/lab-files/Database/TailspinToys.bak)をダウンロードし、それを VM の `C:\` に保存します。
 
-15. On the Name screen, enter **SqlServer** for the name, and select **Finish**.
+2. 次に、Windows の \[スタート\] メニューの検索バーに「sql server」と入力し、検索結果から \[**Microsoft SQL Server Management Studio 17**\] を選択して、**Microsoft SQL Server Management Studio 17** (SSMS) を開きます。
+   
+   ![Windows の \[スタート\] メニューの検索ボックスに「sql server」と入力され、検索結果の \[Microsoft SQL Server Management Studio 17\] が強調表示されている。](media/start-menu-ssms-17.png "Windows の [スタート] メニューの検索")
 
-    ![Profile is selected on the left side of the New Inbound Rule Wizard, and sqlserver is in the Name box on the right.](media/windows-2008-new-inbound-rule-wizard-name.png "Specify the name")
+3. SSMS の \[**サーバーに接続**\] ダイアログで、\[サーバー名\] ボックスに「**SQLSERVER2008**」と入力し、\[**Windows 認証**\] が選択されていることを確認した後、\[**接続**\] を選択します。
+   
+   ![\[サーバー名\] に「SQLSERVER2008」と入力され、\[Windows 認証\] が選択された、SQL Server の \[**サーバーに接続**\] ダイアログが表示されている。](media/sql-server-connect-to-server.png "[bbサーバーに接続bb]")
 
-16. Close the Server Manager.
+4. 接続したら、Object Explorer で \[**SQLSERVER2008**\] 下の \[**データベース**\] を右クリックした後、コンテキスト メニューから \[**データベースの復元**\] を選択します。
+   
+   ![SSMS の Object Explorer の \[データベース\] のコンテキスト メニューが表示され、\[データベースの復元\] が強調表示されている。](media/ssms-databases-restore.png "SSMS の Object Explorer")
 
-17. Next, you will install the Microsoft Data Migration Assistant v5.x by navigating to <https://www.microsoft.com/en-us/download/details.aspx?id=53595> in a web browser on the SqlServer2008 VM and then select the **Download** button.
+5. ダウンロードした `TailspinToys.bak` ファイルを使用して、WWI `TailspinToys` データベースを復元します。\[データベースの復元\] ダイアログの \[**全般**\] ページで、\[ソース\] 下の \[**デバイス**\] を選択した後、\[デバイス\] ボックスの右側にある参照 (`...`) ボタンを選択します。
+   
+   ![\[データベースの復元\] ダイアログの \[ソース\] 下の \[デバイス\] が選択および強調表示され、参照ボタンが強調表示されている。](media/ssms-restore-database-source.png "データベースの復元元")
 
-    ![The Download button is highlighted on the Data Migration Assistant download page.](media/dma-download.png "Download Data Migration Assistant")
+6. 表示される \[**バックアップ デバイスの選択**\] ダイアログで、\[**追加**\] を選択します。
+   
+   ![\[バックアップ デバイスの選択\] ダイアログの \[追加\] ボタンが強調表示されている。](media/ssms-restore-database-select-devices.png "[バックアップ デバイスの選択]")
 
-    > **Note**: Versions change frequently, so if the version number you see does not match the screenshot, download and install the most recent version.
+7. \[**バックアップ ファイルの検索**\] ダイアログで、ダウンロードした `TailspinToys.bak` ファイルの保存場所を参照して、そのファイルを選択した後、\[**OK**\] を選択します。
+   
+   ![\[バックアップ ファイルの検索\] ダイアログで、TailspinToys.bak ファイルが選択および強調表示されている。](media/ssms-restore-database-locate-backup-file.png "バックアップ ファイルの検索]")
 
-18. Run the downloaded installer.
+8. \[**バックアップ デバイスの選択**\] ダイアログで、\[**OK**\] を選択します。選択すると、\[データベースの復元\] ダイアログに戻ります。WWI `TailspinToys` データベースの復元に必要な情報がダイアログに入力されています。
+   
+   ![必要な情報がすべて入力された \[データベースの復元\] ダイアログが表示され、WWI TailSpinToys データベースが復元先として指定されている。](media/ssms-restore-database.png "[データベースの復元]")
 
-19. Select **Next** on each of the screens, accepting the license terms and privacy policy in the process.
+9. \[**OK**\] を選択して、復元を開始します。
 
-20. Select **Install** on the Privacy Policy screen to begin the installation.
+10. データベースの復元が完了したら、ダイアログで \[**OK**\] を選択します。
+    
+    ![TailspinToys データベースが正常に復元されたことを知らせるメッセージを含むダイアログが表示されている。](media/ssms-restore-database-success.png "正常に復元")
 
-21. On the final screen, select **Finish** to close the installer.
+11. 次に、SSMS でスクリプトを実行して Service Broker を有効にし、`WorkshopUser` アカウントを作成して、データベースの復旧モデルを FULL に変更します。スクリプトを作成するために、SSMS のツールバーで \[**新しいクエリ**\] を選択して、SSMS で新しいクエリ ウィンドウを開きます。
+    
+    ![SSMS のツールバーの \[**新しいクエリ**\] ボタンが強調表示されている。](media/ssms-new-query.png "SSMS のツールバー")
 
-    ![The Finish button is selected on the Microsoft Data Migration Assistant Setup dialog.](./media/data-migration-assistant-setup-finish.png "Run the Microsoft Data Migration Assistant")
-
-## Task 12: Configure the WWI TailspinToys database on the SqlServer2008 VM
-
-In this task, you restore and configure Wide World Importers' `TailspinToys` database on the SQL Server 2008 R2 instance.
-
-1. On the SqlServer2008 VM, download a [backup of the WWI TailspinToys database](https://raw.githubusercontent.com/microsoft/Migrating-SQL-databases-to-Azure/master/Hands-on%20lab/lab-files/Database/TailspinToys.bak), and save it to the `C:\` of the VM.
-
-2. Next, open **Microsoft SQL Server Management Studio 17** (SSMS) by entering "sql server" into the search bar in the Windows Start menu and selecting **Microsoft SQL Server Management Studio 17** from the search results.
-
-   ![SQL Server is entered into the Windows Start menu search box, and Microsoft SQL Server Management Studio 17 is highlighted in the search results.](media/start-menu-ssms-17.png "Windows start menu search")
-
-3. In the SSMS **Connect to Server** dialog, enter **SQLSERVER2008** into the Server name box, ensure **Windows Authentication** is selected, and then select **Connect**.
-
-   ![The SQL Server Connect to Search dialog is displayed, with SQLSERVER2008 entered into the Server name and Windows Authentication selected.](media/sql-server-connect-to-server.png "Connect to Server")
-
-4. Once connected, right-click **Databases** under **SQLSERVER2008** in the Object Explorer, and then select **Restore Database** from the context menu.
-
-   ![In the SSMS Object Explorer, the context menu for Databases is displayed and Restore Database is highlighted.](media/ssms-databases-restore.png "SSMS Object Explorer")
-
-5. You will now restore the WWI `TailspinToys` database using the downloaded `TailspinToys.bak` file. On the **General** page of the Restore Database dialog, select **Device** under Source, and then select the Browse (`...`) button to the right of the Device box.
-
-   ![Under Source in the Restore Database dialog, Device is selected and highlighted, and the Browse button is highlighted.](media/ssms-restore-database-source.png "Restore Database source")
-
-6. In the **Select backup devices** dialog that appears, select **Add**.
-
-   ![In the Select backup devices dialog, the Add button is highlighted.](media/ssms-restore-database-select-devices.png "Select backup devices")
-
-7. In the **Locate Backup File** dialog, browse to the location you saved the downloaded `TailspinToys.bak` file, select that file, and then select **OK**.
-
-   ![In the Location Backup File dialog, the TailspinToys.bak file is selected and highlighted.](media/ssms-restore-database-locate-backup-file.png "Locate Backup File")
-
-8. Select **OK** on the **Select backup devices** dialog. This returns you to the Restore Database dialog. The dialog now contains the information required to restore the WWI `TailspinToys` database.
-
-   ![The completed Restore Database dialog is displayed, with the WWI TailSpinToys database specified as the target.](media/ssms-restore-database.png "Restore Database")
-
-9. Select **OK** to start the restore.
-
-10. Select **OK** in the dialog when the database restore is complete.
-
-    ![A dialog is displayed with a message that the database TailspinToys was restored successfully.](media/ssms-restore-database-success.png "Restored successfully")
-
-11. Next, you execute a script in SSMS, which enables Service broker, creates the `WorkshopUser` account, and changes the database recovery model to FULL. To create the script, open a new query window in SSMS by selecting **New Query** in the SSMS toolbar.
-
-    ![The New Query button is highlighted in the SSMS toolbar.](media/ssms-new-query.png "SSMS Toolbar")
-
-12. Copy and paste the SQL script below into the new query window:
-
+12. 以下の SQL スクリプトを新しいクエリ ウィンドウにコピーして貼り付けます。
+    
     ```sql
     USE master;
     GO
-
+    
     -- Create a login and user named WorkshopUser
     CREATE LOGIN WorkshopUser WITH PASSWORD = N'Password.1234567890';
     GO
-
+    
     EXEC sp_addsrvrolemember
         @loginame = N'WorkshopUser',
         @rolename = N'sysadmin';
     GO
-
+    
     -- Assign the user to the TailspinToys database
     USE TailspinToys;
     GO
-
+    
     IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = N'WorkshopUser')
     BEGIN
         CREATE USER [WorkshopUser] FOR LOGIN [WorkshopUser]
@@ -734,6 +734,6 @@ In this task, you restore and configure Wide World Importers' `TailspinToys` dat
     GO
     ```
 
-13. To run the script, select **Execute** from the SSMS toolbar.
-
-    ![The Execute button is highlighted in the SSMS toolbar.](media/ssms-execute.png "SSMS Toolbar")
+13. スクリプトを実行するために、SSMS のツールバーから \[**実行**\] を選択します。
+    
+    ![SSMS のツールバーの \[実行\] ボタンが強調表示されている。](media/ssms-execute.png "SSMS のツールバー")

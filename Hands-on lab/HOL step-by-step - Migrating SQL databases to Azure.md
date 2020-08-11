@@ -1,4 +1,4 @@
-![Microsoft Cloud Workshops](https://github.com/Microsoft/MCW-Template-Cloud-Workshop/raw/master/Media/ms-cloud-workshop.png "Microsoft Cloud Workshops")
+![マイクロソフト クラウド ワークショップ](https://github.com/Microsoft/MCW-Template-Cloud-Workshop/raw/master/Media/ms-cloud-workshop.png "マイクロソフト クラウド ワークショップ")
 
 <div class="MCWHeader1">
 Migrating SQL databases to Azure
@@ -12,158 +12,158 @@ Hands-on lab step-by-step guide
 June 2020
 </div>
 
-Information in this document, including URL and other Internet Web site references, is subject to change without notice. Unless otherwise noted, the example companies, organizations, products, domain names, e-mail addresses, logos, people, places, and events depicted herein are fictitious, and no association with any real company, organization, product, domain name, e-mail address, logo, person, place or event is intended or should be inferred. Complying with all applicable copyright laws is the responsibility of the user. Without limiting the rights under copyright, no part of this document may be reproduced, stored in or introduced into a retrieval system, or transmitted in any form or by any means (electronic, mechanical, photocopying, recording, or otherwise), or for any purpose, without the express written permission of Microsoft Corporation.
+このドキュメントに記載されている情報 (URL 等のインターネット Web サイトに関する情報を含む) は、将来予告なしに変更されることがあります。特に断りがない限り、ここで使用している会社、組織、製品、ドメイン名、電子メール アドレス、ロゴ、人物、場所、イベントの例は、架空のものであり、実在する会社、組織、製品、ドメイン名、電子メール アドレス、ロゴ、人物、場所、イベントなどとは一切関係ありません。お客様ご自身の責任において、適用されるすべての著作権関連法規に従ったご使用を願います。このドキュメントのいかなる部分も、米国 Microsoft Corporation の書面による許諾を受けることなく、その目的を問わず、どのような形態であっても、複製または譲渡することは禁じられています。ここでいう形態とは、複写や記録など、電子的な、または物理的なすべての手段を含みます。ただしこれは、著作権法上のお客様の権利を制限するものではありません。
 
-Microsoft may have patents, patent applications, trademarks, copyrights, or other intellectual property rights covering subject matter in this document. Except as expressly provided in any written license agreement from Microsoft, the furnishing of this document does not give you any license to these patents, trademarks, copyrights, or other intellectual property.
+マイクロソフトは、このドキュメントに記載されている内容に関し、特許、特許申請、商標、著作権、またはその他の無体財産権を有する場合があります。別途マイクロソフトのライセンス契約上に明示の規定のない限り、このドキュメントはこれらの特許、商標、著作権、またはその他の無体財産権に関する権利をお客様に許諾するものではありません。
 
-The names of manufacturers, products, or URLs are provided for informational purposes only and Microsoft makes no representations and warranties, either expressed, implied, or statutory, regarding these manufacturers or the use of the products with any Microsoft technologies. The inclusion of a manufacturer or product does not imply endorsement of Microsoft of the manufacturer or product. Links may be provided to third party sites. Such sites are not under the control of Microsoft and Microsoft is not responsible for the contents of any linked site or any link contained in a linked site, or any changes or updates to such sites. Microsoft is not responsible for webcasting or any other form of transmission received from any linked site. Microsoft is providing these links to you only as a convenience, and the inclusion of any link does not imply endorsement of Microsoft of the site or the products contained therein.
+製造元や製品の名前、URL は情報の提供のみを目的としており、マイクロソフトは、これらの製造元、またはマイクロソフトの技術での製品の使用について、明示的、黙示的、または法的にいかなる表示または保証も行いません。製造元または製品の使用は、マイクロソフトによるその製造元または製品の推奨を意味するものではありません。サード パーティのサイトへのリンクが提供されている場合があります。このようなサイトはマイクロソフトの管理下にはなく、マイクロソフトは、リンクされたサイトの内容またはリンクされたサイトに含まれるリンク、あるいはこのようなサイトの変更または更新について責任を負いません。マイクロソフトは、リンクされたサイトから受信された Web キャストまたは他のいかなる形態の転送にも責任を負いません。マイクロソフトは、これらのリンクを便宜のみを目的として提供しており、いかなるリンクの使用も、マイクロソフトによるサイトまたはそこに含まれる製品の推奨を意味するものではありません。
 
-© 2020 Microsoft Corporation. All rights reserved.
+© 2020 Microsoft Corporation.All rights reserved.
 
-Microsoft and the trademarks listed at <https://www.microsoft.com/en-us/legal/intellectualproperty/Trademarks/Usage/General.aspx> are trademarks of the Microsoft group of companies. All other trademarks are property of their respective owners.
+Microsoft および <https://www.microsoft.com/en-us/legal/intellectualproperty/Trademarks/Usage/General.aspx> に記載されている商標は、Microsoft グループの商標です。その他すべての商標は、該当する各社が所有しています。
 
-**Contents**
+**目次**
 
-- [Migrating SQL databases to Azure hands-on lab step-by-step](#migrating-sql-databases-to-azure-hands-on-lab-step-by-step)
-  - [Abstract and learning objectives](#abstract-and-learning-objectives)
-  - [Overview](#overview)
-  - [Solution architecture](#solution-architecture)
-  - [Requirements](#requirements)
-  - [Exercise 1: Perform database assessments](#exercise-1-perform-database-assessments)
-    - [Task 1: Configure the WWI TailspinToys database on the SqlServer2008 VM](#task-1-configure-the-wwi-tailspintoys-database-on-the-sqlserver2008-vm)
-    - [Task 2: Perform assessment for migration to Azure SQL Database](#task-2-perform-assessment-for-migration-to-azure-sql-database)
-    - [Task 3: Perform assessment for migration to Azure SQL Managed Instance](#task-3-perform-assessment-for-migration-to-azure-sql-managed-instance)
-  - [Exercise 2: Migrate the database to SQL MI](#exercise-2-migrate-the-database-to-sql-mi)
-    - [Task 1: Create an SMB network share on the SqlServer2008 VM](#task-1-create-an-smb-network-share-on-the-sqlserver2008-vm)
-    - [Task 2: Change MSSQLSERVER service to run under sqlmiuser account](#task-2-change-mssqlserver-service-to-run-under-sqlmiuser-account)
-    - [Task 3: Create a backup of WWI TailspinToys database](#task-3-create-a-backup-of-wwi-tailspintoys-database)
-    - [Task 4: Retrieve SQL MI and SQL Server 2008 VM connection information](#task-4-retrieve-sql-mi-and-sql-server-2008-vm-connection-information)
-    - [Task 5: Create a service principal](#task-5-create-a-service-principal)
-    - [Task 6: Create and run an online data migration project](#task-6-create-and-run-an-online-data-migration-project)
-    - [Task 7: Perform migration cutover](#task-7-perform-migration-cutover)
-    - [Task 8: Verify database and transaction log migration](#task-8-verify-database-and-transaction-log-migration)
-  - [Exercise 3: Update the web application to use the new SQL MI database](#exercise-3-update-the-web-application-to-use-the-new-sql-mi-database)
-    - [Task 1: Deploy the web app to Azure](#task-1-deploy-the-web-app-to-azure)
-    - [Task 2: Update App Service configuration](#task-2-update-app-service-configuration)
-  - [Exercise 4: Integrate App Service with the virtual network](#exercise-4-integrate-app-service-with-the-virtual-network)
-    - [Task 1: Set point-to-site addresses](#task-1-set-point-to-site-addresses)
-    - [Task 2: Configure VNet integration with App Services](#task-2-configure-vnet-integration-with-app-services)
-    - [Task 3: Open the web application](#task-3-open-the-web-application)
-  - [Exercise 5: Improve database security posture with Advanced Data Security](#exercise-5-improve-database-security-posture-with-advanced-data-security)
-    - [Task 1: Enable Advanced Data Security](#task-1-enable-advanced-data-security)
-    - [Task 2: Configure SQL Data Discovery and Classification](#task-2-configure-sql-data-discovery-and-classification)
-    - [Task 3: Review an Advanced Data Security Vulnerability Assessment](#task-3-review-an-advanced-data-security-vulnerability-assessment)
-  - [Exercise 6: Enable Dynamic Data Masking](#exercise-6-enable-dynamic-data-masking)
-    - [Task 1: Enable DDM on credit card numbers](#task-1-enable-ddm-on-credit-card-numbers)
-    - [Task 2: Apply DDM to email addresses](#task-2-apply-ddm-to-email-addresses)
-  - [Exercise 7: Use online secondary for read-only queries](#exercise-7-use-online-secondary-for-read-only-queries)
-    - [Task 1: View Leaderboard report in the WWI Tailspin Toys web application](#task-1-view-leaderboard-report-in-the-wwi-tailspin-toys-web-application)
-    - [Task 2: Update read-only connection string](#task-2-update-read-only-connection-string)
-    - [Task 3: Reload Leaderboard report in the Tailspin Toys web app](#task-3-reload-leaderboard-report-in-the-tailspin-toys-web-app)
-  - [After the hands-on lab](#after-the-hands-on-lab)
-    - [Task 1: Delete Azure resource groups](#task-1-delete-azure-resource-groups)
-    - [Task 2: Delete the wide-world-importers service principal](#task-2-delete-the-wide-world-importers-service-principal)
+- [Azure への SQL データベースの移行 ハンズオン ラボ ステップバイステップ](#azure-への-sql-データベースの移行-ハンズオン-ラボ-ステップバイステップ)
+    - [要約と学習目的](#要約と学習目的)
+    - [概要](#概要)
+    - [ソリューションのアーキテクチャ](#ソリューションのアーキテクチャ)
+    - [必要条件](#必要条件)
+    - [演習 1: データベースの評価を実行する](#演習-1-データベースの評価を実行する)
+        - [タスク 1: SqlServer2008 VM 上で WWI TailspinToys データベースを設定する](#タスク-1-sqlserver2008-vm-上で-wwi-tailspintoys-データベースを設定する)
+        - [タスク 2: Azure SQL Database への移行に向けた評価を実行する](#タスク-2-azure-sql-database-への移行に向けた評価を実行する)
+        - [タスク 3: Azure SQL Managed Instance への移行に向けた評価を実行する](#タスク-3-azure-sql-managed-instance-への移行に向けた評価を実行する)
+    - [演習 2: データベースを SQL MI に移行する](#演習-2-データベースを-sql-mi-に移行する)
+        - [タスク 1: SMB ネットワーク共有を SqlServer2008 VM 上で作成する](#タスク-1-smb-ネットワーク共有を-sqlserver2008-vm-上で作成する)
+        - [タスク 2: MSSQLSERVER サービスを変更して sqlmiuser アカウントで実行されるようにする](#タスク-2-mssqlserver-サービスを変更して-sqlmiuser-アカウントで実行されるようにする)
+        - [タスク 3: WWI TailspinToys データベースのバックアップを作成する](#タスク-3-wwi-tailspintoys-データベースのバックアップを作成する)
+        - [タスク 4: SQL MI と SQL Server 2008 VM の接続情報を取得する](#タスク-4-sql-mi-と-sql-server-2008-vm-の接続情報を取得する)
+        - [タスク 5: サービス プリンシパルを作成する](#タスク-5-サービス-プリンシパルを作成する)
+        - [タスク 6: オンライン データ移行プロジェクトを作成し実行する](#タスク-6-オンライン-データ移行プロジェクトを作成し実行する)
+        - [タスク 7: 移行のカットオーバーを実施する](#タスク-7-移行のカットオーバーを実施する)
+        - [タスク 8: データベースとトランザクション ログの移行を検証する](#タスク-8-データベースとトランザクション-ログの移行を検証する)
+    - [演習 3: Web アプリケーションを更新して新しい SQL MI データベースを使用させる](#演習-3-web-アプリケーションを更新して新しい-sql-mi-データベースを使用させる)
+        - [タスク 1: Web アプリを Azure に展開する](#タスク-1-web-アプリを-azure-に展開する)
+        - [タスク 2: App Service の設定を更新する](#タスク-2-app-service-の設定を更新する)
+    - [演習 4: App Service と仮想ネットワークを統合する](#演習-4-app-service-と仮想ネットワークを統合する)
+        - [タスク 1: ポイント対サイト アドレスを設定する](#タスク-1-ポイント対サイト-アドレスを設定する)
+        - [タスク 2: VNet と App Services の統合を設定する](#タスク-2-vnet-と-app-services-の統合を設定する)
+        - [タスク 3: Web アプリケーションを開く](#タスク-3-web-アプリケーションを開く)
+    - [演習 5: Advanced Data Security でデータベースのセキュリティ体制を強化する](#演習-5-advanced-data-security-でデータベースのセキュリティ体制を強化する)
+        - [タスク 1: Advanced Data Security を有効にする](#タスク-1-advanced-data-security-を有効にする)
+        - [タスク 2: SQL データの検出と分類を設定する](#タスク-2-sql-データの検出と分類を設定する)
+        - [タスク 3: Advanced Data Security の脆弱性評価をレビューする](#タスク-3-advanced-data-security-の脆弱性評価をレビューする)
+    - [演習 6: 動的データ マスクを有効にする](#演習-6-動的データ-マスクを有効にする)
+        - [タスク 1: クレジット カード 番号に対して DDM を有効にする](#タスク-1-クレジット-カード-番号に対して-ddm-を有効にする)
+        - [タスク 2: メール アドレスに DDM を適用する](#タスク-2-メール-アドレスに-ddm-を適用する)
+    - [演習 7: 読み取り専用クエリのためのオンライン セカンダリを使用する](#演習-7-読み取り専用クエリのためのオンライン-セカンダリを使用する)
+        - [タスク 1: WWI Tailspin Toys の Web アプリケーションのランキング レポートを表示する](#タスク-1-wwi-tailspin-toys-の-web-アプリケーションのランキング-レポートを表示する)
+        - [タスク 2:読み取り専用接続文字列を更新する](#タスク-2読み取り専用接続文字列を更新する)
+        - [タスク 3: Tailspin Toys の Web アプリのランキング レポートを再読み込みする](#タスク-3-tailspin-toys-の-web-アプリのランキング-レポートを再読み込みする)
+    - [ハンズオン ラボの後に](#ハンズオン-ラボの後に)
+        - [タスク 1: Azure リソース グループを削除する](#タスク-1-azure-リソース-グループを削除する)
+        - [タスク 2:wide-world-importers のサービス プリンシパルを削除する](#タスク-2wide-world-importers-のサービス-プリンシパルを削除する)
 
-# Migrating SQL databases to Azure hands-on lab step-by-step
+# Azure への SQL データベースの移行 ハンズオン ラボ ステップバイステップ
 
-## Abstract and learning objectives
+## 要約と学習目的
 
-In this hands-on lab, you implement a proof-of-concept (PoC) for migrating an on-premises SQL Server 2008 R2 database into Azure SQL Managed Instance (SQL MI). You perform assessments to reveal any feature parity and compatibility issues between the on-premises SQL Server 2008 R2 database and the managed database offerings in Azure. You then migrate the customer's on-premises gamer information web application and database into Azure, with minimal to no down-time. Finally, you enable some of the advanced SQL features available in SQL MI to improve security and performance in the customer's application.
+このハンズオン ラボでは、オンプレミスの SQL Server 2008 R2 データベースを Azure SQL Managed Instance (SQL MI) に移行するための概念実証 (PoC) を実装します。オンプレミスの SQL Server 2008 R2 データベースと Azure のマネージド データベース オファリングとの間で、機能パリティや互換性の問題がないかを明らかにするために、評価を実施します。続いて、ダウンタイムを最小限またはゼロに抑えながら、お客様のオンプレミスのプレイヤー情報 Web アプリケーションとデータベースを Azure に移行します。最後に、SQL MI で利用できる高度な SQL 機能の一部を有効にして、お客様のアプリケーションのセキュリティとパフォーマンスを向上させます。
 
-At the end of this hands-on lab, you will be better able to implement a cloud migration solution for business-critical applications and databases.
+このハンズオン ラボを完了すると、ビジネスクリティカルなアプリケーションおよびデータベースのクラウド移行ソリューションをより効果的に実装できるようになります。
 
-## Overview
+## 概要
 
-Tailspin Toys, a subsidiary of Wide World Importers (WWI), is the developer of several popular online video games. Founded in 2010, the company has experienced exponential growth since releasing the first installment of their most popular game franchise to include online multiplayer gameplay. They have since built upon this success by adding online capabilities to the majority of their game portfolio.
+Wide World Importers (WWI) の子会社である Tailspin Toys は、いくつかの人気のあるオンライン ゲームを開発した企業です。2010 年に設立された同社は、オンラインの多人数ゲームを含んだ、非常に人気のあるゲーム シリーズの第一弾リリース以降、急激な成長を遂げました。以来、同社はゲーム ポートフォリオの大部分にオンライン機能を追加することで、その成功を積み重ねてきました。
 
-Adding online gameplay has dramatically increased the popularity of their games, but the rapid increase in demand for their services has made supporting the current setup problematic. To facilitate online gameplay, they host gaming services on-premises using rented hardware. For each game, their gaming services setup consists of three virtual machines running the gaming software and five game databases hosted on a single SQL Server 2008 R2 instance. In addition to the dedicated gaming VMs and databases, they also host shared authentication and gateway VMs and databases. At its foundation, Tailspin Toys is a game development company, made up primarily of software developers. The few dedicated database and infrastructure resources they do have are struggling to keep up with their ever-increasing workload.
+オンライン ゲームの追加によって、同社のゲームの人気は劇的に上昇しましたが、サービスへの需要が急速に増大したため、現在の構成のサポートに問題が生じるようになりました。オンライン ゲームの提供を円滑に行うために、同社はレンタルのハードウェアを使って、オンプレミスでゲーム サービスをホストしています。各ゲームに対して、同社のゲーム サービスの構成は、ゲーム ソフトウェアを実行する 3 台の仮想マシンと、単一の SQL Server 2008 R2 インスタンスでホストされる 5 つのゲーム データベースから成っています。専用のゲーム VM とデータベースに加え、認証およびゲートウェイ用に共有の VM とデータベースもホストしています。Tailspin Toys は基本的にゲーム開発企業であり、主にソフトウェア開発者によって構成されています。データベースおよびインフラストラクチャ専門のリソースは少数で、拡大を続けるワークロードへの対応に苦戦しています。
 
-WWI is hoping that migrating their services from on-premises to the cloud can help to alleviate some of their infrastructure management issues, while simultaneously helping them to refocus their efforts on delivering business value by releasing new and improved games. They are looking for a proof-of-concept (PoC) for migrating their gamer information web application and database into the cloud. They maintain their gamer information database, `TailspinToys`, on an on-premises SQL Server 2008 R2 database. This system is used by gamers to update their profiles, view leader boards, purchase game add-ons, and more. Since this system helps to drive revenue, it is considered a business-critical application and needs to be highly-available. They are aware that SQL Server 2008 R2 is approaching the end of support, and are looking at options for migrating this database into Azure. They have read about some of the advanced security and performance tuning options that are available only in Azure and would prefer to migrate the database into a platform-as-a-service (PaaS) offering, if possible. WWI is using the Service Broker feature of SQL Server for messaging within the WWI `TailspinToys` database. This functionality enables several critical processes, and they cannot afford to lose these capabilities when migrating their operations database to the cloud. They have also stated that, at this time, they do not have the resources to rearchitect the solution to use an alternative message broker.
+WWI は、サービスをオンプレミスからクラウドに移行することによって、インフラストラクチャ管理の問題をいくらか軽減できると同時に、新しい改良されたゲームをリリースすることでビジネス価値を提供するという同社の取り組みに再度集中できるようになることを期待しています。現在は、プレイヤー情報 Web アプリケーションとデータベースをクラウドに移行するための概念実証 (PoC) を実施しようとしています。同社では、プレイヤー情報データベースである `TailspinToys` をオンプレミスの SQL Server 2008 R2 データベース上で維持しています。このシステムは、プレイヤーによるプロフィール更新、ランキング表示、ゲームのアドオン購入などのために使用されています。このシステムは収益の促進に寄与しているため、ビジネスクリティカルなアプリケーションであり、高可用性が必要であると考えられます。同社では SQL Server 2008 R2 のサポート終了が近づいていることを認識しており、このデータベースを Azure に移行させるための選択肢に目を向けています。Azure でしか利用できない、セキュリティとパフォーマンスに関する高度なチューニング オプションについて書かれた情報を見たことがあり、可能であれば、データベースを "サービスとしてのプラットフォーム (PaaS)" オファリングへ移行したいと考えています。WWI では WWI `TailspinToys` データベース内のメッセージングのために、SQL Server の Service Broker 機能を利用しています。この機能によっていくつかのクリティカルなプロセスが実現されているため、オペレーション データベースをクラウドに移行する際に、これを失うわけにはいきません。また、現時点では、代替となるメッセージ ブローカーを使用できるようにソリューションを再設計するためのリソースがないと語っています。
 
-## Solution architecture
+## ソリューションのアーキテクチャ
 
-Below is a diagram of the solution architecture you implement in this lab. Please study this carefully, so you understand the whole of the solution as you are working on the various components.
+以下の図は、このラボで実装するソリューションのアーキテクチャを示しています。これについて入念に学び、さまざまなコンポーネントに取り組む際に、ソリューション全体を把握できるようにしてください。
 
-![This solution diagram includes a virtual network containing SQL MI in an isolated subnet, along with a JumpBox VM and Database Migration Service in a management subnet. The MI Subnet displays both the primary managed instance, along with a read-only replica, which is accessed by reports from the web app. The web app connects to SQL MI via a subnet gateway and point-to-site VPN. The web app is published to App Services using Visual Studio 2019. Online data migration is conducted from the on-premises SQL Server to SQL MI using the Azure Database Migration Service, which reads backup files from an SMB network share.](./media/preferred-solution-architecture.png "Preferred Solution diagram")
+![このソリューションの図にある仮想ネットワークには、分離したサブネット内に SQL MI が、管理サブネット内に JumpBox VM および Database Migration Service が含まれています。MI サブネット内には、プライマリのマネージド インスタンスと、読み取り専用のレプリカの両方が示されています。レプリカは、Web アプリのレポートによるアクセスを受けます。Web アプリは、サブネット ゲートウェイとポイント対サイト VPN を介して SQL MI に接続します。この Web アプリは、Visual Studio 2019 を使って App Service に発行します。オンプレミスの SQL Server から SQL MI へのオンライン データ移行は、Azure Database Migration Service を使って実施します。Azure Database Migration Service は、SMB ネットワーク共有からバックアップ ファイルを読み取ります。](./media/preferred-solution-architecture.png "望ましいソリューションの図")
 
-The solution begins with using the Microsoft Data Migration Assistant (DMA) to perform assessments of feature parity and compatibility of the on-premises SQL Server 2008 R2 database. Assessments are performed against both Azure SQL Database (Azure SQL DB) and Azure SQL Managed Instance (SQL MI). The goal is to migrate the `TailspinToys` database into an Azure PaaS offering with minimal or no changes. After completing the assessments and reviewing the findings, the SQL Server 2008 R2 database is migrated into SQL MI using the Azure Database Migration Service's online data migration option. Online data migration allows the database to be migrated with little to no downtime by using a backup and transaction logs stored in an SMB network share.
+このソリューションでは、まず始めに Microsoft Data Migration Assistant (DMA) を使用して、オンプレミスの SQL Server 2008 R2 データベースの機能パリティと互換性に関する評価を実施します。評価は Azure SQL Database (Azure SQL DB) と Azure SQL Managed Instance (SQL MI) の両方に対して実施します。目標は、変更を最小限またはゼロに抑えながら、`TailspinToys` データベースを Azure PaaS オファリングに移行することです。評価を完了し、結果をレビューした後、Azure Database Migration Service のオンライン データ移行オプションを利用して、SQL Server 2008 R2 データベースを SQL MI に移行します。オンライン データ移行を利用すると、SMB ネットワーク共有に保存されたバックアップとトランザクション ログを使うことで、ダウンタイムを短時間またはゼロに抑えながらデータベースを移行できます。
 
-The web app is deployed to an Azure App Service Web App using Visual Studio 2019. Once the database has been migrated and cutover, the `TailspinToysWeb` application is configured to talk to the SQL MI VNet through a virtual network gateway using point-to-site VPN, and its connection strings are updated to point to the new SQL MI database.
+Web アプリは、Visual Studio 2019 を使って Azure App Service Web App に展開します。データベースの移行とカットオーバーが済んだら、`TailspinToysWeb` アプリケーションを設定して、このアプリケーションがポイント対サイト VPN を利用して、仮想ネットワーク ゲートウェイを通じて SQL MI VNet と通信できるようにします。また、接続文字列を、新しい SQL MI を指すように更新します。
 
-In SQL MI, several features of Azure SQL Database are examined. Advanced Data Security (ADS) is enabled, and Data Discovery and Classification is used to better understand the data and potential compliance issues with data in the database. The ADS Vulnerability Assessment is used to identify potential security vulnerabilities and issues in the database, and those finding are used to mitigate one finding by enabling Transparent Data Encryption in the database. Dynamic Data Masking (DDM) is used to prevent sensitive data from appearing when querying the database. Finally, Read Scale-out is used to point reports on WWI's Tailspin Toys web app to a read-only secondary, allowing reporting to occur without impacting the performance of the primary database.
+SQL MI では、Azure SQL Database のいくつかの機能を検証します。Advanced Data Security (ADS) を有効にします。また "データの検出と分類" を使用して、データについての理解、そしてデータベース内のデータに関する潜在的なコンプライアンス問題についての理解を深めます。ADS の脆弱性評価を使用してデータベース内の潜在的なセキュリティ脆弱性と問題を特定し、その結果を利用して、Transparent Data Encryption をデータベース内で有効にすることで 1 つの評価結果を緩和します。動的データ マスク (DDM) を利用して、データベースへのクエリ実行の際に機密データが表示されることを防ぎます。最後に、読み取りスケールアウトを使用して、WWI の Tailspin Toys の Web アプリ上のレポートを読み取り専用のセカンダリに振り向け、プライマリ データベースのパフォーマンスに影響を与えることなくレポーティングを実行できるようにします。
 
-## Requirements
+## 必要条件
 
-- Microsoft Azure subscription must be pay-as-you-go or MSDN.
-  - Trial subscriptions will not work.
-- A virtual machine configured with Visual Studio Community 2019 or higher (setup in the Before the hands-on lab exercises).
-- **Important**: You must have sufficient rights within your Azure AD tenant to create an Azure Active Directory application and service principal and assign roles on your subscription to complete this hands-on lab.
+- Microsoft Azure サブスクリプションが従量課金制または MSDN であること。
+  - 無料評価版サブスクリプションでは動作しません。
+- Visual Studio Community 2019 またはそれ以上を組み込んだ仮想マシンを用意すること ("ハンズオン ラボの前に" の演習でセットアップする)。
+- **重要**: このハンズオン ラボを完了するためには、Azure Active Directory アプリケーションやサービス プリンシパルを作成したり、サブスクリプションのロールを割り当てたりするための十分な権限を、Azure AD テナント内に持っている必要があります。
 
-## Exercise 1: Perform database assessments
+## 演習 1: データベースの評価を実行する
 
-Duration: 20 minutes
+所要時間: 20 分
 
-In this exercise, you use the Microsoft Data Migration Assistant (DMA) to perform assessments on the `TailspinToys` database. You create two assessments, one for a migration to Azure SQL Database, and then a second for SQL MI. These assessments provide reports about any feature parity, and compatibility issues between the on-premises database and the Azure managed SQL database service options.
+この演習では、Microsoft Data Migration Assistant (DMA) を使用して、`TailspinToys` データベースの評価を実行します。作成する評価は 2 つです。1 つは Azure SQL Database への移行用で、もう 1 つは SQL MI への移行用です。これらの評価は、オンプレミスのデータベースと Azure のマネージド SQL データベース サービス オプションとの間で発生しうる、機能パリティや互換性の問題についてのレポートを提供します。
 
-> DMA helps you upgrade to a modern data platform by detecting compatibility issues that can impact database functionality in your new version of SQL Server or Azure SQL Database. DMA recommends performance and reliability improvements for your target environment and allows you to move your schema, data, and uncontained objects from your source server to your target server. To learn more, read the [Data Migration Assistant documentation](https://docs.microsoft.com/sql/dma/dma-overview?view=azuresqldb-mi-current).
+> DMA は、新しいバージョンの SQL Server や Azure SQL Database でのデータベース機能に影響を与えうる互換性の問題を検出することで、最新のデータ プラットフォームへのアップグレードを支援します。DMA はターゲット環境のパフォーマンスと信頼性に関わる改善点を提案し、スキーマ、データ、および非包含オブジェクトをソース サーバーからターゲット サーバーに移動できるようにします。詳しくは、[Data Migration Assistant のドキュメント](https://docs.microsoft.com/sql/dma/dma-overview?view=azuresqldb-mi-current)を参照してください。
 
-### Task 1: Configure the WWI TailspinToys database on the SqlServer2008 VM
+### タスク 1: SqlServer2008 VM 上で WWI TailspinToys データベースを設定する
 
-In this task, you do some configuration the WWI `TailspinToys` database on the SQL Server 2008 R2 instance to prepare it for migration.
+このタスクでは、SQL Server 2008 R2 インスタンス上の WWI `TailspinToys` データベースに対して、移行に向けて準備するためのいくつかの設定を行います。
 
-1. Navigate to the [Azure portal](https://portal.azure.com) and select **Resource groups** from the Azure services list.
+1. [Azure portal](https://portal.azure.com) に移動し、\[Azure services\] リストから \[**Resource groups**\] を選択します。
+   
+   ![\[Azure services\] リストで \[Resource groups\] が強調表示されている。](media/azure-services-resource-groups.png "[Azure services]")
 
-   ![Resource groups is highlighted in the Azure services list.](media/azure-services-resource-groups.png "Azure services")
+2. リストから hands-on-lab-SUFFIX リソース グループを選択します。
+   
+   ![Azure のナビゲーション ペインで \[Resource groups\] が選択され、"hands-on-lab-SUFFIX" リソース グループが強調表示されている。](./media/resource-groups.png "リソース グループのリスト")
 
-2. Select the hands-on-lab-SUFFIX resource group from the list.
+3. リソース グループのリソース リストで、SqlServer2008 VM を選択します。
+   
+   ![リソース リストで SqlServer2008 VM が強調表示されている。](media/resource-list-sqlserver2008.png "リソース リスト")
 
-   ![Resource groups is selected in the Azure navigation pane, and the "hands-on-lab-SUFFIX" resource group is highlighted.](./media/resource-groups.png "Resource groups list")
+4. Azure portal の \[SqlServer2008 Virtual machine\] ブレードで、前にも行ったように、左側のメニューから \[**Overview**\] を選択した後、上部のメニューで \[**Connect**\] と \[**RDP**\] を選択します。
+   
+   ![\[SqlServer2008 Virtual machine\] ブレードが表示され、上部のメニューの \[Connect\] ボタンが強調表示されている。](./media/connect-vm-rdp.png "SqlServer2008 VM への接続")
 
-3. In the list of resources for your resource group, select the SqlServer2008 VM.
+5. \[Connect with RDP\] ブレードで \[**Download RDP File**\] を選択した後、ダウンロードされた RDP ファイルを開きます。
 
-   ![The SqlServer2008 VM is highlighted in the list of resources.](media/resource-list-sqlserver2008.png "Resource list")
+6. \[Remote Desktop Connection\] ダイアログで \[**Connect**\] を選択します。
+   
+   ![\[Remote Desktop Connection\] ダイアログ ボックスの \[Connect\] ボタンが強調表示されている。](./media/remote-desktop-connection-sql-2008.png "[Remote Desktop Connection] ダイアログ")
 
-4. On the SqlServer2008 VM blade in the Azure portal, select **Overview** from the left-hand menu, and then select **Connect** and **RDP** on the top menu, as you've done previously.
+7. プロンプトが表示されたら、以下の資格情報を入力し、\[**OK**\] を選択します。
+   
+   - **ユーザー名:** `sqlmiuser`
+   - **パスワード**: `Password.1234567890`
+   
+   ![\[Enter your credentials\]　ダイアログに上記の資格情報が入力されている。\[Enter your credentials\]](media/rdc-credentials-sql-2008.png "[Enter your credentials]")
 
-   ![The SqlServer2008 VM blade is displayed, with the Connect button highlighted in the top menu.](./media/connect-vm-rdp.png "Connect to SqlServer2008 VM")
+8. \[The identity of the remot  computer  annot be  erified\] というプロンプトが表示された場合、\[**Yes**\] を選択して接続します。
+   
+   ![\[Remote Desktop Connection\] ダイアログ ボックスで、このリモート コンピューターの ID が確認できないことを示し、このまま続行するか尋ねる警告メッセージが表示されている。下部の \[Yes\] ボタンが赤線で囲まれている。](./media/remote-desktop-connection-identity-verification-sqlserver2008.png "[Remote Desktop Connection] ダイアログ")
 
-5. On the Connect with RDP blade, select **Download RDP File**, then open the downloaded RDP file.
+9. ログインしたら、Windows の \[スタート\] メニューの検索バーに「sql server」と入力し、検索結果から \[**Microsoft SQL Server Management Studio 17**\] を選択して、**Microsoft SQL Server Management Studio 17** (SSMS) を開きます。
+   
+   ![Windows の \[スタート\] メニューの検索ボックスに「sql server」と入力され、検索結果内の \[Microsoft SQL Server Management Studio 17\] が強調表示されている。](media/start-menu-ssms-17.png "Windows の [スタート] メニューの検索")
 
-6. Select **Connect** on the Remote Desktop Connection dialog.
+10. SSMS の \[**サーバーに接続**\] ダイアログで、\[サーバー名\] ボックスに「**SQLSERVER2008**」と入力し、\[**Windows 認証**\] が選択されていることを確認した後、\[**接続**\] を選択します。
+    
+    ![\[サーバー名\] に「SQLSERVER2008」と入力され、\[Windows認証\] が選択さた、SQL Server の \[サーバーに接続\] ダイアログが表示されている。](media/sql-server-connect-to-server.png "[サーバーに接続]")
 
-   ![In the Remote Desktop Connection Dialog Box, the Connect button is highlighted.](./media/remote-desktop-connection-sql-2008.png "Remote Desktop Connection dialog")
+11. 接続したら、データベース下で `TailspinToys` データベースが表示されていることを確認します。表示されていない場合、VM のセットアップ時に設定スクリプトが適切に実行されなかった可能性があります。[手動によるリソースのセットアップ ガイド](./Manual-resource-setup.md)のタスク 12 の手順に従って、手動でデータベースを追加および復元できます。
 
-7. Enter the following credentials when prompted, and then select **OK**:
+12. SSMS ツールバーで \[**新しいクエリ**\] を選択します。
+    
+    ![SSMS ツールバーの \[新しいクエリ\] ボタンが強調表示されている。](media/ssms-new-query.png "SSMS のツールバー")
 
-   - **User name**: `sqlmiuser`
-   - **Password**: `Password.1234567890`
-
-   ![The credentials specified above are entered into the Enter your credentials dialog.](media/rdc-credentials-sql-2008.png "Enter your credentials")
-
-8. Select **Yes** to connect, if prompted that the identity of the remote computer cannot be verified.
-
-   ![In the Remote Desktop Connection dialog box, a warning states that the identity of the remote computer cannot be verified, and asks if you want to continue anyway. At the bottom, the Yes button is circled.](./media/remote-desktop-connection-identity-verification-sqlserver2008.png "Remote Desktop Connection dialog")
-
-9. Once logged in, open **Microsoft SQL Server Management Studio 17** (SSMS) by entering "sql server" into the search bar in the Windows Start menu and selecting **Microsoft SQL Server Management Studio 17** from the search results.
-
-   ![SQL Server is entered into the Windows Start menu search box, and Microsoft SQL Server Management Studio 17 is highlighted in the search results.](media/start-menu-ssms-17.png "Windows start menu search")
-
-10. In the SSMS **Connect to Server** dialog, enter **SQLSERVER2008** into the Server name box, ensure **Windows Authentication** is selected, and then select **Connect**.
-
-    ![The SQL Server Connect to Search dialog is displayed, with SQLSERVER2008 entered into the Server name and Windows Authentication selected.](media/sql-server-connect-to-server.png "Connect to Server")
-
-11. Once connected, verify you see the `TailspinToys` database listed under databases. If you don't see it, the configuration script may have failed during the VM setup. You can manually add restore the database by following the step under Task 12 of the [Manual-resource-setup guide](./Manual-resource-setup.md).
-
-12. Select **New Query** from the SSMS toolbar.
-
-    ![The New Query button is highlighted in the SSMS toolbar.](media/ssms-new-query.png "SSMS Toolbar")
-
-13. Next, copy and paste the SQL script below into the new query window. This script enables Service broker and changes the database recovery model to FULL.
-
+13. 次に、以下の SQL スクリプトを新しいクエリのウィンドウにコピーして貼り付けます。このスクリプトは Service Broker を有効にし、データベースの復旧モデルを FULL に変更します。
+    
     ```sql
     USE master;
     GO
-
+    
     -- Update the recovery model of the database to FULL and enable Service Broker
     ALTER DATABASE TailspinToys SET
     RECOVERY FULL,
@@ -171,301 +171,301 @@ In this task, you do some configuration the WWI `TailspinToys` database on the S
     GO
     ```
 
-14. To run the script, select **Execute** from the SSMS toolbar.
+14. スクリプトを実行するには、SSMS ツールバーから **\[実行\]** を選択します。
+    
+    ![SSMS ツールバーの \[実行\] ボタンが強調表示されている。](media/ssms-execute.png "SSMS ツールバー")
+
+### タスク 2: Azure SQL Database への移行に向けた評価を実行する
+
+このタスクでは、Microsoft Data Migration Assistant (DMA) を使用して、WWI の `TailspinToys` データベースを Azure SQL Database (Azure SQL DB) に対して評価します。この評価によって、オンプレミスのデータベースと Azure の SQL DB サービスとの間で発生しうる、機能パリティや互換性の問題についてのレポートが得られます。
+
+1. SqlSever2008 VM で、Windows の \[スタート\] メニューの検索バーに「data migration」と入力し、検索結果から \[**Microsoft Data Migration Assistant**\] を選択して、DMA を起動します。
+   
+   ![Windows の \[スタート\] メニューの検索バーに「data migration」と入力され、Windows の \[スタート\] メニューの検索結果で \[Microsoft Data Migration Assistant\] が強調表示されている。](media/windows-start-menu-dma.png "Data Migration Assistant")
+
+2. DMA のダイアログで、左側メニューから \[**+**\] を選択し、新しいプロジェクトを作成します。
+   
+   ![DMA の新しいプロジェクトのアイコンが強調表示されている。](media/dma-new.png "新しい DMA プロジェクト")
+
+3. \[New\] プロジェクト ペインで、次の項目を設定します。
+   
+   - **Project type**: \[**Assessment**\] を選択します。
+   - **Project name**: 「`ToAzureSqlDb`」と入力します。
+   - **Assessment type**: \[**Database Engine**\] を選択します。
+   - **Source server type**: \[**SQL Server**\] を選択します。
+   - **Target server type**: \[**Azure SQL Database**\] を選択します。
+   
+   ![SQL Server から Azure SQL Database への移行の評価を目的とした新しいプロジェクトの設定がダイアログに入力されている。](media/dma-new-project-to-azure-sql-db.png "新しいプロジェクトの設定")
+
+4. \[**Create**\] を選択します。
+
+5. \[**Options**\] 画面で \[**Check database compatibility**\] と \[**Check feature parity**\] の両方がオンになっていることを確認し、続いて \[**Next**\] を選択します。
+   
+   ![\[Option\] 画面で \[Check database compatibility\] と \[Check feature parity\] がオンになっている。](media/dma-options.png "DMA のオプション")
+
+6. \[**Sources**\] 画面で、右側に表示される \[**Connect to a server**\] ダイアログに以下の事項を入力します。
+   
+   - **Server name**: \[**SQLSERVER2008**\] を選択します。
+   - **Authentication type**: \[**SQL Server Authentication**\] を選択します。
+   - **Username**: 「`WorkshopUser`」と入力します。
+   - **Password**: 「`Password.1234567890`」と入力します。
+   - **Encrypt connection**: このボックスをオンにします。
+   - **Trust server certificate**: このボックスをオンにします。
+   
+   ![\[Connect to a server\] ダイアログで、上記の値が適切なフィールドに入力されている。](media/dma-connect-to-a-server.png "[Connect to a server]")
+
+7. \[**Connect**\] を選択します。
+
+8. 続いて表示される \[**Add sources**\] ダイアログで\[**TailspinToys**\] ボックスをオンにし、\[**Add**\] を選択します。
+   
+   ![\[Add sources\] ダイアログで \[TailspinToys\] ボックスがオンになっている。](media/dma-add-sources.png "[Add sources]")
+
+9. \[**Start Assessment**\] を選択します。
+   
+   ![評価の開始](media/dma-start-assessment-to-azure-sql-db.png "評価の開始")
 
-    ![The Execute button is highlighted in the SSMS toolbar.](media/ssms-execute.png "SSMS Toolbar")
+10. Azure SQL DB への移行が可能か判断するため、移行評価を確認します。
+    
+    ![ターゲット プラットフォームである Azure SQL DB について、機能パリティによって、Azure SQL DB でサポートされていない 2 つの機能が示されている。左側で Service Broker 機能が選択され、右側の "Service Broker feature is not supported in Azure SQL Database" が強調表示されている。](media/dma-feature-parity-service-broker-not-supported.png "データベースの機能パリティ")
+    
+    > ターゲット プラットフォームである Azure SQL DB に WWI の `TailspinToys` データベースを移行するための DMA 評価では、サポートされていない使用中の機能が示されます。Service Broker を含むこれらの機能が妨げとなっているため、WWI はまず自社のデータベースに変更を加えなければ、Azure SQL DB PaaS オファリングへの移行を行えません。
+
+### タスク 3: Azure SQL Managed Instance への移行に向けた評価を実行する
 
-### Task 2: Perform assessment for migration to Azure SQL Database
+1 つの PaaS オファリングが機能パリティによって除外されたので、Azure SQL Managed Instance (SQL MI) に対して、2 回目の DMA 評価を実行します。この評価によって、オンプレミスのデータベースと SQL MI サービスとの間で発生しうる、機能パリティや互換性の問題についてのレポートが得られます。
+
+1. 開始するには、DMA の左側メニューから \[**+**\] を選択し、別の新しいプロジェクトを作成します。
+   
+   ![DMA の新しいプロジェクトのアイコンが強調表示されている。](media/dma-new.png "新しい DMA プロジェクト")
+
+2. \[New\] プロジェクト ペインで、次の項目を設定します。
+   
+   - **Project type**: \[**Assessment**\] を選択します。
+   - **Project name**: 「`ToSqlMi`」と入力します。
+   - **Assessment type**: \[**Database Engine**\] を選択します。
+   - **Source server type**: \[**SQL Server**\] を選択します。
+   - **Target server type**: \[**Azure SQL Database Managed Instance**\] を選択します。
+   
+   ![SQL Server から Azure SQL Managed Instance への移行の評価を目的とした新しいプロジェクトの設定がダイアログに入力されている。](media/dma-new-project-to-sql-mi.png "新しいプロジェクトの設定")
+
+3. \[**Create**\] を選択します。
+
+4. \[**Options**\] 画面で \[**Check database compatibility**\] と \[**Check feature parity**\] の両方がオンになっていることを確認し、続いて \[**Next**\] を選択します。
+   
+   ![\[Option\] 画面で \[Check database compatibility\] と \[Check feature parity\] がオンになっている。](media/dma-options.png "DMA のオプション")
+
+5. \[**Sources**\] 画面で、右側に表示される \[**Connect to a server**\] ダイアログに以下の事項を入力します。
+   
+   - **Server name**: \[**SQLSERVER2008**\] を選択します。
+   - **Authentication type**: \[**SQL Server Authentication**\] を選択します。
+   - **Username**: 「`WorkshopUser`」と入力します。
+   - **Password**: 「`Password.1234567890`」と入力します。
+   - **Encrypt connection**: このボックスをオンにします。
+   - **Trust server certificate**: このボックスをオンにします。
+   
+   ![\[Connect to a server\] ダイアログで、上記の値が適切なフィールドに入力されている。](media/dma-connect-to-a-server.png "[Connect to a server]")
 
-In this task, you use the Microsoft Data Migration Assistant (DMA) to assess WWI's `TailspinToys` database against Azure SQL Database (Azure SQL DB). The assessment provides a report about any feature parity and compatibility issues between the on-premises database and the Azure SQL DB service.
+6. \[**Connect**\] を選択します。
 
-1. On the SqlSever2008 VM, launch DMA from the Windows Start menu by typing "data migration" into the search bar, and then selecting **Microsoft Data Migration Assistant** in the search results.
+7. 続いて表示される \[**Add sources**\] ダイアログで\[**TailspinToys**\] ボックスをオンにし、\[**Add**\] を選択します。
+   
+   ![\[Add sources\] ダイアログで \[TailspinToys\] ボックスがオンになっている。](media/dma-add-sources.png "[Add sources]")
 
-   ![In the Windows Start menu, "data migration" is entered into the search bar, and Microsoft Data Migration Assistant is highlighted in the Windows start menu search results.](media/windows-start-menu-dma.png "Data Migration Assistant")
+8. \[**Start Assessment**\] を選択します。
+   
+   ![評価の開始](media/dma-start-assessment-to-sql-mi.png "評価の開始")
 
-2. In the DMA dialog, select **+** from the left-hand menu to create a new project.
+9. Azure SQL Managed Instance への移行が可能か判断するため、移行評価の \[SQL Server feature parity\] オプションと \[Compatibility issues\] オプションを確認します。
+   
+   ![ターゲット プラットフォームである Azure SQL Managed Instance について、問題は挙げられていない。](media/dma-feature-parity-sql-mi.png "データベースの機能パリティ")
+   
+   ![ターゲット プラットフォームである Azure SQL Managed Instance について、フルテキスト検索が変更されているというメッセージと、影響を受けるオブジェクトのリストが表示されている。](media/dma-compatibility-issues-sql-mi.png "互換性の問題")
+   
+   > **注**: ターゲット プラットフォームである Azure SQL Managed Instance に WWI の `TailspinToys` データベースを移行するための評価レポートでは、機能パリティは表示されておらず、フルテキスト検索機能について確認せよという注記が示されています。フルテキスト検索の変更は `TailspinToys` データベースから SQL MI への移行に影響を与えません。
 
-   ![The new project icon is highlighted in DMA.](media/dma-new.png "New DMA project")
+10. このデータベースは、Service Broker 機能を含め、現状のまま移行させることが可能であり、WWI は Azure 上でフルマネージドの PaaS データベースを実行できます。従来、Azure SQL Database との互換性がない Service Broker のような機能を使用しているデータベースを移行させる唯一の選択肢は、Azure 上で動作している仮想マシン (IaaS) にデータベースを展開する、あるいはサポートされていない機能を使わないようにデータベースと関連アプリケーションを修正することでした。しかし Azure SQL MI の登場によって、TailspinToys による Azure SQL Database の使用を妨げていた機能を含め、"ほぼ 100% の互換性" を確保しながら、マネージドな Azure SQL データベース サービスへのデータベースの移行を行えるようになりました。
 
-3. In the New project pane, set the following:
+## 演習 2: データベースを SQL MI に移行する
 
-   - **Project type**: Select **Assessment**.
-   - **Project name**: Enter `ToAzureSqlDb`
-   - **Assessment type**: Select **Database Engine**.
-   - **Source server type**: Select **SQL Server**.
-   - **Target server type**: Select **Azure SQL Database**.
+所要時間: 60 分
 
-   ![The new project settings for doing a SQL Server to Azure SQL Database migration assessment are entered into the dialog.](media/dma-new-project-to-azure-sql-db.png "New project settings")
+この演習では、[Azure Database Migration Service](https://azure.microsoft.com/services/database-migration/) (DMS) を使用して、オンプレミスの SQL Server 2008 R2 データベースから SQL MI に WWI の `TailspinToys` データベースを移行します。WWI は自社のプレイヤー情報 Web アプリケーションが収益促進のために重要であると述べています。そのため、今回の移行ではダウンタイムの短縮を目的として、オンライン移行オプションを採用します。[Business Critical サービス レベル](https://docs.microsoft.com/azure/azure-sql/managed-instance/sql-managed-instance-paas-overview#managed-instance-service-tiers)は、お客様の高可用性要件への適合を狙いとしています。
 
-4. Select **Create**.
+> Business Critical サービス レベルは、最高度のパフォーマンスおよび高可用性 (HA) の要件を持つビジネス アプリケーションに向けて設計されています。詳しくは、[Managed Instance のサービス レベルのドキュメント](https://docs.microsoft.com/azure/azure-sql/managed-instance/sql-managed-instance-paas-overview#service-tiers)を参照してください。
 
-5. On the **Options** screen, ensure **Check database compatibility** and **Check feature parity** are both checked, and then select **Next**.
+### タスク 1: SMB ネットワーク共有を SqlServer2008 VM 上で作成する
 
-   ![Check database compatibility and check feature parity are checked on the Options screen.](media/dma-options.png "DMA options")
+このタスクでは、SqlServer2008 VM で新しい SMB ネットワーク共有を作成します。これは、データベース移行プロセス中に DMS が WWI `TailspinToys` データベースのバックアップを取得するために使用するフォルダーです。
 
-6. On the **Sources** screen, enter the following into the **Connect to a server** dialog that appears on the right-hand side:
+1. SqlServer2008 VM で、Windows タスクバー上のアイコンを選択して**エクスプローラー**を開きます。
+   
+   ![Windows タスクバーの \[エクスプローラー\] アイコンが強調表示されている。](media/windows-task-bar.png "Windows タスクバー")
 
-   - **Server name**: Select **SQLSERVER2008**.
-   - **Authentication type**: Select **SQL Server Authentication**.
-   - **Username**: Enter `WorkshopUser`
-   - **Password**: Enter `Password.1234567890`
-   - **Encrypt connection**: Check this box.
-   - **Trust server certificate**: Check this box.
+2. \[エクスプローラー\] ウィンドウ内で、ツリー ビューの \[**コンピューター**\] を展開し、\[**Windows (C:)**\] を選択します。続いて上部メニューの \[**新しいフォルダー**\] を選択します。
+   
+   ![エクスプローラーの左側ツリー ビューで \[コンピューター\] 以下の \[Windows (C:)\] が選択され、上部メニューの \[新しいフォルダー\] が強調表示されている。](media/windows-explorer-new-folder.png "エクスプローラー")
 
-   ![In the Connect to a server dialog, the values specified above are entered into the appropriate fields.](media/dma-connect-to-a-server.png "Connect to a server")
+3. 新しいフォルダーに **dms-backups** という名前を付け、そのフォルダーを右クリックして、コンテキスト メニューの \[**共有**\] と \[**特定のユーザー**\] を選択します。
+   
+   ![エクスプローラーで dms-backups フォルダーのコンテキスト メニューが表示され、\[共有\] と \[特定のユーザー\] が強調表示されている。](media/windows-explorer-folder-share-with.png "エクスプローラー")
 
-7. Select **Connect**.
+4. \[ファイル共有\] ダイアログで **sqlmiuser** がリストされ、アクセス許可レベルが**読み取り/書き込み**になっていることを確認してから、\[**共有**\] を選択します。
+   
+   ![\[ファイル共有\] ダイアログで sqlmiuser が強調表示され、読み取り/書き込みのアクセス許可レベルが割り当てられている。](media/file-sharing.png "[ファイル共有]")
 
-8. On the **Add sources** dialog that appears next, check the box for **TailspinToys** and select **Add**.
+5. \[**ネットワークの探索とファイル共有**\] ダイアログで、既定値である "**いいえ、接続しているネットワークをプライベート ネットワークにします**" を選択します。
+   
+   ![\[ネットワークの探索とファイル共有\] ダイアログの "いいえ、接続しているネットワークをプライベート ネットワークにします" が強調表示されている。](media/network-discovery-and-file-sharing.png "ネットワークの探索とファイル共有]")
 
-   ![The TailspinToys box is checked on the Add sources dialog.](media/dma-add-sources.png "Add sources")
+6. \[ファイル共有\] ダイアログに戻ったら、共有フォルダーのパスである `\\SQLSERVER2008\dms-backups` を確認し、\[**完了**\] を選択して共有プロセスを完了します。
+   
+   ![\[ファイル共有\] ダイアログの \[完了\] ボタンが強調表示されている。](media/file-sharing-done.png "[ファイル共有]")
 
-9. Select **Start Assessment**.
+### タスク 2: MSSQLSERVER サービスを変更して sqlmiuser アカウントで実行されるようにする
 
-   ![Start assessment](media/dma-start-assessment-to-azure-sql-db.png "Start assessment")
+このタスクでは、SQL Server Configuration Manager を使用して、SQL Server (MSSQLSERVER) が使用するサービス アカウントを `sqlmiuser` アカウントに更新します。これを実行するのは、共有フォルダーにバックアップを書き込むための適切な権限を、SQL Server サービスに確保させるためです。
 
-10. Review the migration assessment to determine the possibility of migrating to Azure SQL DB.
+1. SqlServer2008 VM で **\[スタート\] メニュー**を選択し、検索バーに「sql configuration」と入力します。続いて検索結果から \[**SQL Server Configuration Manager**\] を選択します。
+   
+   ![Windows の \[スタート\] メニューの検索ボックスに「sql configuration」と入力され、検索結果で \[SQL ServerSQL Server Configuration Manager\] が強調表示されている。](media/windows-start-sql-configuration-manager.png "Windows Search")
+   
+   > **注**: 必ず \[**SQL Server Configuration Manager**\] を選んでください。**SQL Server 2017 Configuration Manager**は、インストールされている SQL Server 2008 R2 データベースに対応していないため、選択しないでください。
 
-    ![For a target platform of Azure SQL DB, feature parity shows two features that are not supported in Azure SQL DB. The Service broker feature is selected on the left and on the right Service Broker feature is not supported in Azure SQL Database is highlighted.](media/dma-feature-parity-service-broker-not-supported.png "Database feature parity")
+2. \[SQL Server Configuration Manager\] ダイアログで、左側ツリー ビューの \[**SQL Server サービス**\] を選択します。続いてサービスのリストにある \[**SQL Server (MSSQLSERVER)**\] を右クリックし、コンテキスト メニューの \[**プロパティ**\] を選択します。
+   
+   ![SQL Server 設定マネージャーのツリー ビューで SQL Server サービスが選択され、強調表示されている。サービス ペインで SQL Server (MSSQLSERVER) が選択され、強調表示されている。コンテキスト メニューの \[プロパティ\] が強調表示されている。](media/sql-server-configuration-manager-services.png "SQL Server 設定マネージャー")
 
-    > The DMA assessment for migrating WWI's `TailspinToys` database to a target platform of Azure SQL DB reveals features in use that are not supported. These features, including Service broker, prevent WWI from being able to migrate to the Azure SQL DB PaaS offering without first making changes to their database.
+3. \[SQL Server (MSSQLSERVER) プロパティ\] ダイアログで、\[ログオン\] 下の \[**このアカウント**\] を選択し、以下の項目を入力します。
+   
+   - **アカウント名** `sqlmiuser`
+   - **パスワード**: `Password.1234567890`
+   
+   ![\[SQL Server (MSSQLSERVER) プロパティ\] ダイアログで、\[ログオン\] 下の \[このアカウント\] が選択され、sqlmiuser のアカウント名とパスワードが入力されている。](media/sql-server-service-properties.png "[SQL Server (MSSQLSERVER) プロパティ]")
 
-### Task 3: Perform assessment for migration to Azure SQL Managed Instance
+4. \[**OK**\] を選択します。
 
-With one PaaS offering ruled out due to feature parity, perform a second DMA assessment against Azure SQL Managed Instance (SQL MI). The assessment provides a report about any feature parity and compatibility issues between the on-premises database and the SQL MI service.
+5. \[アカウント変更の確認\] ダイアログで \[**はい**\] を選択します。
+   
+   ![\[アカウント変更の確認\] ダイアログの \[はい\] ボタンが強調表示されている。](media/confirm-account-change.png "[アカウント変更の確認]")
 
-1. To get started, select **+** on the left-hand menu in DMA to create another new project.
+6. SQL Server (MSSQLSERVER) サービスの \[**ログオン**\] の値が `./sqlmiuser` に変更されたことを確認してください。
+   
+   ![SQL Server サービスのリストで、SQL Server (MSSQLSERVER) サービスが強調表示されている。](media/sql-server-service.png "SQL Server サービス")
 
-   ![The new project icon is highlighted in DMA.](media/dma-new.png "New DMA project")
+7. SQL Server Configurat ion Manager を閉じます。
 
-2. In the New project pane, set the following:
+### タスク 3: WWI TailspinToys データベースのバックアップを作成する
 
-   - **Project type**: Select **Assessment**.
-   - **Project name**: Enter `ToSqlMi`
-   - **Assessment type**: Select **Database Engine**.
-   - **Source server type**: Select **SQL Server**.
-   - **Target server type**: Select **Azure SQL Database Managed Instance**.
+オンライン データ移行を実行するために、DMS はソース データベース サーバーの SMB 共有バックアップ フォルダーにあるバックアップとログを探します。このタスクでは、SSMS を使って WWI `TailspinToys` データベースのバックアップを作成し、それを前のタスクで作成した SMB ネットワーク共有 `\\SQLSERVER2008\dms-backups` に書き込みます。このバックアップ ファイルにはチェックサムが含まれている必要があるので、それをバックアップ手順の間に付加します。
 
-   ![The new project settings for doing a SQL Server to Azure SQL Managed Instance migration assessment are entered into the dialog.](media/dma-new-project-to-sql-mi.png "New project settings")
+1. SqlServer2008 VM で、Windows の \[スタート\] メニューの検索バーに「sql server」と入力し、**Microsoft SQL Server Management Studio 17** を起動します。
+   
+   ![Windows の \[スタート\] メニューの検索ボックスに「SQL Server」と入力され、検索結果内で \[Microsoft SQL Server Management Studio 17\] が強調表示されている。](media/start-menu-ssms-17.png "Windows の [スタート] メニューの検索")
 
-3. Select **Create**.
+2. SSMS の \[**サーバーに接続**\] ダイアログで、\[サーバー名\] ボックスに「**SQLSERVER2008**」と入力し、\[**Windows 認証**\] が選択されていることを確認した後、\[**接続**\] を選択します。
+   
+   ![\[サーバー名\] に に「SQLSERVER2008」と入力され、\[Windows 認証\] が選択さた、SQL Server の \[サーバーに接続\] ダイアログが表示されている。](media/sql-server-connect-to-server.png "[サーバーに接続]")
 
-4. On the **Options** screen, ensure **Check database compatibility** and **Check feature parity** are both checked, and then select **Next**.
+3. 接続が済んだら、Object Explorer で \[SQLSERVER2008\] 以下の \[**データベース**\] を展開してから、\[**TailspinToys**\] データベースを右クリックします。コンテキスト メニューから \[**タスク**\] を選び、続いて \[**バックアップ**\] を選択します。
+   
+   ![SSMS の Object Explorer で、TailspinToys データベースのコンテキスト メニューが表示され、\[タスク\] と \[バックアップ\] が強調表示されている。](media/ssms-backup.png "SSMS の [バックアップ]")
 
-   ![Check database compatibility and check feature parity are checked on the Options screen.](media/dma-options.png "DMA options")
+4. \[データベースのバックアップ\] ダイアログの \[出力先\] ボックスに、`C:\TailspinToys.bak` がリストされているはずです。これはもう不要なので、選択してから、\[**削除**\] を選んでください。
+   
+   ![\[データベースのバックアップ\] ダイアログの \[全般\] タブで、C:\\TailspinToys.bak が選択され、\[出力先\] 下の \[削除\] ボタンが強調表示されている。](media/ssms-back-up-database-general-remove.png)
 
-5. On the **Sources** screen, enter the following into the **Connect to a server** dialog that appears on the right-hand side:
+5. 続いて、SMB ネットワーク共有をバックアップの保存先として追加するために、\[**追加**\] を選択します。
+   
+   ![\[データベースのバックアップ\] ダイアログの \[全般\] タブで、\[出力先\] 下の \[追加\] ボタンが強調表示されている。](media/ssms-back-up-database-general.png "[データベースのバックアップ]")
 
-   - **Server name**: Select **SQLSERVER2008**.
-   - **Authentication type**: Select **SQL Server Authentication**.
-   - **Username**: Enter `WorkshopUser`
-   - **Password**: Enter `Password.1234567890`
-   - **Encrypt connection**: Check this box.
-   - **Trust server certificate**: Check this box.
+6. \[バックアップ先の選択\] ダイアログで、\[参照\] (`...`) ボタンを選択します。
+   
+   ![\[バックアップ先の選択\] ダイアログの \[参照\] ボタンが強調表示されている。](media/ssms-select-backup-destination.png "[バックアップ先の選択]")
 
-   ![In the Connect to a server dialog, the values specified above are entered into the appropriate fields.](media/dma-connect-to-a-server.png "Connect to a server")
+7. \[データベース ファイルの場所\] ダイアログで、`C:\dms-backups` フォルダーを選択し、\[ファイル名\] フィールドに「`TailspinToys.bak`」と入力してから、\[**OK**\] を選択します。
+   
+   ![\[ファイルの選択\] ペインで、C:\\dms-backups フォルダーが選択および強調表示され、\[ファイル名\] フィールドに「TailspinToys.bak」と入力されている。](media/ssms-locate-database-files.png "[データベース ファイルの場所]")
 
-6. Select **Connect**.
+8. \[**OK**\] を選択して、\[バックアップ先の選択\] ダイアログを閉じます。
 
-7. On the **Add sources** dialog that appears next, check the box for **TailspinToys** and select **Add**.
+9. \[データベースのバックアップ\] ダイアログで、\[ページの選択\] ペイン の \[**メディア オプション**\] を選択してから、以下の項目を設定します。
+   
+   - \[**既存のメディア セットにバックアップ**\] を選んでから、\[**既存のすべてのバックアップ セットを上書き**\] を選択します。
+   - \[信頼性\] 下の \[**メディアへの書き込みの前にチェックサムを実行**\] ボックスをオンにします。これはバックアップを使用してデータベースを SQL MI へ復元する際、DMS にとって必要となります。
+   
+   ![\[データベースのバックアップ\] ダイアログで、\[メディア オプション\] ページが選択され、\[既存のすべてのバックアップ セットを上書き\] と \[メディアへの書き込みの前にチェックサムを実行\] が選択および強調表示されている。](media/ssms-back-up-database-media-options.png "[データベースのバックアップ]")
 
-   ![The TailspinToys box is checked on the Add sources dialog.](media/dma-add-sources.png "Add sources")
+10. \[**OK**\] を選択してバックアップを実行します。
 
-8. Select **Start Assessment**.
+11. バックアップが完了したら、メッセージが表示されます。\[**OK**\] を選択します。
+    
+    ![データベースのバックアップが正常に終了したというメッセージを表示するダイアログ](media/ssms-backup-complete.png "バックアップの完了")
 
-   ![Start assessment](media/dma-start-assessment-to-sql-mi.png "Start assessment")
+### タスク 4: SQL MI と SQL Server 2008 VM の接続情報を取得する
 
-9. Review the SQL Server feature parity and Compatibility issues options of the migration assessment to determine the possibility of migrating to Azure SQL Managed Instance.
+このタスクでは、Azure Cloud Shell を使用して、DMS から SqlServer2008 VM に接続するのに必要な情報を取得します。
 
-   ![For a target platform of Azure SQL Managed Instance, no issues are listed.](media/dma-feature-parity-sql-mi.png "Database feature parity")
+1. [Azure portal](https://portal.azure.com) のトップメニューから \[Azure Cloud Shell\] アイコンを選択します。
+   
+   ![Azure portal のトップメニューで \[Azure Cloud Shell\] アイコンが強調表示されている。](media/cloud-shell-icon.png "Azure Cloud Shell")
 
-   ![For a target platform of Azure SQL Managed Instance, a message that full-text search has changed, and the list of impacted objects are listed.](media/dma-compatibility-issues-sql-mi.png "Compatibility issues")
+2. ブラウザー ウィンドウの下部に開かれる \[Cloud Shell\] ウィンドウで、\[**PowerShell**\] を選択します。
+   
+   ![\[Welcome to Azure Cloud Shell\] ウィンドウで、\[PowerShell\] が強調表示されている。](media/cloud-shell-select-powershell.png "Azure Cloud Shell")
 
-   > **Note**: The assessment report for a migrating WWI's `TailspinToys` database to a target platform of Azure SQL Managed Instance shows no feature parity and a note to validate full-text search functionality. The full text search changes do not impact the migration of the `TailspinToys` database to SQL MI.
+3. "You have no storage mounted (ストレージがマウントされていません)" というメッセージが表示された場合は、このハンズオン ラボのために使用しているサブスクリプションを選び、\[**Create storage**\] を選択します。
+   
+   ![\[You have no storage mounted\] ダイアログで、サブスクリプションが選択され、\[Create Storage\] ボタンが強調表示されている。](media/cloud-shell-create-storage.png "Azure Cloud Shell")
+   
+   > **注**: 作成が失敗した場合は、\[**Advanced settings**\] を選択して、新しいストレージ アカウントのためのサブスクリプション、リージョン、リソース グループを指定する必要があるかもしれません。
 
-10. The database, including the Service Broker feature, can be migrated as is, providing an opportunity for WWI to have a fully managed PaaS database running in Azure. Previously, their only option for migrating a database using features incompatible with Azure SQL Database, such as Service Broker, was to deploy the database to a virtual machine running in Azure (IaaS) or modify the database and associated applications to remove use of the unsupported features. The introduction of Azure SQL MI, however, provides the ability to migrate databases into a managed Azure SQL database service with _near 100% compatibility_, including the features that prevented them from using Azure SQL Database.
+4. しばらくすると、Cloud Shell の要求に成功したというメッセージが \[PS Azure\] プロンプトと一緒に表示されます。
+   
+   ![\[Azure Cloud Shell\] ダイアログで、Cloud Shell の要求に成功したというメッセージが表示され、\[PS Azure\] プロンプトが表示されている。](media/cloud-shell-ps-azure-prompt.png "Azure Cloud Shell")
 
-## Exercise 2: Migrate the database to SQL MI
-
-Duration: 60 minutes
-
-In this exercise, you use the [Azure Database Migration Service](https://azure.microsoft.com/services/database-migration/) (DMS) to migrate WWI's `TailspinToys` database from their on-premises SQL Server 2008 R2 database into SQL MI. WWI mentioned the importance of their gamer information web application in driving revenue, so for this migration, the online migration option is used to reduce downtime. The [Business Critical service tier](https://docs.microsoft.com/azure/azure-sql/managed-instance/sql-managed-instance-paas-overview#managed-instance-service-tiers) is targeted to meet the customer's high-availability requirements.
-
-> The Business Critical service tier is designed for business applications with the highest performance and high-availability (HA) requirements. To learn more, read the [Managed Instance service tiers documentation](https://docs.microsoft.com/azure/azure-sql/managed-instance/sql-managed-instance-paas-overview#service-tiers).
-
-### Task 1: Create an SMB network share on the SqlServer2008 VM
-
-In this task, you create a new SMB network share on the SqlServer2008 VM. This is the folder used by DMS for retrieving backups of the WWI `TailspinToys` database during the database migration process.
-
-1. On the SqlServer2008 VM, open **Windows Explorer** by selecting its icon on the Windows Taskbar.
-
-   ![The Windows Explorer icon is highlighted in the Windows Taskbar.](media/windows-task-bar.png "Windows Taskbar")
-
-2. In the Windows Explorer window, expand **Computer** in the tree view, select **Windows (C:)**, and then select **New folder** in the top menu.
-
-   ![In Windows Explorer, Windows (C:) is selected under Computer in the left-hand tree view, and New folder is highlighted in the top menu.](media/windows-explorer-new-folder.png "Windows Explorer")
-
-3. Name the new folder **dms-backups**, then right-click the folder and select **Share with** and **Specific people** in the context menu.
-
-   ![In Windows Explorer, the context menu for the dms-backups folder is displayed, with Share with and Specific people highlighted.](media/windows-explorer-folder-share-with.png "Windows Explorer")
-
-4. In the File Sharing dialog, ensure the **sqlmiuser** is listed with a **Read/Write** permission level, and then select **Share**.
-
-   ![In the File Sharing dialog, the sqlmiuser is highlighted and assigned a permission level of Read/Write.](media/file-sharing.png "File Sharing")
-
-5. In the **Network discovery and file sharing** dialog, select the default value of **No, make the network that I am connected to a private network**.
-
-   ![In the Network discovery and file sharing dialog, No, make the network that I am connected to a private network is highlighted.](media/network-discovery-and-file-sharing.png "Network discovery and file sharing")
-
-6. Back on the File Sharing dialog, note the path of the shared folder, `\\SQLSERVER2008\dms-backups`, and select **Done** to complete the sharing process.
-
-   ![The Done button is highlighted on the File Sharing dialog.](media/file-sharing-done.png "File Sharing")
-
-### Task 2: Change MSSQLSERVER service to run under sqlmiuser account
-
-In this task, you use the SQL Server Configuration Manager to update the service account used by the SQL Server (MSSQLSERVER) to the `sqlmiuser` account. This is done to ensure the SQL Server service has the appropriate permissions to write backups to the shared folder.
-
-1. On your SqlServer2008 VM, select the **Start menu**, enter "sql configuration" into the search bar, and then select **SQL Server Configuration Managed** from the search results.
-
-   ![In the Windows Start menu, "sql configuration" is entered into the search box, and SQL Server Configuration Manager is highlighted in the search results.](media/windows-start-sql-configuration-manager.png "Windows search")
-
-   > **Note**: Be sure to choose **SQL Server Configuration Manager**, and not **SQL Server 2017 Configuration Manager**, which does not work for the installed SQL Server 2008 R2 database.
-
-2. In the SQL Server Configuration Managed dialog, select **SQL Server Services** from the tree view on the left, then right-click **SQL Server (MSSQLSERVER)** in the list of services and select **Properties** from the context menu.
-
-   ![SQL Server Services is selected and highlighted in the tree view of the SQL Server Configuration Manager. In the Services pane, SQL Server (MSSQLSERVER) is selected and highlighted. Properties is highlighted in the context menu.](media/sql-server-configuration-manager-services.png "SQL Server Configuration Manager")
-
-3. In the SQL Server (MSSQLSERVER) Properties dialog, select **This account** under Log on as, and enter the following:
-
-   - **Account name**: `sqlmiuser`
-   - **Password**: `Password.1234567890`
-
-   ![In the SQL Server (MSSQLSERVER) Properties dialog, This account is selected under Log on as and the sqlmiuser account name and password are entered.](media/sql-server-service-properties.png "SQL Server (MSSQLSERVER) Properties")
-
-4. Select **OK**.
-
-5. Select **Yes** in the Confirm Account Change dialog.
-
-   ![The Yes button is highlighted in the Confirm Account Change dialog.](media/confirm-account-change.png "Confirm Account Change")
-
-6. Observe that the **Log On As** value for the SQL Server (MSSQLSERVER) service changed to `./sqlmiuser`.
-
-   ![In the list of SQL Server Services, the SQL Server (MSSQLSERVER) service is highlighted.](media/sql-server-service.png "SQL Server Services")
-
-7. Close the SQL Server Configuration Manager.
-
-### Task 3: Create a backup of WWI TailspinToys database
-
-To perform online data migrations, DMS looks for backups and logs in the SMB shared backup folder on the source database server. In this task, you create a backup of the WWI `TailspinToys` database using SSMS and write it to the `\\SQLSERVER2008\dms-backups` SMB network share you created in a previous task. The backup file needs to include a checksum, so you add that during the backup steps.
-
-1. On the SqlServer2008 VM, open **Microsoft SQL Server Management Studio 17** by entering "sql server" into the search bar in the Windows Start menu.
-
-   ![SQL Server is entered into the Windows Start menu search box, and Microsoft SQL Server Management Studio 17 is highlighted in the search results.](media/start-menu-ssms-17.png "Windows start menu search")
-
-2. In the SSMS **Connect to Server** dialog, enter **SQLSERVER2008** into the Server name box, ensure **Windows Authentication** is selected, and then select **Connect**.
-
-   ![The SQL Server Connect to Search dialog is displayed, with SQLSERVER2008 entered into the Server name and Windows Authentication selected.](media/sql-server-connect-to-server.png "Connect to Server")
-
-3. Once connected, expand **Databases** under SQLSERVER2008 in the Object Explorer, and then right-click the **TailspinToys** database. In the context menu, select **Tasks** and then **Back Up**.
-
-   ![In the SSMS Object Explorer, the context menu for the TailspinToys database is displayed, with Tasks and Back Up... highlighted.](media/ssms-backup.png "SSMS Backup")
-
-4. In the Back Up Database dialog, you should see `C:\TailspinToys.bak` listed in the Destinations box. This is no longer needed, so select it and then select **Remove**.
-
-   ![In the General tab of the Back Up Database dialog, C:\TailspinToys.bak is selected, and the Remove button is highlighted under destinations.](media/ssms-back-up-database-general-remove.png)
-
-5. Next, select **Add** to add the SMB network share as a backup destination.
-
-   ![In the General tab of the Back Up Database dialog, the Add button is highlighted under destinations.](media/ssms-back-up-database-general.png "Back Up Database")
-
-6. In the Select Backup Destination dialog, select the Browse (`...`) button.
-
-   ![The Browse button is highlighted in the Select Backup Destination dialog.](media/ssms-select-backup-destination.png "Select Backup Destination")
-
-7. In the Location Database Files dialog, select the `C:\dms-backups` folder, enter `TailspinToys.bak` into the File name field, and then select **OK**.
-
-   ![In the Select the file pane, the C:\dms-backups folder is selected and highlighted and TailspinToys.bak is entered into the File name field.](media/ssms-locate-database-files.png "Location Database Files")
-
-8. Select **OK** to close the Select Backup Destination dialog.
-
-9. In the Back Up Database dialog, select **Media Options** in the Select a page pane, and then set the following:
-
-   - Select **Back up to the existing media set** and then select **Overwrite all existing backup sets**.
-   - Under Reliability, check the box for **Perform checksum before writing to media**. This is required by DMS when using the backup to restore the database to SQL MI.
-
-   ![In the Back Up Database dialog, the Media Options page is selected, and Overwrite all existing backup sets and Perform checksum before writing to media are selected and highlighted.](media/ssms-back-up-database-media-options.png "Back Up Database")
-
-10. Select **OK** to perform the backup.
-
-11. You will receive a message when the backup is complete. Select **OK**.
-
-    ![A dialog displaying a message that the database backup was completed successfully.](media/ssms-backup-complete.png "Backup complete")
-
-### Task 4: Retrieve SQL MI and SQL Server 2008 VM connection information
-
-In this task, you use the Azure Cloud shell to retrieve the information necessary to connect to your SqlServer2008 VM from DMS.
-
-1. In the [Azure portal](https://portal.azure.com), select the Azure Cloud Shell icon from the top menu.
-
-   ![The Azure Cloud Shell icon is highlighted in the Azure portal's top menu.](media/cloud-shell-icon.png "Azure Cloud Shell")
-
-2. In the Cloud Shell window that opens at the bottom of your browser window, select **PowerShell**.
-
-   ![In the Welcome to Azure Cloud Shell window, PowerShell is highlighted.](media/cloud-shell-select-powershell.png "Azure Cloud Shell")
-
-3. If prompted that you have no storage mounted, select the subscription you are using for this hands-on lab and select **Create storage**.
-
-   ![In the You have no storage mounted dialog, a subscription has been selected, and the Create Storage button is highlighted.](media/cloud-shell-create-storage.png "Azure Cloud Shell")
-
-   > **Note**: If the creation fails, you may need to select **Advanced settings** and specify the subscription, region, and resource group for the new storage account.
-
-4. After a moment, a message is displayed that you have successfully requested a Cloud Shell, and be presented with a PS Azure prompt.
-
-   ![In the Azure Cloud Shell dialog, a message is displayed that requesting a Cloud Shell succeeded, and the PS Azure prompt is displayed.](media/cloud-shell-ps-azure-prompt.png "Azure Cloud Shell")
-
-5. At the prompt, retrieve the public IP address of the SqlSerer2008 VM, which is used to connect to the database on that server. Enter the following PowerShell command, **replacing `<your-resource-group-name>`** in the resource group name variable with the name of your resource group:
-
+5. プロンプトで、SqlSerer2008 VM のパブリック IP アドレスを取得します。このアドレスは、そのサーバーのデータベースへの接続に使用します。以下の PowerShell コマンドを入力します。その際、リソース グループ名変数内の **`<your-resource-group-name>`** を自分のリソース グループ名に**置き換え**てください。
+   
    ```powershell
    $resourceGroup = "<your-resource-group-name>"
    az vm list-ip-addresses -g $resourceGroup -n SqlServer2008 --output table
    ```
+   
+   > **注**: 複数の Azure サブスクリプションを保有していて、このハンズオン ラボに使用しているアカウントが既定のアカウントではない場合は、Azure Cloud Shell プロンプトで `az account list --output table` を実行し、サブスクリプションのリストを出力する必要があるかもしれません。その場合、このラボに使用しているアカウントのサブスクリプション ID をコピーした後、`az account set --subscription <your-subscription-id>` を実行して Azure CLI コマンド用の適切なアカウントを設定してください。
 
-   > **Note**: If you have multiple Azure subscriptions, and the account you are using for this hands-on lab is not your default account, you may need to run `az account list --output table` at the Azure Cloud Shell prompt to output a list of your subscriptions, then copy the Subscription Id of the account you are using for this lab, and then run `az account set --subscription <your-subscription-id>` to set the appropriate account for the Azure CLI commands.
+6. 出力の中から `PublicIpAddresses` フィールド以下の `ipAddress` プロパティの値を探し、それをコピーします。後で参照するために、Notepad.exe (メモ帳) などのテキスト エディターにその値を貼り付けます。
+   
+   ![az vm list-ip-addresses コマンドの出力が Cloud Shell に表示され、SqlServer2008 VM の publicIpAddress が強調表示されている。](media/cloud-shell-az-vm-list-ip-addresses.png "Azure Cloud Shell")
 
-6. Within the output, locate and copy the value of the `ipAddress` property below the `PublicIpAddresses` field. Paste the value into a text editor, such as Notepad.exe, for later reference.
+7. 次のタスクのために、Azure Cloud Shell は開いたままにしておきます。
 
-   ![The output from the az vm list-ip-addresses command is displayed in the Cloud Shell, and the publicIpAddress for the SqlServer2008 VM is highlighted.](media/cloud-shell-az-vm-list-ip-addresses.png "Azure Cloud Shell")
+### タスク 5: サービス プリンシパルを作成する
 
-7. Leave the Azure Cloud Shell open for the next task.
+このタスクでは Azure Cloud Shell を使用して、Azure SQL MI へのアクセスを DMS に提供する Azure Active Directory (Azure AD) アプリケーションとサービス プリンシパル (SP) を作成します。この SP には、hands-on-lab-SUFFIX リソース グループやサブスクリプションに対するアクセス許可を与えます。
 
-### Task 5: Create a service principal
+> **重要**: このタスクを完了するためには、Azure Active Directory アプリケーションやサービス プリンシパルを作成したり、サブスクリプションのロールを割り当てたりするための十分な権限を、Azure AD テナント内に持っている必要があります。
 
-In this task, use the Azure Cloud Shell to create an Azure Active Directory (Azure AD) application and service principal (SP) that will provide DMS access to Azure SQL MI. You will grant the SP permissions to the hands-on-lab-SUFFIX resource group and your subscription.
+1. 次に、Cloud Shell プロンプトで、**wide-world-importers** と名付けたサービス プリンシパルを作成するコマンドを発行し、それに **hands-on-lab-SUFFIX** リソース グループに対する共同作成者権限を割り当てます。
 
-> **Important**: You must have sufficient rights within your Azure AD tenant to create an Azure Active Directory application and service principal and assign roles on your subscription to complete this task.
-
-1. Next at the Cloud Shell prompt, issue a command to create a service principal named **wide-world-importers** and assign it contributor permissions to your **hands-on-lab-SUFFIX** resource group.
-
-2. First, you need to retrieve your subscription ID. Enter the following at the Cloud Shell prompt:
-
+2. まずは、サブスクリプション ID を取得する必要があります。Cloud Shell プロンプトに以下を入力してください。
+   
    ```powershell
    az account list --output table
    ```
 
-3. In the output table, locate the subscription you are using for this hands-on lab. Copy the SubscriptionId value and use it to replace `<your-subscription-id>` in the command below. Run the completed command at the CLI command prompt.
-
+3. 出力テーブルの中から、このハンズオン ラボで使用しているサブスクリプションを見つけます。SubscriptionId の値をコピーし、それを使って以下のコマンドの `<your-subscription-id>` を置き換えます。完成したコマンドを CLI コマンド プロンプトで実行します。
+   
    ```powershell
    $subscriptionId = "<your-subscription-id>"
    ```
 
-4. Next, enter the following `az ad sp create-for-rbac` command at the Cloud Shell prompt and then press `Enter` to run the command.
-
+4. 次に、以下の `az ad sp create-for-rbac` コマンドを Cloud Shell プロンプトに入力し、`Enter` を押してコマンドを実行します。
+   
    ```powershell
    az ad sp create-for-rbac -n "https://wide-world-importers" --role owner --scopes subscriptions/$subscriptionId/resourceGroups/$resourceGroup
    ```
 
-5. Copy the output from the command into a text editor, as you need the `appId` and `password` in the next task. The output should be similar to:
-
+5. コマンドの出力をテキスト エディターにコピーします。これは、次のタスクで `appId` と `password` が必要になるためです。出力は以下に示すものと類似しているはずです。
+   
    ```json
    {
      "appId": "aeab3b83-9080-426c-94a3-4828db8532e9",
@@ -476,853 +476,853 @@ In this task, use the Azure Cloud Shell to create an Azure Active Directory (Azu
    }
    ```
 
-6. To verify the role assignment, select **Access control (IAM)** from the left-hand menu of the **hands-on-lab-SUFFIX** resource group blade, and then select the **Role assignments** tab and locate **wide-world-importers** under the OWNER role.
+6. ロールの割り当てを確認するために、**hands-on-lab-SUFFIX** リソース グループ ブレードの左側メニューから \[**Access control (IAM)**\] を選択し、続いて \[**Role assignments**\] タブを選び、OWNER ロールの下の **wide-world-importers** を見つけます。
+   
+   ![\[Role assignments\] タブが表示され、リスト内の OWNER の下の wide-world-importers が強調表示されている。](media/rg-hands-on-lab-role-assignments.png "[Role assignments]")
 
-   ![The Role assignments tab is displayed, with wide-world-importers highlighted under OWNER in the list.](media/rg-hands-on-lab-role-assignments.png "Role assignments")
-
-7. Next, issue another command to grant the CONTRIBUTOR role at the subscription level to the newly created service principal. At the Cloud Shell prompt, run the following command:
-
+7. 続いて別のコマンドを発行して、新しく作成したサービス プリンシパルに、サブスクリプション レベルでの CONTRIBUTOR (共同作成者) ロールを与えます。Cloud Shell プロンプトで、以下のコマンドを実行します。
+   
    ```powershell
    az role assignment create --assignee https://wide-world-importers --role contributor
    ```
 
-### Task 6: Create and run an online data migration project
+### タスク 6: オンライン データ移行プロジェクトを作成し実行する
 
-In this task, you create a new online data migration project in DMS for WWI's `TailspinToys` database.
+このタスクでは、DMS で新しいオンライン データ移行プロジェクトを WWI の `TailspinToys` データベース用に作成します。
 
-1. In the [Azure portal](https://portal.azure.com), navigate to the Azure Database Migration Service by selecting **Resource groups** from the left-hand navigation menu, selecting the **hands-on-lab-SUFFIX** resource group, and then selecting the **wwi-dms** Azure Database Migration Service in the list of resources.
+1. [Azure portal](https://portal.azure.com) で、左側のナビゲーション メニューから \[**Resource groups**\] を選んで **hands-on-lab-SUFFIX** リソース グループを選択し、続いてリソースのリストから **wwi-dms** Azure Database Migration Service を選択して、Azure Database Migration Service に移動します。
+   
+   ![hands-on-lab-SUFFIX リソース グループのリソース リストで tailspin-dms Azure Database Migration Service が強調表示されている。](media/resource-group-dms-resource.png "リソース")
 
-   ![The tailspin-dms Azure Database Migration Service is highlighted in the list of resources in the hands-on-lab-SUFFIX resource group.](media/resource-group-dms-resource.png "Resources")
+2. \[Azure Database Migration Service\] ブレードで、\[**+New Migration Project**\] を選択します。
+   
+   ![\[Azure Database Migration Service\] ブレードで、ツールバーの \[+New Migration Project\] が強調表示されている。](media/dms-add-new-migration-project.png "Azure Database Migration Service の新しいプロジェクト")
 
-2. On the Azure Database Migration Service blade, select **+New Migration Project**.
+3. \[New migration project\] ブレードで、以下を入力します。
+   
+   - **Project name**: 「`OnPremToSqlMi`」と入力します。
+   - **Source server type**: \[**SQL Server**\] を選択します。
+   - **Target server type**: \[**Azure SQL Database Managed Instance**\] を選択します。
+   - **Choose type of activity**: \[**Online data migration**\] を選び、\[**Save**\] を選択します。
+   
+   ![\[New migration project\] ブレードが表示され、該当するフィールドに、上記の指定された値が入力されている。](media/dms-new-migration-project-blade.png "[New migration project]")
 
-   ![On the Azure Database Migration Service blade, +New Migration Project is highlighted in the toolbar.](media/dms-add-new-migration-project.png "Azure Database Migration Service New Project")
+4. \[**Create and run activity**\] を選択します。
 
-3. On the New migration project blade, enter the following:
+5. Migration Wizard の \[**Select source**\] ブレードで、以下を入力します。
+   
+   - **Source SQL Server instance name**: 前のタスクでテキスト エディターにコピーした、SqlServer2008 VM の IP アドレスを入力します。例えば `13.66.228.107` など。
+   - **Authentication type**: \[SQL Authentication\] を選択します。
+   - **Username**: 「`WorkshopUser`」と入力します。
+   - **Password**: 「`Password.1234567890`」と入力します。
+   - **Connection properties**: \[Encrypt connection\] と \[Trust server certificate\] の両方をオンにします。
+   
+   ![Migration Wizard の \[Select source\] ブレードが表示され、該当するフィールドに、上記の指定された値が入力されている。](media/dms-migration-wizard-select-source.png "Migration Wizard の [Select source]")
 
-   - **Project name**: Enter `OnPremToSqlMi`
-   - **Source server type**: Select **SQL Server**.
-   - **Target server type**: Select **Azure SQL Database Managed Instance**.
-   - **Choose type of activity**: Select **Online data migration** and select **Save**.
+6. \[**Save**\] を選択します。
 
-   ![The New migration project blade is displayed, with the values specified above entered into the appropriate fields.](media/dms-new-migration-project-blade.png "New migration project")
+7. Migration Wizard の \[**Select target**\] ブレードで、以下を入力します。
+   
+   - **Application ID**: 1 つ前のタスクで実行した　\`az ad sp create-for-rbac' コマンドの出力から、`appId` の値を入力します。
+   - **Key**: 1 つ前のタスクで実行した　az ad sp create-for-rbac コマンドの出力から、`password` の値を入力します。
+   - **Skip the Application ID Contributor level access check on the subscription**: オフの状態のままにします。
+   - **Subscription**: このハンズオン ラボで使用しているサブスクリプションを選択します。
+   - **Target Azure SQL Managed Instance**: sqlmi-UNIQUEID インスタンスを選択します。
+   - **SQL Username**: 「`sqlmiuser`」と入力します。
+   - **Password**: 「`Password.1234567890`」と入力します。
+   
+   ![Migration Wizard の \[Select target\] ブレードが表示され、該当するフィールドに、上記の指定された値が入力されている。](media/dms-migration-wizard-select-target.png "Migration Wizard の [Select target]")
 
-4. Select **Create and run activity**.
+8. \[**Save**\] を選択します。
 
-5. On the Migration Wizard **Select source** blade, enter the following:
+9. Migration Wizard の \[**Select databases**\] ブレードで、`TailspinToys` を選択します。
+   
+   ![Migration Wizard の \[Select databases\] ブレードが表示され、TailspinToys が選択されている。](media/dms-migration-wizard-select-databases.png "Migration Wizard の [Select databases]")
 
-   - **Source SQL Server instance name**: Enter the IP address of your SqlServer2008 VM that you copied into a text editor in the previous task. For example, `13.66.228.107`.
-   - **Authentication type**: Select SQL Authentication.
-   - **Username**: Enter `WorkshopUser`
-   - **Password**: Enter `Password.1234567890`
-   - **Connection properties**: Check both Encrypt connection and Trust server certificate.
+10. \[**Save**\] を選択します。
 
-   ![The Migration Wizard Select source blade is displayed, with the values specified above entered into the appropriate fields.](media/dms-migration-wizard-select-source.png "Migration Wizard Select source")
+11. Migration Wizard の \[**Configure migration settings**\] ブレードで、以下を入力します。
+    
+    - **Network share location**: 「`\\SQLSERVER2008\dms-backups`」と入力します。これは前に作成した SMB ネットワーク共有のパスです。
+    - **Windows User Azure Database Migration Service impersonates to upload files to Azure Storage**: 「`SQLSERVER2008\sqlmiuser`」と入力します。
+    - **Password**: 「`Password.1234567890`」と入力します。
+    - **Subscription containing storage account**: このハンズオン ラボで使用しているサブスクリプションを選択します。
+    - **Storage account**: ストレージ アカウント \[sqlmistoreUNIQUEID\] を選択します。
+    
+    ![Migration Wizard の \[Configure migration settings\] ブレードが表示され、該当するフィールドに、上記の指定された値が入力されている。](media/dms-migration-wizard-configure-migration-settings.png "Migration Wizard の [Configure migration settings]")
 
-6. Select **Save**.
+12. \[**Configure migration setting**\] ブレードで、\[**Save**\] を選択します。
 
-7. On the Migration Wizard **Select target** blade, enter the following:
+13. Migration Wizard の \[**Summary**\] ブレードで、以下を入力します。
+    
+    - **Activity name**: 「WwiMigration」と入力します。
+    
+    ![Migration Wizard の \[Summary\] ブレードが表示され、名前フィールドに「WwiMigration」と入力され、\[Choose validation option\] ブレードの \[Validate my database(s)\] が選ばれ、3 つの検証オプションすべてが選択されている。](media/dms-migration-wizard-migration-summary.png "Migration Wizard の [Summary]")
 
-   - **Application ID**: Enter the `appId` value from the output of the `az ad sp create-for-rbac' command you executed in the last task.
-   - **Key**: Enter the `password` value from the output of the `az ad sp create-for-rbac' command you executed in the last task.
-   - **Skip the Application ID Contributor level access check on the subscription**: Leave this unchecked.
-   - **Subscription**: Select the subscription you are using for this hand-on lab.
-   - **Target Azure SQL Managed Instance**: Select the sqlmi-UNIQUEID instance.
-   - **SQL Username**: Enter `sqlmiuser`
-   - **Password**: Enter `Password.1234567890`
+14. \[**Run migration**\] を選択します。
 
-   ![The Migration Wizard Select target blade is displayed, with the values specified above entered into the appropriate fields.](media/dms-migration-wizard-select-target.png "Migration Wizard Select target")
+15. 表示される状態画面で移行を監視します。ツールバーにある \[Refresh\] アイコンを選択し、最新の状態を取得します。
+    
+    ![\[Migration job\] ブレードで、\[Refresh \] ボタンが強調表示され、"Full backup uploading" という状態が表示および強調表示されている。](media/dms-migration-wizard-status-running.png "移行状況")
 
-8. Select **Save**.
+16. 状態が "**Log shipping in progress**" に変化するまで、**\[Refresh\]** を 5 ～ 10 秒ごとに選択し続けます。その状態が表示されたら、次のタスクに進みます。
+    
+    ![移行監視ウィンドウで、"Log shipping in progress" という状態が強調表示されている。](media/dms-migration-wizard-status-log-files-uploading.png "移行状況")
 
-9. On the Migration Wizard **Select databases** blade, select `TailspinToys`.
+### タスク 7: 移行のカットオーバーを実施する
 
-   ![The Migration Wizard Select databases blade is displayed, with the TailspinToys database selected.](media/dms-migration-wizard-select-databases.png "Migration Wizard Select databases")
+ここで実行したのは "オンライン データ移行" であるため、移行ウィザードは、新しく追加されるログ バックアップ ファイルのための SMB ネットワーク共有を監視し続けます。これによって、SQL MI データベースへのカットオーバーを行うまでにソース データベースに生じた更新を、すべて記録できるようになっています。このタスクでは、データベース テーブルの 1 つにレコードを追加してから、ログをバックアップし、SQL MI データベースへのカットオーバーを行って、WWI `TailspinToys` データベースの移行を完了します。
 
-10. Select **Save**.
+1. Azure portal の移行状況ウィンドウで、\[DATABASE NAME\] の下の \[**TailspinToys**\] を選択し、データベース移行に関するより詳しい情報を確認します。
+   
+   ![移行状況ウィンドウでデータベース名 \[TailspinToys\] が強調表示されている。](media/dms-migration-wizard-database-name.png "移行状況")
 
-11. On the Migration Wizard **Configure migration settings** blade, enter the following configuration:
+2. \[TailspinToys\] の画面で、`TailspinToys.bak` ファイルの **Restored** という状態に注目してください。
+   
+   ![\[TailspinToys\] ブレードのアクティブなバックアップ ファイルのリストで、TailspinToys.bak ファイルの横にある Restored という状態が強調表示されている。](media/dms-migration-wizard-database-restored.png "Migration Wizard")
 
-    - **Network share location**: Enter `\\SQLSERVER2008\dms-backups`. This is the path of the SMB network share you created previously.
-    - **Windows User Azure Database Migration Service impersonates to upload files to Azure Storage**: Enter `SQLSERVER2008\sqlmiuser`
-    - **Password**: Enter `Password.1234567890`
-    - **Subscription containing storage account**: Select the subscription you are using for this hands-on lab.
-    - **Storage account**: Select the **sqlmistoreUNIQUEID** storage account.
+3. ログ配布を実演し、移行プロセス中にソース データベースで実行されるトランザクションがどのようにターゲットの SQL MI データベースに追加されるのかを示すため、データベース テーブルの 1 つにレコードを追加することにします。
 
-    ![The Migration Wizard Configure migration settings blade is displayed, with the values specified above entered into the appropriate fields.](media/dms-migration-wizard-configure-migration-settings.png "Migration Wizard Configure migration settings")
+4. SqlServer2008 VM の SSMS に戻り、ツールバーから \[**新しいクエリ**\] を選択します。
+   
+   ![SSMS ツールバーの \[新しいクエリ\] ボタンが強調表示されている。](media/ssms-new-query.png "SSMS ツールバー")
 
-12. Select **Save** on the **Configure migration setting** blade.
-
-13. On the Migration Wizard **Summary** blade, enter the following:
-
-    - **Activity name**: Enter WwiMigration.
-
-    ![The Migration Wizard summary blade is displayed, WwiMigration is entered into the name field, and Validate my database(s) is selected in the Choose validation option blade, with all three validation options selected.](media/dms-migration-wizard-migration-summary.png "Migration Wizard Summary")
-
-14. Select **Run migration**.
-
-15. Monitor the migration on the status screen that appears. Select the refresh icon in the toolbar to retrieve the latest status.
-
-    ![On the Migration job blade, the Refresh button is highlighted, and a status of Full backup uploading is displayed and highlighted.](media/dms-migration-wizard-status-running.png "Migration status")
-
-16. Continue selecting **Refresh** every 5-10 seconds, until you see the status change to **Log shipping in progress**. When that status appears, move on to the next task.
-
-    ![In the migration monitoring window, a status of Log shipping in progress is highlighted.](media/dms-migration-wizard-status-log-files-uploading.png "Migration status")
-
-### Task 7: Perform migration cutover
-
-Since you performed an "online data migration," the migration wizard continuously monitors the SMB network share for newly added log backup files. This allows for any updates that happen on the source database to be captured until you cut over to the SQL MI database. In this task, you add a record to one of the database tables, backup the logs, and complete the migration of the WWI `TailspinToys` database by cutting over to the SQL MI database.
-
-1. In the migration status window in the Azure portal and select **TailspinToys** under database name to view further details about the database migration.
-
-   ![The TailspinToys database name is highlighted in the migration status window.](media/dms-migration-wizard-database-name.png "Migration status")
-
-2. On the TailspinToys screen, note the status of **Restored** for the `TailspinToys.bak` file.
-
-   ![On the TailspinToys blade, a status of Restored is highlighted next to the TailspinToys.bak file in the list of active backup files.](media/dms-migration-wizard-database-restored.png "Migration Wizard")
-
-3. To demonstrate log shipping and how transactions made on the source database during the migration process are added to the target SQL MI database, you will add a record to one of the database tables.
-
-4. Return to SSMS on your SqlServer2008 VM and select **New Query** from the toolbar.
-
-   ![The New Query button is highlighted in the SSMS toolbar.](media/ssms-new-query.png "SSMS Toolbar")
-
-5. Paste the following SQL script, which inserts a record into the `Game` table, into the new query window:
-
+5. 以下の SQL スクリプトを新しいクエリのウィンドウに貼り付けます。このスクリプトは、`Game` テーブルにレコードを挿入します。
+   
    ```sql
    USE TailspinToys;
    GO
-
+   
    INSERT [dbo].[Game] (Title, Description, Rating, IsOnlineMultiplayer)
    VALUES ('Space Adventure', 'Explore the universe with are newest online multiplayer gaming experience. Build custom  rocket ships, and take off for the stars in an infinite open-world adventure.', 'T', 1)
    ```
 
-6. Execute the query by selecting **Execute** in the SSMS toolbar.
+6. SSMS ツールバーの \[**実行**\] を選択して、クエリを実行します。
+   
+   ![SSMS ツールバーの \[実行\] ボタンが強調表示されている。](media/ssms-execute.png "SSMS ツールバー")
 
-   ![The Execute button is highlighted in the SSMS toolbar.](media/ssms-execute.png "SSMS Toolbar")
-
-7. After adding the new record to the `Games` table, back up the transaction logs. DMS detects any new backups and ships them to the migration service. Select **New Query** again in the toolbar, and paste the following script into the new query window:
-
+7. 新しいレコードを `Games` テーブルに追加したら、トランザクション ログをバックアップします。DMS はすべての新しいバックアップを検出し、それを移行サービスへ配布します。ツールバーの \[**新しいクエリ**\] をもう一度選択し、新しいクエリのウィンドウに次のスクリプトを貼り付けます。
+   
    ```sql
    USE master;
    GO
-
+   
    BACKUP LOG TailspinToys
    TO DISK = 'c:\dms-backups\TailspinToysLog.trn'
    WITH CHECKSUM
    GO
    ```
 
-8. Execute the query by selecting **Execute** in the SSMS toolbar.
+8. SSMS ツールバーの \[**実行**\] を選択して、クエリを実行します。
 
-9. Return to the migration status page in the Azure portal. On the TailspinToys screen, select **Refresh** and you should see the **TailspinToysLog.trn** file appear with a status of **Uploaded**.
+9. Azure portal の移行状況ページに戻ります。\[TailspinToys\] の画面で \[**Resfresh**\] を選択します。すると、**TailspinToysLog.trn** ファイルが表示され、状態が **"Uploaded"** になっているのが確認できるはずです。
+   
+   ![\[TailspinToys\] ブレードの \[Refresh\] ボタンが強調表示されている。アクティブなバックアップ ファイルのリストで、TailspinToysLog.trn ファイルの横にある "Uploaded" という状態が強調表示されている。](media/dms-migration-wizard-transaction-log-uploaded.png "Migration Wizard")
+   
+   > **注**: Transaction log (トランザクション ログ) のエントリが表示されない場合は、表示されるまで数秒ごとに \[Refresh\] を選択し続けてください。
 
-   ![On the TailspinToys blade, the Refresh button is highlighted. A status of Uploaded is highlighted next to the TailspinToysLog.trn file in the list of active backup files.](media/dms-migration-wizard-transaction-log-uploaded.png "Migration Wizard")
+10. トランザクション ログは、アップロードが済んだらデータベースに復元されます。状態が "**Restored**" に変わったことを確認するまで、10 ～ 15 秒ごとに **\[Refresh\]** を選択してください。これには 1 ～ 2 分かかることがあります。
+    
+    ![アクティブなバックアップ ファイルのリストで、TailspinToysLog.trn ファイルの横にある "Restored" という状態が強調表示されている。](media/dms-migration-wizard-transaction-log-restored.png "Migration Wizard")
 
-   > **Note**: If you don't see it the transaction logs entry, continue selecting refresh every few seconds until it appears.
+11. トランザクション ログの状態が "**Restored**" になっていることを確認してから、\[**Start Cutover**\] を選択します。
+    
+    ![\[Start Cutover\] ボタンが表示されている。](media/dms-migration-wizard-start-cutover.png "DMS Migration Wizard")
 
-10. Once the transaction logs are uploaded, they are restored to the database. Select **Refresh** every 10-15 seconds until you see the status change to **Restored**, which can take a minute or two.
+12. \[Complete cutover\] ダイアログで、Pending log backups が `0` であることを確認し、\[**Confirm**\] をオンにしてから、\[**Apply**\] を選択します。
+    
+    ![\[Complete cutover\] ダイアログで、Pending log backups の隣の 0 という値が強調表示され、\[Confirm\] チェックボックスがオンになっている。](media/dms-migration-wizard-complete-cutover-apply.png "Migration Wizard")
 
-    ![A status of Restored is highlighted next to the TailspinToysLog.trn file in the list of active backup files.](media/dms-migration-wizard-transaction-log-restored.png "Migration Wizard")
+13. \[Complete cutover\] ダイアログの \[Apply\] ボタンの下にある進行状況バーは、カットオーバーの状況の最新情報を提供します。移行が完了すると、状況が "**Completed**" に変わります。
+    
+    ![\[Complete cutover\] ダイアログで "Completed" という状態が表示されている。](media/dms-migration-wizard-complete-cutover-completed.png "Migration Wizard")
+    
+    > **注**: 数分経っても進行状況バーが動かない場合は、次の手順に進み、\[WwiMigration\] ブレードの \[Refresh\] を選択することでカットオーバーの進行状況を監視しても構いません。
 
-11. After verifying the transaction log status of **Restored**, select **Start Cutover**.
+14. ダイアログの右上隅の "X" を選択して \[Complete cutover\] ダイアログを閉じ、\[TailspinToys\] ブレードについても同様にします。こうすることで \[WwiMigration\] ブレードに戻ります。\[**Refresh**\] を選択します。すると、TailspinToys データベースの "**Completed**" という状態を確認できるはずです。
+    
+    ![\[Migration job\] ブレードで、"Completed" という状態が強調表示されている。](media/dms-migration-wizard-status-complete.png "移行の状態が \"Completed\" になっている")
 
-    ![The Start Cutover button is displayed.](media/dms-migration-wizard-start-cutover.png "DMS Migration Wizard")
+15. WWI の `TailspinToys` データベースを Azure SQL Managed Instance に正常に移行できました。
 
-12. On the Complete cutover dialog, verify pending log backups is `0`, check **Confirm**, and then select **Apply**.
+### タスク 8: データベースとトランザクション ログの移行を検証する
 
-    ![In the Complete cutover dialog, a value of 0 is highlighted next to Pending log backups, and the Confirm checkbox is checked.](media/dms-migration-wizard-complete-cutover-apply.png "Migration Wizard")
+このタスクでは、SSMS を使用して SQL MI データベースに接続し、移行をすばやく検証します。
 
-13. A progress bar below the Apply button in the Complete cutover dialog provides updates on the status of the cutover. When the migration finishes, the status changes to **Completed**.
+1. 始めに、Azure Cloud Shell を使用して、自分の SQL MI データベースの完全修飾ドメイン名を取得します。[Azure portal](https://portal.azure.com) のトップメニューから \[Azure Cloud Shell\] アイコンを選択します。
+   
+   ![Azure portal のトップメニューで \[Azure Cloud Shell\] アイコンが強調表示されている。](media/cloud-shell-icon.png "Azure Cloud Shell")
 
-    ![A status of Completed is displayed in the Complete cutover dialog.](media/dms-migration-wizard-complete-cutover-completed.png "Migration Wizard")
+2. ブラウザー ウィンドウの下部に開かれる \[Cloud Shell\] ウィンドウで、\[**PowerShell**\] を選択します。
+   
+   ![\[Welcome to Azure Cloud Shell\] ウィンドウで、\[PowerShell\] が強調表示されている。](media/cloud-shell-select-powershell.png "Azure Cloud Shell")
 
-    > **Note**: If after a few minutes the progress bar has not moved, you can proceed to the next step, and monitor the cutover progress on the WwiMigration blade by selecting refresh.
+3. しばらくすると、Cloud Shell の要求に成功したというメッセージが \[PS Azure\] プロンプトと一緒に表示されます。
+   
+   ![\[Azure Cloud Shell\] ダイアログで、Cloud Shell の要求に成功したというメッセージが表示され、\[PS Azure\] プロンプトが表示されている。](media/cloud-shell-ps-azure-prompt.png "Azure Cloud Shell")
 
-14. Close the Complete cutover dialog by selecting the "X" in the upper right corner of the dialog, and do the same thing for the TailspinToys blade. This returns you to the WwiMigration blade. Select **Refresh**, and you should see a status of **Completed** from the TailspinToys database.
-
-    ![On the Migration job blade, the status of Completed is highlighted.](media/dms-migration-wizard-status-complete.png "Migration with Completed status")
-
-15. You have successfully migrated WWI's `TailspinToys` database to Azure SQL Managed Instance.
-
-### Task 8: Verify database and transaction log migration
-
-In this task, you connect to the SQL MI database using SSMS, and quickly verify the migration.
-
-1. First, use the Azure Cloud Shell to retrieve the fully qualified domain name of your SQL MI database. In the [Azure portal](https://portal.azure.com), select the Azure Cloud Shell icon from the top menu.
-
-   ![The Azure Cloud Shell icon is highlighted in the Azure portal's top menu.](media/cloud-shell-icon.png "Azure Cloud Shell")
-
-2. In the Cloud Shell window that opens at the bottom of your browser window, select **PowerShell**.
-
-   ![In the Welcome to Azure Cloud Shell window, PowerShell is highlighted.](media/cloud-shell-select-powershell.png "Azure Cloud Shell")
-
-3. After a moment, a message is displayed that you have successfully requested a Cloud Shell, and be presented with a PS Azure prompt.
-
-   ![In the Azure Cloud Shell dialog, a message is displayed that requesting a Cloud Shell succeeded, and the PS Azure prompt is displayed.](media/cloud-shell-ps-azure-prompt.png "Azure Cloud Shell")
-
-4. At the prompt, retrieve information about SQL MI in the hands-on-lab-SUFFIX resource group by entering the following PowerShell command, **replacing `<your-resource-group-name>`** in the resource group name variable with the name of your resource group:
-
+4. プロンプトで以下の PowerShell コマンドを入力し、hands-on-lab-SUFFIX リソース グループ内の SQL MI についての情報を取得します。その際、リソース グループ名変数内の **`<your-resource-group-name>`** を自分のリソース グループ名に**置き換え**てください。
+   
    ```powershell
    $resourceGroup = "<your-resource-group-name>"
    az sql mi list --resource-group $resourceGroup
    ```
+   
+   > **注**: 複数の Azure サブスクリプションを保有していて、このハンズオン ラボに使用しているアカウントが既定のアカウントではない場合は、Azure Cloud Shell プロンプトで `az account list --output table` を実行し、サブスクリプションのリストを出力する必要があるかもしれません。このラボのために使用しているアカウントのサブスクリプション ID をコピーし、`az account set --subscription <your-subscription-id>` を実行して Azure CLI コマンド用の適切なアカウントを設定してください。
 
-   > **Note**: If you have multiple Azure subscriptions, and the account you are using for this hands-on lab is not your default account, you may need to run `az account list --output table` at the Azure Cloud Shell prompt to output a list of your subscriptions. Copy the Subscription Id of the account you are using for this lab and then run `az account set --subscription <your-subscription-id>` to set the appropriate account for the Azure CLI commands.
+5. 上のコマンドの出力から、`fullyQualifiedDomainName` プロパティの値を見つけてコピーします。以降の手順で参照するために、Notepad.exe (メモ帳) などのテキスト エディターにその値を貼り付けます。
+   
+   ![az sql mi list コマンドの出力が Cloud Shell に表示され、fullyQualifiedDomainName プロパティとその値が強調表示されている。](media/cloud-shell-az-sql-mi-list-output.png "Azure Cloud Shell")
 
-5. Within the output of the above command, locate and copy the value of the `fullyQualifiedDomainName` property. Paste the value into a text editor, such as Notepad.exe, for reference below.
+6. SqlServer2008 VM の　SSMS に戻り、Object Explorer のメニューから \[**接続**\] と \[**データベース エンジン**\] を選択します。
+   
+   ![SSMS の Object Explore で、メニューの \[接続\] が強調表示され、\[接続\] のコンテキスト メニューの \[データベース エンジン\] が強調表示されている。](media/ssms-object-explorer-connect.png "SSMS の [接続]")
 
-   ![The output from the az sql mi list command is displayed in the Cloud Shell, and the fullyQualifiedDomainName property and value are highlighted.](media/cloud-shell-az-sql-mi-list-output.png "Azure Cloud Shell")
+7. \[サーバーに接続\] ダイアログで、以下を入力します。
+   
+   - **サーバー名:** SQL マネージド インスタンスの完全修飾ドメイン名 (前の手順で Azure Cloud Shell からコピーしたもの) を入力します。
+   - **認証:** **\[**SQL Server 認証**\]** を選択します。
+   - **ログイン:** 「`sqlmiuser`」と入力します。
+   - **パスワード**: 「`Password.1234567890`」と入力します。
+   - **\[パスワードを記憶する\]** ボックスをオンにします。
+   
+   ![上で指定された SQL マネージド インスタンスの詳細情報が \[サーバーに接続\] ダイアログに入力されている。](media/ssms-connect-to-server-sql-mi.png "[サーバーに接続]")
 
-6. Return to SSMS on your SqlServer2008 VM, and then select **Connect** and **Database Engine** from the Object Explorer menu.
+8. \[**接続**\] を選択します。
 
-   ![In the SSMS Object Explorer, Connect is highlighted in the menu and Database Engine is highlighted in the Connect context menu.](media/ssms-object-explorer-connect.png "SSMS Connect")
+9. SQLSERVER2008 接続の下に SQL MI 接続が表示されます。SQL MI 接続の \[データベース\] を展開し、`TailspinToys` データベースを選択します。
+   
+   ![SSMS の Object Explorer で、SQL MI 接続が展開され、TailspinToys データベースが強調表示および選択されている。](media/ssms-sql-mi-tailspintoys-database.png "SSMS の Object Explorer")
 
-7. In the Connect to Server dialog, enter the following:
+10. `TailspinToys` データベースを選択したまま、SSMS ツールバーの \[**新しいクエリ**\] を選択して新しいクエリのウィンドウを開きます。
 
-   - **Server name**: Enter the fully qualified domain name of your SQL managed instance, which you copied from the Azure Cloud Shell in the previous steps.
-   - **Authentication**: Select **SQL Server Authentication**.
-   - **Login**: Enter `sqlmiuser`
-   - **Password**: Enter `Password.1234567890`
-   - Check the **Remember password** box.
-
-   ![The SQL managed instance details specified above are entered into the Connect to Server dialog.](media/ssms-connect-to-server-sql-mi.png "Connect to Server")
-
-8. Select **Connect**.
-
-9. The SQL MI connection appears below the SQLSERVER2008 connection. Expand Databases the SQL MI connection and select the `TailspinToys` database.
-
-   ![In the SSMS Object Explorer, the SQL MI connection is expanded, and the TailspinToys database is highlighted and selected.](media/ssms-sql-mi-tailspintoys-database.png "SSMS Object Explorer")
-
-10. With the `TailspinToys` database selected, select **New Query** on the SSMS toolbar to open a new query window.
-
-11. In the new query window, enter the following SQL script:
-
+11. 新しいクエリのウィンドウに、次の SQL スクリプトを入力します。
+    
     ```sql
     USE TailspinToys;
     GO
-
+    
     SELECT * FROM Game
     ```
 
-12. Select **Execute** on the SSMS toolbar to run the query. Observe the records contained within the `Game` table, including the new `Space Adventure` game you added after initiating the migration process.
+12. SSMS ツールバーにある \[**実行**\] を選択し、クエリを実行します。`Game` テーブルに格納されているレコードを確認します。これには、移行プロセスの開始後に追加した新しいゲーム `Space Adventure` も含まれています。
+    
+    ![新しいクエリのウィンドウに上記のクエリが入力され、新しいゲーム Space Adventure が \[結果\] ペインで強調表示されている。](media/ssms-query-game-table.png "SSMS のクエリ")
 
-    ![In the new query window, the query above has been entered, and in the results pane, the new Space Adventure game is highlighted.](media/ssms-query-game-table.png "SSMS Query")
+13. 以上で SqlServer2008 VM の使用は終了です。開いたウィンドウをすべて閉じ、VM からログオフします。このハンズオン ラボの残りのタスクでは、JumpBox VM を使用します。
 
-13. You are done using the SqlServer2008 VM. Close any open windows and log off of the VM. The JumpBox VM is used for the remaining tasks of this hands-on lab.
+## 演習 3: Web アプリケーションを更新して新しい SQL MI データベースを使用させる
 
-## Exercise 3: Update the web application to use the new SQL MI database
+所要時間: 30 分
 
-Duration: 30 minutes
+WWI `TailspinToys` データベースは、Azure 上の SQL MI で動作するようになりました。そこで次は、WWI TailspinToys のプレイヤー情報 Web アプリケーションに、必要な修正を加える手順に進みます。
 
-With the WWI `TailspinToys` database now running on SQL MI in Azure, the next step is to make the required modifications to the WWI TailspinToys gamer information web application.
+> **注**: Azure SQL Managed Instance は専用 VNet 内のプライベート IP アドレスを持っています。そのため、アプリケーションを接続するには、Managed Instance を展開した VNet へのアクセスを設定する必要があります。詳しくは、[「Azure SQL Managed Instance にアプリケーションを接続する」](https://docs.microsoft.com/azure/azure-sql/managed-instance/connect-application-instance)を参照してください。
 
-> **Note**: Azure SQL Managed Instance has a private IP address in a dedicated VNet, so to connect an application, you must configure access to the VNet where Managed Instance is deployed. To learn more, read [Connect your application to Azure SQL Managed Instance](https://docs.microsoft.com/azure/azure-sql/managed-instance/connect-application-instance).
+### タスク 1: Web アプリを Azure に展開する
 
-### Task 1: Deploy the web app to Azure
+このタスクでは JumpBox VM への RDP 接続を作成してから、JumpBox で Visual Studio を使用して、`TailspinToysWeb` アプリケーションを Azure の App Service に展開します。
 
-In this task, you create an RDP connection to the JumpBox VM and then using Visual Studio on the JumpBox, deploy the `TailspinToysWeb` application into the App Service in Azure.
+1. [Azure portal](https://portal.azure.com) の Azure のナビゲーション ペインで \[**Resource groups**\] を選択し、リストから **hands-on-lab-SUFFIX** リソースグループを選択します。
+   
+   ![Azure のナビゲーション ペインで \[Resource groups\] が選択され、"hands-on-lab-SUFFIX" リソース グループが強調表示されている。](./media/resource-groups.png "リソース グループのリスト")
 
-1. In the [Azure portal](https://portal.azure.com), select **Resource groups** in the Azure navigation pane and select the **hands-on-lab-SUFFIX** resource group from the list.
+2. リソース グループのリソースのリストで、\[JumpBox\] VM を選択します。
+   
+   ![hands-on-lab-SUFFIX リソース グループのリスースのリストが表示され、\[JumpBox\] が強調表示されている。](./media/resource-group-resources-jumpbox.png "リソース グループのリストの [JumpBox]")
 
-   ![Resource groups is selected in the Azure navigation pane, and the "hands-on-lab-SUFFIX" resource group is highlighted.](./media/resource-groups.png "Resource groups list")
+3. \[JumpBox VM\] ブレードで、上部のメニューから \[**Connect**\] と \[**RDP**\] を選択します。
+   
+   ![\[JumpBox VM\] ブレードが表示され、上部のメニューの \[Connect\] ボタンが強調表示されている。](./media/connect-vm-rdp.png "JumpBox VM への接続")
 
-2. In the list of resources for your resource group, select the JumpBox VM.
+4. \[Connect with RDP\] ブレードで \[**Download RDP File**\] を選択した後、ダウンロードされた RDP ファイルを開きます。
 
-   ![The list of resources in the hands-on-lab-SUFFIX resource group are displayed, and JumpBox is highlighted.](./media/resource-group-resources-jumpbox.png "JumpBox in resource group list")
+5. \[Remote Desktop Connection\] ダイアログで \[**Connect**\] を選択します。
+   
+   ![\[Remote Desktop Connection\] ダイアログ ボックスの \[Connect\] ボタンが強調表示されている。](./media/remote-desktop-connection.png "[Remote Desktop Connection] ダイアログ")
 
-3. On your JumpBox VM blade, select **Connect** and **RDP** from the top menu.
-
-   ![The JumpBox VM blade is displayed, with the Connect button highlighted in the top menu.](./media/connect-vm-rdp.png "Connect to JumpBox VM")
-
-4. On the Connect with RDP blade, select **Download RDP File**, then open the downloaded RDP file.
-
-5. Select **Connect** on the Remote Desktop Connection dialog.
-
-   ![In the Remote Desktop Connection Dialog Box, the Connect button is highlighted.](./media/remote-desktop-connection.png "Remote Desktop Connection dialog")
-
-6. Enter the following credentials when prompted, and then select **OK**:
-
-   - **Username**: `sqlmiuser`
+6. プロンプトが表示されたら、以下の資格情報を入力し、\[**OK**\] を選択します。
+   
+   - **Username:** `sqlmiuser`
    - **Password**: `Password.1234567890`
+   
+   ![\[Enter your credentials\]　ダイアログに上記の資格情報が入力されている。\[Enter your credentials\]](media/rdc-credentials.png "[Enter your credentials]")
 
-   ![The credentials specified above are entered into the Enter your credentials dialog.](media/rdc-credentials.png "Enter your credentials")
+7. \[The identity of the remot  computer  annot be  erified\] というプロンプトが表示された場合、\[**Yes**\] を選択して接続しま す。
+   
+   ![\[Remote Desktop Connection\] ダイアログ ボックスで、このリモート コンピューターの ID が確認できないことを示し、このまま続行するか尋ねる警告メッセージが表示されている。下部の \[Yes\] ボタンが赤線で囲まれている。](./media/remote-desktop-connection-identity-verification-jumpbox.png "[Remote Desktop Connection] ダイアログ")
 
-7. Select **Yes** to connect, if prompted that the identity of the remote computer cannot be verified.
+8. ログインしたら、エクスプローラーを Windows の \[スタート\] バーから選択して開きます。
+   
+   ![Windows の \[スタート\] バーの \[エクスプローラー\] アイコンが強調表示されている。](media/windows-2019-start-bar-file-explorer.png "Windows の [スタート] バー")
 
-   ![In the Remote Desktop Connection dialog box, a warning states that the identity of the remote computer cannot be verified, and asks if you want to continue anyway. At the bottom, the Yes button is circled.](./media/remote-desktop-connection-identity-verification-jumpbox.png "Remote Desktop Connection dialog")
+9. \[エクスプローラー\] ダイアログで、`C:\hands-on-lab` フォルダーに移動し、`Migrating-SQL-databases-to-Azure-master\Hands-on lab\lab-files` まで階層を下ります。`lab-files` フォルダーの `TailspinToysWeb.sln` をダブルクリックし、このソリューションを Visual Studio で開きます。
+   
+   ![上で指定されたパスのフォルダーが表示され、TailspinToys.sln が強調表示されている。](media/windows-explorer-tailspintoysweb.png "エクスプローラー")
 
-8. Once logged in, open File Explorer by selecting it in the Windows start bar.
+10. ファイルの開き方を尋ねるメッセージが表示されたら、\[**Visual Studio 2019**\] を選び、\[**OK**\] を選択します。
+    
+    ![Visual Studio のバージョン セレクターで Visual Studio 2019 が選択され強調表示されている。](media/visual-studio-version-selector.png "Visual Studio")
 
-   ![The File Explorer icon is highlighted in the Windows start bar.](media/windows-2019-start-bar-file-explorer.png "Windows start bar")
+11. \[**サインイン**\] を選択し、要求に応じて Azure アカウントの資格情報を入力します。
+    
+    ![Visual Studio のようこそ画面で、\[サインイン\] ボタンが強調表示されている。](media/visual-studio-sign-in.png "Visual Studio")
 
-9. In the File Explorer dialog, navigate to the `C:\hands-on-lab` folder and then drill down to `Migrating-SQL-databases-to-Azure-master\Hands-on lab\lab-files`. In the `lab-files` folder, double-click `TailspinToysWeb.sln` to open the solution in Visual Studio.
+12. セキュリティ警告ダイアログで、\[**ソリューション内のすべてのプロジェクトに対して確認メッセージを表示する**\] をオフにしてから \[**OK**\] を選択します。
+    
+    ![Visual Studio のセキュリティ警告が表示され、\[ソリューション内のすべてのプロジェクトに対して確認メッセージを表示する\] チェックボックスがオフの状態で強調表示されている。](media/visual-studio-security-warning.png "Visual Studio")
 
-   ![The folder at the path specified above is displayed, and TailspinToys.sln is highlighted.](media/windows-explorer-tailspintoysweb.png "Windows Explorer")
+13. Visual Studio へのログインしたら、Solution Explorerで \[`TailspinToysWeb`\] プロジェクトを右クリックし、\[\]**公開** を選択します。
+    
+    ![Solution Explorerで、TailspinToysWeb プロジェクトのコンテキスト メニューが表示され、\[公開\] が強調表示されている。](media/visual-studio-project-publish.png "Visual Studio")
 
-10. If prompted about how you want to open the file, select **Visual Studio 2019** and then select **OK**.
+14. \[**公開**\] ダイアログの \[Target\] ボックスで \[**Azure**\] を選択し、\[**次へ**\] を選択します。
+    
+    ![\[公開\] ダイアログの  \[ターゲット\] ボックスで \[Azure\] が選択および強調表示されている。\[次へ\] ボタンが強調表示されている。](media/vs-publish-to-azure.png "Azure への API アプリの発行")
 
-    ![In the Visual Studio version selector, Visual Studio 2019 is selected and highlighted.](media/visual-studio-version-selector.png "Visual Studio")
+15. 次に、\[**特定のターゲット**\] ボックスで、\[**Azure App Service (Windows)**\] を選択します。
+    
+    ![\[公開\] ダイアログの \[特定のターゲット\] ボックスで \[Azure App Service (Windows)\] が選択および強調表示されている。\[次へ\] ボタンが強調表示されている。](media/vs-publish-specific-target.png "Azure への API アプリの発行")
 
-11. Select **Sign in** and enter your Azure account credentials when prompted.
+16. 最後に、\[**App Service**\] ボックスで、自身のサブスクリプションを選択し、hands-on-lab-SUFFIX リソース グループを展開して、Web アプリを選択します。
+    
+    ![\[公開\] ダイアログの hands-on-lab-SUFFIX リソース グループ下で Tailspin Toys の Web アプリが選択および強調表示されている。](media/vs-publish-web-app-service.png "Azure への API アプリの発行")
 
-    ![On the Visual Studio welcome screen, the Sign in button is highlighted.](media/visual-studio-sign-in.png "Visual Studio")
+17. \[**完了**\] を選択します。
 
-12. At the security warning prompt, uncheck **Ask me for every project in this solution**, and then select **OK**.
+18. `TailspinToysWeb` プロジェクトの Visual Studio の \[公開\] ページに戻り、\[**公開**\] を選択し、Web API を Azure API App に発行するプロセスを開始します。
+    
+    ![Visual Studio の \[公開\] ページで \[公開\] ボタンが強調表示されている。](media/visual-studio-publish-web-app.png "[公開]")
 
-    ![A Visual Studio security warning is displayed, and the Ask me for every project in this solution checkbox is unchecked and highlighted.](media/visual-studio-security-warning.png "Visual Studio")
+19. 発行が完了すると、Visual Studio の \[出力\] ページに、発行に成功したというメッセージが表示されます。
+    
+    !["発行に成功しました" というメッセージが Visual Studio の \[出力\] ペインに表示されている。](media/visual-studio-output-publish-succeeded.png "Visual Studio")
 
-13. Once logged into Visual Studio, right-click the `TailspinToysWeb` project in the Solution Explorer, and then select **Publish**.
+20. 発行した Web アプリへのリンクを Visual Studio の出力ウィンドウから選択すると、エラー ページが返されます。これは、データベース接続文字列が SQL MI データベースを指すように更新されていないためです。これについては、次のタスクで対処します。
+    
+    ![Web アプリの設定でデータベース接続文字列が SQL MI データベースを指すように更新されていないため、エラー画面が表示されている。](media/web-app-error-screen.png "Web アプリのエラー")
 
-    ![In the Solution Explorer, the context menu for the TailspinToysWeb project is displayed, and Publish is highlighted.](media/visual-studio-project-publish.png "Visual Studio")
+### タスク 2: App Service の設定を更新する
 
-14. On the **Publish** dialog, select **Azure** in the Target box and select **Next**.
+このタスクでは、WWI の Tailspin Toys のプレイヤー情報 Web アプリケーションに更新を加えて、SQL MI データベースへの接続とその利用を行えるようにします。
 
-    ![In the Publish dialog, Azure is selected and highlighted in the Target box. The Next button is highlighted.](media/vs-publish-to-azure.png "Publish API App to Azure")
+1. [Azure portal](https://portal.azure.com) で、\[Azure services\] リストから \[**Resource groups**\] を選択します。
+   
+   ![\[Azure services\] リストで \[Resource groups\] が強調表示されている。](media/azure-services-resource-groups.png "[Azure services]")
 
-15. Next, in the **Specific target** box, select **Azure App Service (Windows)**.
+2. リストから hands-on-lab-SUFFIX リソース グループを選択します。
+   
+   ![Azure のナビゲーション ペインで \[Resource groups\] が選択され、"hands-on-lab-SUFFIX" リソース グループが強調表示されている。](./media/resource-groups.png "リソース グループのリスト")
 
-    ![In the Publish dialog, Azure App Service (Windows) is selected and highlighted in the Specific Target box. The Next button is highlighted.](media/vs-publish-specific-target.png "Publish API App to Azure")
+3. リソース グループのリソース リストで、**hands-on-lab-SUFFIX** リソース グループを選び、続いてリソースのリストから **tailspintoysUNIQUEID** という App Service を選択します。
+   
+   ![リソース グループのリソースのリストで tailspintoys という App Service が強調表示されている。](media/rg-app-service.png "リソース グループ")
 
-16. Finally, in the **App Service** box, select your subscription, expand the hands-on-lab-SUFFIX resource group, and select the Web App.
+4. \[App Service\] ブレードで、左側の \[Settings\] の下の \[**Configuration**\] を選択します。
+   
+   ![\[Settings\] の下の \[Configuration\] アイテムが選択されている。](media/app-service-configuration-menu.png "[Configuration]")
 
-    ![In the Publish dialog, The Tailspin Toys Web App is selected and highlighted under the hands-on-lab-SUFFIX resource group.](media/vs-publish-web-app-service.png "Publish API App to Azure")
+5. \[Configuration \] ブレードで \[**Connection strings**\] セクションを見つけ、接続文字列 `TailspinToysContext` の右にある鉛筆 (編集) アイコンを選択します。
+   
+   ![\[Connection strings\] セクションで、接続文字列 TailspinToysContext の右にある鉛筆アイコンが強調表示されている。](media/app-service-configuration-connection-strings.png "[Connection strings]")
 
-17. Select **Finish**.
-
-18. Back on the Visual Studio Publish page for the `TailspinToysWeb` project, select **Publish** to start the process of publishing your Web API to your Azure API App.
-
-    ![The Publish button is highlighted on the Publish page in Visual Studio.](media/visual-studio-publish-web-app.png "Publish")
-
-19. When the publish completes, you will see a message in the Visual Studio Output page that the publish succeeded.
-
-    ![The Publish Succeeded message is displayed in the Visual Studio Output pane.](media/visual-studio-output-publish-succeeded.png "Visual Studio")
-
-20. If you select the link of the published web app from the Visual Studio output window, an error page is returned because the database connection strings have not been updated to point to the SQL MI database. You address this in the next task.
-
-    ![An error screen is displayed, because the database connection string has not been updated to point to SQL MI in the web app's configuration.](media/web-app-error-screen.png "Web App error")
-
-### Task 2: Update App Service configuration
-
-In this task, you make updates to WWI's Tailspin Toys gamer info web application to enable it to connect to and utilize the SQL MI database.
-
-1. In the [Azure portal](https://portal.azure.com), select **Resource groups** from the Azure services list.
-
-   ![Resource groups is highlighted in the Azure services list.](media/azure-services-resource-groups.png "Azure services")
-
-2. Select the hands-on-lab-SUFFIX resource group from the list.
-
-   ![Resource groups is selected in the Azure navigation pane, and the "hands-on-lab-SUFFIX" resource group is highlighted.](./media/resource-groups.png "Resource groups list")
-
-3. In the list of resources for your resource group, select the **hands-on-lab-SUFFIX** resource group and then select the **tailspintoysUNIQUEID** App Service from the list of resources.
-
-   ![The tailspintoys App Service is highlighted in the list of resource group resources.](media/rg-app-service.png "Resource group")
-
-4. On the App Service blade, select **Configuration** under Settings on the left-hand side.
-
-   ![The Configuration item is selected under Settings.](media/app-service-configuration-menu.png "Configuration")
-
-5. On the Configuration blade, locate the **Connection strings** section, and then select the Pencil (Edit) icon to the right of the `TailspinToysContext` connection string.
-
-   ![In the Connection string section, the pencil icon is highlighted to the right of the TailspinToysContext connection string.](media/app-service-configuration-connection-strings.png "Connection Strings")
-
-6. The value of the connection string should look like:
-
+6. 接続文字列の値は以下のようになっているはずです。
+   
    ```sql
    Server=tcp:your-sqlmi-host-fqdn-value,1433;Database=TailspinToys;User ID=sqlmiuser;Password=Password.1234567890;Trusted_Connection=False;Encrypt=True;TrustServerCertificate=True;
    ```
 
-7. In the Add/Edit connection string dialog, replace `your-sqlmi-host-fqdn-value` with the fully qualified domain name for your SQL MI that you copied to a text editor earlier from the Azure Cloud Shell.
+7. \[Add/Edit connection string\] ダイアログで、`your-sqlmi-host-fqdn-value` を自分の SQL MI の完全修飾ドメイン名に置き換えます。このドメイン名は以前の手順で、Azure Cloud Shell からテキスト エディターにコピーしたものです。
+   
+   ![接続文字列内の文字列 your-sqlmi-host-fqdn-value が強調表示されている。](media/app-service-configuration-edit-conn-string.png "接続文字列の編集")
 
-   ![The your-sqlmi-host-fqdn-value string is highlighted in the connection string.](media/app-service-configuration-edit-conn-string.png "Edit Connection String")
+8. 更新された値は、以下のスクリーンショットに似たものになります。
+   
+   ![更新された接続文字列が表示され、文字列内で SQL MI の完全修飾ドメイン名が強調表示されている。](media/app-service-configuration-edit-conn-string-value.png "接続文字列の値")
 
-8. The updated value should look similar to the following screenshot.
+9. **\[OK\]** を選択します。
 
-   ![The updated connection string is displayed, with the fully qualified domain name of SQL MI highlighted within the string.](media/app-service-configuration-edit-conn-string-value.png "Connection string value")
+10. 今度は接続文字列 `TailspinToysReadOnlyContext` について、手順 3 ～ 7 を再度実行します。
 
-9. Select **OK**.
+11. \[Configuration\] ブレード上部の \[**Save**\] を選択します。
+    
+    ![\[Configuration\] ブレードの保存ボタンが強調表示されている。](media/app-service-configuration-save.png "[Save]")
 
-10. Repeat steps 3 - 7, this time for the `TailspinToysReadOnlyContext` connection string.
+12. アプリケーション設定と接続文字列を変更するとアプリケーションが再起動されるというメッセージが表示されたら、\[**Continue**\] を選択します。
+    
+    ![アプリケーションが再起動されるという警告メッセージが表示され、\[Continue \] ボタンが強調表示されている。](media/app-service-restart.png "再起動メッセージ")
 
-11. Select **Save** at the top of the Configuration blade.
+13. \[Configuration\] ブレードの左にある \[**Overview**\] を選択し、App Service の概要ブレードに戻ります。
+    
+    ![App Service の左側メニューで \[Overview\] が強調表示されている。](media/app-service-overview-menu-item.png "メニュー項目 [Overview ]")
 
-    ![The save button on the Configuration blade is highlighted.](media/app-service-configuration-save.png "Save")
+14. この時点で、\[Overview\] ブレードにおいて App Service の **URL** を選択しても、まだエラーが返されます。これは SQL Managed Instance が VNet 内のプライベート IP アドレスを持っているためです。アプリケーションに接続するには、Managed Instance が展開されている VNet へのアクセスを設定する必要があります。これについては次の演習で扱います。
+    
+    ![プライベート仮想ネットワーク内の SQL MI にアプリケーションが接続できないため、エラー画面が表示されている。](media/web-app-error-screen.png "Web アプリのエラー")
 
-12. When prompted that changes to application settings and connection strings will restart your application, select **Continue**.
+## 演習 4: App Service と仮想ネットワークを統合する
 
-    ![The prompt warning that the application will be restarted is displayed, and the Continue button is highlighted.](media/app-service-restart.png "Restart prompt")
+所要時間: 15 分
 
-13. Select **Overview** to the left of the Configuration blade to return to the overview blade of your App Service.
+この演習では、"ハンズオン ラボの前に" の演習で作成した仮想ネットワークと、App Service を統合します。ARM テンプレートによって、VNet 上のゲートウェイ サブネットと、仮想ネットワーク ゲートウェイが作成されました。この 2 つのリソースはどちらも、App Service を統合して、SQL MI に接続するために必要となります。
 
-    ![Overview is highlighted on the left-hand menu for App Service](media/app-service-overview-menu-item.png "Overview menu item")
+### タスク 1: ポイント対サイト アドレスを設定する
 
-14. At this point, selecting the **URL** for the App Service on the Overview blade still results in an error being return. This is because SQL Managed Instance has a private IP address in its VNet. To connect an application, you need to configure access to the VNet where Managed Instance is deployed, which you handle in the next exercise.
+このタスクでは、クライアント アドレス プールを設定します。これは、プライベート IP アドレスの範囲であり、以下で指定します。ポイント対サイト VPN を介して接続するクライアントは、この範囲から IP アドレスを動的に受け取ります。使用するプライベート IP アドレスの範囲は、VNet と重複しないものにします。
 
-    ![An error screen is displayed, because the application is unable to connect to SQL MI within its private virtual network.](media/web-app-error-screen.png "Web App error")
+1. [Azure portal](https://portal.azure.com) で、リソース グループ hands-on-lab-SUFFIX のリソース リストから**hands-on-lab-SUFFIX-vnet-gateway** 仮想ネットワーク ゲートウェイを選択し、そこに移動します。
+   
+   ![リソースのリストで仮想ネットワーク ゲートウェイ リソースが強調表示されている。](media/resource-group-vnet-gateway.png "リソース")
 
-## Exercise 4: Integrate App Service with the virtual network
+2. \[Virtual network gateway\] ブレードで、左側メニューの \[Settings\] 下の \[**User VPN configuration**\] を選択し、続いて \[**Configure now**\] を選択します。
+   
+   ![左側メニューの \[User VPN configuration\] が強調表示および選択されている。\[User VPN configuration\] ブレードの \[Configure now\] が強調表示されている。](media/virtual-network-gateway-configure-point-to-site.png "[Virtual network gateway] の [User VPN configuration]")
 
-Duration: 15 minutes
+3. \[**Point-to-site configuration**\] ページで、以下の設定を指定します。
+   
+   - **Address pool**: 使用したいプライベート IP アドレスの範囲を追加します。このアドレス空間は以下のアドレス ブロックの 1 つである必要がありますが、VNet が使用するアドレス空間と重複してはいけません。
+     - `10.0.0.0/8` - これは 10.0.0.0 ～ 10.255.255.255 という IP アドレスの範囲を意味します。
+     - `172.16.0.0/12` - これは 172.16.0.0 ～ 172.31.255.255 という IP アドレスの範囲を意味します。
+     - `192.168.0.0/16` - これは 192.168.0.0 ～ 192.168.255.255 という IP アドレスの範囲を意味します。
+   - **Tunnel type**: \[**SSTP (SSL)**\] を選択します。
+   - **Authentication type**: \[**Azure certificate**\] を選択します。
+   
+   ![上で指定された値が Point-to-site configuration フォームに入力されている。](media/virtual-network-gateway-point-to-site-configuration.png "仮想ネットワーク ゲートウェイ")
 
-In this exercise, you Integrate your App Service with the virtual network that was created during the Before the hands-on lab exercises. The ARM template created a Gateway subnet on the VNet, as well as a Virtual Network Gateway. Both of these resources are required to integrate App Service and connect to SQL MI.
+4. \[**Save**\] を選択して確定し、設定を保存します。保存の完了には数分かかります。
 
-### Task 1: Set point-to-site addresses
+### タスク 2: VNet と App Services の統合を設定する
 
-In this task, you configure the client address pool. This is a range of private IP addresses that you specify below. Clients that connect over a Point-to-Site VPN dynamically receive an IP address from this range. You use a private IP address range that does not overlap with the VNet.
+このタスクでは、App Service にネットワーキング設定を追加して、VNet 内のリソースとの通信を可能にします。
 
-1. Navigate to the **hands-on-lab-SUFFIX-vnet-gateway** Virtual network gateway in the [Azure portal](https://portal.azure.com) by selecting it from the list of resources in the hands-on-lab-SUFFIX resource group.
+1. [Azure portal](https://portal.azure.com) で、左側メニューから \[**Resource groups**\] を選んで**hands-on-lab-SUFFIX** リソース グループを選択し、続いてリソースのリストから **tailspintoysUNIQUEID** という App Service を選択します。
+   
+   ![リソース グループのリソースのリストで tailspintoys という App Service が強調表示されている。](media/rg-app-service.png "リソース グループ")
 
-   ![The Virtual network gateway resource is highlighted in the list of resources.](media/resource-group-vnet-gateway.png "Resources")
+2. \[App Service\] ブレードで左側メニューから \[**Networking**\] を選び、続いて \[**VNet Integration**\] の下の \[**Click here to configure**\] を選択します。
+   
+   ![\[App Service\] ブレードで左側メニューの \[Networking \] が選択され、\[VNet Integration\] の下の \[Click here to configure\] が強調表示されている。](media/app-service-networking.png "App Service")
 
-2. On the virtual network gateway blade, select **User VPN configuration** under Settings in the left-hand menu, and then select **Configure now**.
+3. \[VNet Configuration\] ブレードで \[**Add VNet**\] を選択します。
+   
+   ![\[VNet Configuration\] ブレードの \[Add VNet\] が強調表示されている。](media/app-service-vnet-configuration.png "App Service")
 
-   ![User VPN configuration is highlighted and selected in the left-hand menu. On the User VPN configuration blade, Configure now is highlighted.](media/virtual-network-gateway-configure-point-to-site.png "Virtual network gateway User VPN configuration")
+4. \[Network Feature Status\] ダイアログで、以下を入力します。
+   
+   - **Virtual Network**: \[hands-on-lab-SUFFIX-vnet\] を選択します。
+   - **Subnet**: \[Create New Subnet\] を選択します。
+   - **Subnet Name**: 「WebAppSubnet」と入力します。
+   - **Virtual Network Address Block**: このドロップダウンの唯一のオプションである \[10.x.0.0/16\] を選択します。
+   - **Subnet Address Block**: /24 ブロックを使用してサブネットを入力します (例: 10.x.3.0/24)。
+   
+   ![上記の値が \[Network Feature Status\] ダイアログに入力されている。](media/app-service-vnet-network-feature-status.png "[Network Feature Status] の設定")
 
-3. On the **Point-to-site** configuration page, set the following configuration:
+5. 数分以内に VNet が追加され、変更を適用するために App Service が再起動します。\[**Refresh**\] を選択して詳細を確認します。CERTIFICATE STATUS (証明書の状態) が Certificates in sync になっているのを確認できるはずです。**注**: CERTIFICATE STATUS が Certificates in sync になっていない場合は、\[Refresh\] (更新) を押してみてください。証明書の状態が反映されるまでには、少し時間がかかる場合があります。
+   
+   ![VNet Configuration (VNet 設定) の詳細が表示されている。"Certificates in sync" という CERTIFICATE STATUS が強調表示されている。](media/app-service-vnet-details.png "App Service")
+   
+   > **注**: Web アプリへの仮想ネットワークの追加が失敗したというメッセージが表示されたら、\[VNet Configuration\] ブレードで \[**Disconnect**\] を選択し、上の手順 3 ～ 5 を再度実行してください。
 
-   - **Address pool**: Add a private IP address range that you want to use. The address space must be in one of the following address blocks, but should not overlap the address space used by the VNet.
-     - `10.0.0.0/8` - This means an IP address range from 10.0.0.0 to 10.255.255.255
-     - `172.16.0.0/12` - This means an IP address range from 172.16.0.0 to 172.31.255.255
-     - `192.168.0.0/16` - This means an IP address range from 192.168.0.0 to 192.168.255.255
-   - **Tunnel type**: Select **SSTP (SSL)**.
-   - **Authentication type**: Choose **Azure certificate**.
+### タスク 3: Web アプリケーションを開く
 
-   ![The values specified above are entered into the Point-to-site configuration form.](media/virtual-network-gateway-point-to-site-configuration.png "Virtual network gateway")
+このタスクでは、Web アプリケーションがロードされ、Web アプリのホームページが表示されるかを確認します。
 
-4. Select **Save** to validate and save the settings. It takes a few minutes for the save to finish.
+1. App Service の左側メニューの \[**Overview**\] を選び、App service の **URL** を選択して Web サイトを立ち上げます。これにより、ブラウザーのウィンドウでその URL が開かれます。
+   
+   ![App service の URL が強調表示されている。](media/app-service-url.png "App Service の URL")
 
-### Task 2: Configure VNet integration with App Services
+2. Web サイトとデータが正しくロードされたことを確認します。ページは以下と同様の表示になっているはずです。
+   
+   ![TailspinToys のオペレーション Web アプリのスクリーンショット](media/tailspin-toys-web-app.png "TailspinToys の Web")
+   
+   > **注**: エラー画面が表示されたら、ブラウザーのウィンドウで \[更新\] を選択してみてください。
 
-In this task, you add the networking configuration to your App Service to enable communication with resources in the VNet.
+3. これで完了です。アプリケーションを新しい SQL MI データベースに接続させることができました。
 
-1. In the [Azure portal](https://portal.azure.com), select **Resource groups** from the left-hand menu, select the **hands-on-lab-SUFFIX** resource group and then select the **tailspintoysUNIQUEID** App Service from the list of resources.
+## 演習 5: Advanced Data Security でデータベースのセキュリティ体制を強化する
 
-   ![The tailspintoys App Service is highlighted in the list of resource group resources.](media/rg-app-service.png "Resource group")
+所要時間: 30 分
 
-2. On the App Service blade, select **Networking** from the left-hand menu and then select **Click here to configure** under **VNet Integration**.
+この演習では、SQL MI データベースで Advanced Data Security (ADS) を有効にして、Azure でデータベースを実行する際の セキュリティ上のメリットをいくつか見ていきます。[SQL Database 向け Advance Data Security](https://docs.microsoft.com/azure/sql-database/sql-database-advanced-data-security) (ADS) は、機密データの検出と分類、潜在的なデータベース脆弱性の発見と緩和、データベースへの脅威の兆候かもしれない異常なアクティビティの検出といった、高度な SQL セキュリティ機能を提供します。
 
-   ![On the App Service blade, Networking is selected in the left-hand menu and Click here to configure is highlighted under VNet Integration.](media/app-service-networking.png "App Service")
+### タスク 1: Advanced Data Security を有効にする
 
-3. Select **Add VNet** on the VNet Configuration blade.
+このタスクでは、Managed Instance 上のすべてのデータベースに対して ADS を有効にします。
 
-   ![Add VNet is highlighted on the VNet Configuration blade.](media/app-service-vnet-configuration.png "App Service")
+1. [Azure portal](https://portal.azure.com) で、\[Azure services\] リストから \[**Resource groups**\] を選択します。
+   
+   ![\[Azure services\] リストで \[Resource groups\] が強調表示されている。](media/azure-services-resource-groups.png "[Azure services]")
 
-4. On the Network Feature Status dialog, enter the following:
+2. リストから hands-on-lab-SUFFIX リソース グループを選択します。
+   
+   ![Azure のナビゲーション ペインで \[Resource groups\] が選択され、"hands-on-lab-SUFFIX" リソース グループが強調表示されている。](./media/resource-groups.png "リソース グループのリスト")
 
-   - **Virtual Network**: Select the hands-on-lab-SUFFIX-vnet.
-   - **Subnet**: Select Create New Subnet.
-   - **Subnet Name**: Enter WebAppSubnet.
-   - **Virtual Network Address Block**: Select the only option under this dropdown, 10.x.0.0/16.
-   - **Subnet Address Block**: Enter a subnet with a /24 block, such as 10.x.3.0/24.
+3. リストから **TailspinToys** という Managed database (マネージド データベース) リソースを選択します
+   
+   ![リソース リストで TailspinToys という Managed database が強調表示されている。](media/resources-sql-mi-database.png "リソース")
 
-   ![The values specified above are entered into the Network Feature Status dialog.](media/app-service-vnet-network-feature-status.png "Network Feature Status configuration")
+4. TailspinToys マネージド データベース のブレードで、左側メニューから \[Security\] の下の \[**Advanced Data Security**\] を選び、続いて \[**Enable Advanced Data Security on the managed instance**\] を選択します。
+   
+   ![マネージド データベースのブレードの左側メニューで \[Advanced Data Security\] が選択および強調表示され、\[Enable Advanced Data Security on the managed instance\] ボタンが強調表示されている。](media/sql-mi-managed-database-advanced-data-security-enable.png "Advanced Data Security")
 
-5. Within a few minutes, the VNet is added, and your App Service is restarted to apply the changes. Select **Refresh** to see the details. You should see that the certificate status is Certificates in sync. **Note**: If the certificate status is not in sync, try hitting refresh, as it can take a moment for that status to be reflected.
+5. 数分以内に、Managed Instance 上のすべてのデータベースに対して ADS が有効になります。有効化が完了すると、\[Advanced Data Security\] ブレードの 3 つのタイルが有効になり、データが読み込まれているのが確認できるはずです。
+   
+   ![\[Advanced Data Security\] ブレードで、有効になったタイルが表示されている。](media/ads-panels.png "Advanced Data Security")
 
-   ![The details of the VNet Configuration are displayed. The Certificate Status, Certificates in sync, is highlighted.](media/app-service-vnet-details.png "App Service")
+### タスク 2: SQL データの検出と分類を設定する
 
-   > **Note**: In you receive a message adding the Virtual Network to Web App failed, select **Disconnect** on the VNet Configuration blade, and repeat steps 3 - 5 above.
+このタスクでは、Advanced Data Security の ["SQL データの検出と分類"](https://docs.microsoft.com/sql/relational-databases/security/sql-data-discovery-and-classification?view=sql-server-2017) 機能をレビューします。"データの検出と分類" には、データベース内の機密データの検出、分類、ラベル付け、およびレポーティングのための新しいツールが導入されました。高度な一連のサービスが導入され、データベースだけでなくデータベース内のデータも保護することを目的とした、新しい SQL Information Protection パラダイムが形成されています。最も機密性の高いデータ (ビジネス、財務、医療など) の検出と分類は、組織の情報保護の達成において極めて重要な役割を果たすことができます。
 
-### Task 3: Open the web application
+1. \[Advanced Data Security\] ブレードで、\[**Data Discovery \& Classification**\] タイルを選択します。
+   
+   ![\[Data Discovery \& Classification\] タイルが表示されている。](media/ads-data-discovery-and-classification-pane.png "Advanced Data Security")
 
-In this task, you verify your web application now loads, and you can see the home page of the web app.
+2. \[**Data Discovery \& Classification**\] ブレードで、"**We have found 35 columns with classification recommendations**" というメッセージの付いた情報リンクを選択します。
+   
+   ![\[Data Discovery \& Classification\] で、推奨事項へのリンクが強調表示されている。](media/ads-data-discovery-and-classification-recommendations-link.png "[Data Discovery & Classification]")
 
-1. Select **Overview** in the left-hand menu of your App Service, and select the **URL** of your App service to launch the website. This opens the URL in a browser window.
+3. 推奨事項のリストに目を通し、データの種類と、組み込みの分類設定に基づいて割り当てられる分類について理解を深めてください。分類に関する推奨事項のリストで、**Sales - CreditCard - CardNumber** フィールドに対する推奨事項を選択します。
+   
+   ![推奨事項のリストで、クレジット カード番号に関する推奨事項が強調表示されている。](media/ads-data-discovery-and-classification-recommendations-credit-card.png "[Data Discovery & Classification]")
 
-   ![The App service URL is highlighted.](media/app-service-url.png "App service URL")
+4. クレジット カード情報の流出リスクを考慮して、WWI はこの情報を推奨事項でも提案されているように、この情報を単に "**Confidential**" (機密) ではなく、極秘として分類する方式を希望しています。これを修正するために、\[Data Discovery \& Classification\] ブレード上部の \[**+ Add classification**\] を選択します。
+   
+   ![ツールバーの \[+Add classification\] ボタンが強調表示されている。](media/ads-data-discovery-and-classification-add-classification-button.png "[Data Discovery & Classification]")
 
-2. Verify that the web site and data are loaded correctly. The page should look similar to the following:
+5. \[**Sensitivity label**\] フィールドを展開し、選択が可能な、さまざまな組み込みのラベルを簡単に確認します。必要があれば、カスタム ラベルを追加することもできます。
+   
+   ![組み込みの機密ラベルのリストが表示されている。](media/ads-data-discovery-and-classification-sensitivity-labels.png "[Data Discovery & Classification]")
 
-   ![Screenshot of the TailspinToys Operations Web App.](media/tailspin-toys-web-app.png "TailspinToys Web")
+6. \[Add classification\] ダイアログで、以下を入力します。
+   
+   - **Schema name**: \[**Sales**\] を選択します。
+   - **Table name**: \[**CreditCard**\] を選択します。
+   - **Column name**: \[**CardNumber (nvarchar)**\] を選択します。
+   - **Information type**: \[**Credit Card**\] を選択します。
+   - **Sensitivity level**: \[**Highly Confidential**\] を選択します。
+   
+   ![上記の値が \[Add classification\] ダイアログに入力されている。](media/ads-data-discovery-and-classification-add-classification.png "[Add classification]")
 
-   > **Note**: If you get an error screen, try selecting Refresh in the browser window.
+7. \[**Add classification**\] を選択します。
 
-3. That's it. You successfully connected your application to the new SQL MI database.
+8. 推奨事項リストから **Sales - CreditCard - CardNumber** フィールドが消え、推奨事項の数が 1 つ減っていることに注目してください。
 
-## Exercise 5: Improve database security posture with Advanced Data Security
+9. \[Data Classification\] ウィンドウのツールバーにある \[**Save**\] を選択します。保存が完了するまでに数分かかる場合があります。
+   
+   ![分類された項目のリストに対する更新を保存する](media/ads-data-discovery-and-classification-save.png "[Save]")
 
-Duration: 30 minutes
+10. ほかにレビューできる推奨事項として、**NationIDNumber** と **BirthDate** に対応する **HumanResources - Employee** フィールドがあります。推奨サービスがこれらのフィールドに **Confidential - GDPR** というフラグを設定していることに注目してください。WWI はヨーロッパを含む世界中のプレイヤーに関するデータを維持しています。そのため、GDPR へのコンプライアンスに関係する可能性があるデータを検出できるツールがあれば、大変役立ちます。
+    
+    ![推奨事項のリストで GDPR 情報が強調表示されている。](media/ads-data-discovery-and-classification-recommendations-gdpr.png "[Data Discovery & Classification]")
 
-In this exercise, you enable Advanced Data Security (ADS) on your SQL MI database and explore some of the security benefits that come with running your database in Azure. [SQL Database Advance Data Security](https://docs.microsoft.com/azure/sql-database/sql-database-advanced-data-security) (ADS) provides advanced SQL security capabilities, including functionality for discovering and classifying sensitive data, surfacing and mitigating potential database vulnerabilities, and detecting anomalous activities that could indicate a threat to your database.
+11. リスト上部の \[**Select all**\] チェックボックスをオンにして、推奨されている分類の残りすべてを選択してから、\[**Accept selected recommendations**\] を選択します。
+    
+    ![推奨されている分類のすべてがオンになり、\[Accept selected recommendations\] ボタンが強調表示されている。](media/ads-data-discovery-and-classification-accept-recommendations.png "[Data Discovery & Classification]")
 
-### Task 1: Enable Advanced Data Security
+12. \[Data Classification\] ウィンドウのツールバーにある \[**Save**\] を選択します。保存が完了するまでに数分かかる場合があります。
+    
+    ![分類された項目のリストに対する更新を保存する](media/ads-data-discovery-and-classification-save.png "[Save]")
+    
+    > **注**: 保存中にエラーが表示されたら、\[Advanced Data Security\] ブレードに戻り、\[Data Discovery \& Classification\] タイルをもう一度選択して、結果を確認してみてください。
 
-In this task, you enable ADS for all databases on the Managed Instance.
+13. 保存が完了したら、\[Data Discovery \& Classification\] ブレードの \[**Overview**\] タブを選択して、データベースの分類状態の全体概要を提供するレポートを表示します。
+    
+    ![ツールバーの \[View Report\] ボタンが強調表示されている。](media/ads-data-discovery-and-classification-overview-report.png "[View Report]")
 
-1. In the [Azure portal](https://portal.azure.com), select **Resource groups** from the Azure services list.
+### タスク 3: Advanced Data Security の脆弱性評価をレビューする
 
-   ![Resource groups is highlighted in the Azure services list.](media/azure-services-resource-groups.png "Azure services")
+このタスクでは、ADS により生成された `TailspinToys` データベースのために生成した評価レポートをレビューし、`TailspinToys` データベースにおいて、結果中の 1 項目に対する修復処置を取ります。[SQL 脆弱性評価サービス](https://docs.microsoft.com/azure/sql-database/sql-vulnerability-assessment)は、セキュリティ状態に対する可視性を提供します。このサービスには、セキュリティ問題を解決してデータベース セキュリティを強化するために実践できる手順が含まれています。
 
-2. Select the hands-on-lab-SUFFIX resource group from the list.
+1. `TailspinToys` マネージド データベースの \[**Advanced Data Security**\] ブレードに戻ってから、\[**Vulnerability Assessment**\] タイルを選択します。
+   
+   ![\[Vulnerability \] タイルが表示されている。](media/ads-vulnerability-assessment-tile.png "Advanced Data Security")
 
-   ![Resource groups is selected in the Azure navigation pane, and the "hands-on-lab-SUFFIX" resource group is highlighted.](./media/resource-groups.png "Resource groups list")
+2. \[Vulnerability Assessment\] ブレードのツールバーにある \[**Scan**\] を選択します。
+   
+   ![ツールバーで Vulnerability assessment の \[Scan\] ボタンが選択されている。](media/vulnerability-assessment-scan.png "[Scan]")
 
-3. Select the **TailspinToys** Managed database resource from the list.
+3. スキャンが完了すると、チェックの不合格数と合格数を表示するダッシュボードが現れ、重大度別に分けられたリスク概要も表示されます。
+   
+   ![\[Vulnerability Assessment\] ダッシュボードが表示されている。](media/sql-mi-vulnerability-assessment-dashboard.png "[Vulnerability Assessment] ダッシュボード")
 
-   ![The TailspinToys Managed Database is highlighted in the resources list.](media/resources-sql-mi-database.png "Resources")
+4. スキャン結果画面で、数分かけて Failed (不合格) のチェックと Passed (合格) のチェックの両方に目を通し、実行されたチェックの種類を確認します。\[**Failed**\] のリストから、**Transparent data encryption** に関するセキュリティ チェックを見つけてください。このチェックは **VA1219** という ID を持っています。
+   
+   ![Transparent data encryption に関する VA1219 の結果が強調表示されている。](media/sql-mi-vulnerability-assessment-failed-va1219.png "[Vulnerability assessment]")
 
-4. On the TailspinToys Managed database blade, select **Advanced Data Security** from the left-hand menu, under Security, and then select **Enable Advanced Data Security on the managed instance**.
+5. **VA1219** の結果を選択して、詳しい説明を確認します。
+   
+   ![\[VA1219 - Transparent data encryption should be enabled\] の結果の詳細が表示され、説明、影響、修復のフィールドが強調表示されている。](media/sql-mi-vulnerability-assessment-failed-va1219-details.png "[Vulnerability assessment]")
+   
+   > それぞれの結果の詳細からは、その結果がもたらされた理由に関する、さらなる洞察が得られます。注目していただきたいのは、結果を説明するフィールド、推奨設定がもたらす影響についてのフィールド、結果の修復に関する詳細についてのフィールドです。
 
-   ![Advanced Data Security is selected and highlighted in the left-hand menu of the Managed database blade, and the Enable Advanced Data Security on the managed instance button is highlighted.](media/sql-mi-managed-database-advanced-data-security-enable.png "Advanced Data Security")
+6. それでは今から、結果に対して推奨されている修復手順に従って、`TailspinToys` データベースに対する [Transparent Data Encryption](https://docs.microsoft.com/azure/azure-sql/database/transparent-data-encryption-tde-overview?tabs=azure-portal) を有効化することにします。これを達成するために、JumpBox VM 上の SSMS に切り替え、次のいくつかの手順ではこれを使用します。
+   
+   > **注**: Azure SQL Managed Instance に対して、Transparent data encryption (TDE) は手作業で有効にする必要があります。TDE は悪意のあるアクティビティの脅威から Azure SQL Database、Azure SQL Managed Instance、および Azure Data Warehouse を保護するために役立ちます。TDE はデータベース、関連するバックアップ、保存されているトランザクション ログ ファイルの暗号化と暗号化解除をリアルタイムで実行します。また、そのためにアプリケーションの変更は必要とされません。
 
-5. Within a few minutes, ADS is enabled for all databases on the Managed Instance. You will see the three tiles on the Advanced Data Security blade become enabled and populated with data when it has finished.
+7. JumpBox VM の \[スタート\] メニューから Microsoft SQL Server Management Studio 18 を開き、以下の情報を \[**サーバーに接続**\] ダイアログに入力します。
+   
+   - **サーバー名:** SQL マネージド インスタンスの完全修飾ドメイン名 (前のタスクで Azure Cloud Shell からコピーしたもの) を入力します。
+   - **認証:** \[**SQL Server 認証**\] を選択します。
+   - **ログイン:** 「`sqlmiuser`」と入力します。
+   - **パスワード**: 「`Password.1234567890`」と入力します。
+   - \[**パスワードを記憶する**\] ボックスをオンにします。
+   
+   ![上で指定された SQL マネージド インスタンスの詳細情報が \[サーバーに接続\] ダイアログに入力されている。](media/ssms-18-connect-to-server.png "[サーバーに接続]")
 
-   ![The enabled tiles on the Advance Data Security blade are displayed.](media/ads-panels.png "Advanced Data Security")
-
-### Task 2: Configure SQL Data Discovery and Classification
-
-In this task, you review the [SQL Data Discovery and Classification](https://docs.microsoft.com/sql/relational-databases/security/sql-data-discovery-and-classification?view=sql-server-2017) feature of Advanced Data Security. Data Discovery & Classification introduces a new tool for discovering, classifying, labeling, and reporting the sensitive data in your databases. It introduces a set of advanced services, forming a new SQL Information Protection paradigm aimed at protecting the data in your database, not just the database. Discovering and classifying your most sensitive data (e.g., business, financial, healthcare) can play a pivotal role in your organizational information protection stature.
-
-1. On the Advanced Data Security blade, select the **Data Discovery & Classification** tile.
-
-   ![The Data Discovery & Classification tile is displayed.](media/ads-data-discovery-and-classification-pane.png "Advanced Data Security")
-
-2. In the **Data Discovery & Classification** blade, select the info link with the message **We have found 35 columns with classification recommendations**.
-
-   ![The recommendations link on the Data Discovery & Classification blade is highlighted.](media/ads-data-discovery-and-classification-recommendations-link.png "Data Discovery & Classification")
-
-3. Look over the list of recommendations to get a better understanding of the types of data and classifications that can be assigned, based on the built-in classification settings. In the list of classification recommendations, select the recommendation for the **Sales - CreditCard - CardNumber** field.
-
-   ![The CreditCard number recommendation is highlighted in the recommendations list.](media/ads-data-discovery-and-classification-recommendations-credit-card.png "Data Discovery & Classification")
-
-4. Due to the risk of exposing credit card information, WWI would like a way to classify it as highly confidential, not just **Confidential**, as the recommendation suggests. To correct this, select **+ Add classification** at the top of the Data Discovery & Classification blade.
-
-   ![The +Add classification button is highlighted in the toolbar.](media/ads-data-discovery-and-classification-add-classification-button.png "Data Discovery & Classification")
-
-5. Quickly expand the **Sensitivity label** field, and review the various built-in labels from which you can choose. You can also add custom labels, should you desire.
-
-   ![The list of built-in Sensitivity labels is displayed.](media/ads-data-discovery-and-classification-sensitivity-labels.png "Data Discovery & Classification")
-
-6. In the Add classification dialog, enter the following:
-
-   - **Schema name**: Select **Sales**.
-   - **Table name**: Select **CreditCard**.
-   - **Column name**: Select **CardNumber (nvarchar)**.
-   - **Information type**: Select **Credit Card**.
-   - **Sensitivity level**: Select **Highly Confidential**.
-
-   ![The values specified above are entered into the Add classification dialog.](media/ads-data-discovery-and-classification-add-classification.png "Add classification")
-
-7. Select **Add classification**.
-
-8. Notice that the **Sales - CreditCard - CardNumber** field disappears from the recommendations list, and the number of recommendations drops by 1.
-
-9. Select **Save** on the toolbar of the Data Classification window. It may take several minutes for the save to complete.
-
-   ![Save the updates to the classified columns list.](media/ads-data-discovery-and-classification-save.png "Save")
-
-10. Other recommendations you can review are the **HumanResources - Employee** fields for **NationIDNumber** and **BirthDate**. Note that the recommendation service flagged these fields as **Confidential - GDPR**. WWI maintains data about gamers from around the world, including Europe, so having a tool that helps them discover data that may be relevant to GDPR compliance is very helpful.
-
-    ![GDPR information is highlighted in the list of recommendations](media/ads-data-discovery-and-classification-recommendations-gdpr.png "Data Discovery & Classification")
-
-11. Check the **Select all** checkbox at the top of the list to select all the remaining recommended classifications, and then select **Accept selected recommendations**.
-
-    ![All the recommended classifications are checked, and the Accept selected recommendations button is highlighted.](media/ads-data-discovery-and-classification-accept-recommendations.png "Data Discovery & Classification")
-
-12. Select **Save** on the toolbar of the Data Classification window. It may take several minutes for the save to complete.
-
-    ![Save the updates to the classified columns list.](media/ads-data-discovery-and-classification-save.png "Save")
-
-    > **Note**: If you receive an error when saving, try returning to the Advanced Data Security blade, and selecting the Data Discovery & Classification tile again to see the results.
-
-13. When the save completes, select the **Overview** tab on the Data Discovery & Classification blade to view a report with a full summary of the database classification state.
-
-    ![The View Report button is highlighted on the toolbar.](media/ads-data-discovery-and-classification-overview-report.png "View report")
-
-### Task 3: Review an Advanced Data Security Vulnerability Assessment
-
-In this task, you review an assessment report generated by ADS for the `TailspinToys` database and take action to remediate one of the findings in the `TailspinToys` database. The [SQL Vulnerability Assessment service](https://docs.microsoft.com/azure/sql-database/sql-vulnerability-assessment) is a service that provides visibility into your security state and includes actionable steps to resolve security issues and enhance your database security.
-
-1. Return to the **Advanced Data Security** blade for the `TailspinToys` Managed database and then select the **Vulnerability Assessment** tile.
-
-   ![The Vulnerability tile is displayed.](media/ads-vulnerability-assessment-tile.png "Advanced Data Security")
-
-2. On the Vulnerability Assessment blade, select **Scan** on the toolbar.
-
-   ![The Vulnerability assessment scan button is selected in the toolbar.](media/vulnerability-assessment-scan.png "Scan")
-
-3. When the scan completes, a dashboard displaying the number of failing and passing checks, along with a breakdown of the risk summary by severity level is displayed.
-
-   ![The Vulnerability Assessment dashboard is displayed.](media/sql-mi-vulnerability-assessment-dashboard.png "Vulnerability Assessment dashboard")
-
-4. In the scan results, take a few minutes to browse both the Failed and Passed checks, and review the types of checks that are performed. In the **Failed** the list, locate the security check for **Transparent data encryption**. This check has an ID of **VA1219**.
-
-   ![The VA1219 finding for Transparent data encryption is highlighted.](media/sql-mi-vulnerability-assessment-failed-va1219.png "Vulnerability assessment")
-
-5. Select the **VA1219** finding to view the detailed description.
-
-   ![The details of the VA1219 - Transparent data encryption should be enabled finding are displayed with the description, impact, and remediation fields highlighted.](media/sql-mi-vulnerability-assessment-failed-va1219-details.png "Vulnerability Assessment")
-
-   > The details for each finding provide more insight into the reason for the finding. Of note are fields describing the finding, the impact of the recommended settings, and details on remediation for the finding.
-
-6. You will now act on the recommended remediation steps for the finding and enable [Transparent Data Encryption](https://docs.microsoft.com/azure/azure-sql/database/transparent-data-encryption-tde-overview?tabs=azure-portal) for the `TailspinToys` database. To accomplish this, switch over to using SSMS on your JumpBox VM for the next few steps.
-
-   > **Note**: Transparent data encryption (TDE) needs to be manually enabled for Azure SQL Managed Instance. TDE helps protect Azure SQL Database, Azure SQL Managed Instance, and Azure Data Warehouse against the threat of malicious activity. It performs real-time encryption and decryption of the database, associated backups, and transaction log files at rest without requiring changes to the application.
-
-7. On your JumpBox VM, open Microsoft SQL Server Management Studio 18 from the Start menu, and enter the following information in the **Connect to Server** dialog.
-
-   - **Server name**: Enter the fully qualified domain name of your SQL managed instance, which you copied from the Azure Cloud Shell in a previous task.
-   - **Authentication**: Select **SQL Server Authentication**.
-   - **Login**: Enter `sqlmiuser`
-   - **Password**: Enter `Password.1234567890`
-   - Check the **Remember password** box.
-
-   ![The SQL managed instance details specified above are entered into the Connect to Server dialog.](media/ssms-18-connect-to-server.png "Connect to Server")
-
-8. In SSMS, select **New Query** from the toolbar, paste the following SQL script into the new query window.
-
+8. SSMS のツールバーの \[**新しいクエリ**\] を選択し、新しいクエリのウィンドウに次の SQL スクリプトを貼り付けます。
+   
    ```sql
    USE TailspinToys;
    GO
-
+   
    ALTER DATABASE [TailspinToys] SET ENCRYPTION ON
    ```
+   
+   > Transparent Data Encryption のオンとオフはデータベース レベルで行います。Azure SQL Managed Instance 内のデータベースで Transparent Data Encryption を有効にするには、T-SQL を使用する必要があります。
 
-   > You turn transparent data encryption on and off on the database level. To enable transparent data encryption on a database in Azure SQL Managed Instance use must use T-SQL.
+9. SSMS ツールバーから \[**実行**\] を選択します。数秒後に、"Commands completed successfully" というメッセージが表示されます。
 
-9. Select **Execute** from the SSMS toolbar. After a few seconds, you will see a message that the "Commands completed successfully."
-
-10. You can verify the encryption state and view information the associated encryption keys by using the [sys.dm_database_encryption_keys view](https://docs.microsoft.com/sql/relational-databases/system-dynamic-management-views/sys-dm-database-encryption-keys-transact-sql). Select **New Query** on the SSMS toolbar again, and paste the following query into the new query window:
-
+10. [sys.dm\_database\_encryption\_keys view](https://docs.microsoft.com/sql/relational-databases/system-dynamic-management-views/sys-dm-database-encryption-keys-transact-sql) を使用すると、暗号化の状態と、それに関連付けられている暗号化キーの情報を確認できます。SSMS のツールバーの \[**新しいクエリ**\] をもう一度選択し、新しいクエリのウィンドウに次のクエリを貼り付けます。
+    
     ```sql
     SELECT * FROM sys.dm_database_encryption_keys
     ```
+    
+    ![SSMS の新しいクエリのウィンドウに、上のクエリが貼り付けられている。](media/ssms-sql-mi-database-encryption-keys.png "新しいクエリ")
 
-    ![The query above is pasted into a new query window in SSMS.](media/ssms-sql-mi-database-encryption-keys.png "New query")
+11. SSMS ツールバーから \[**実行**\] を選択します。\[結果\] ウィンドウに 2 件のレコードが表示されるはずです。これらは暗号化の状態、および暗号化に使用されているキーについての情報を提供しています。
+    
+    ![SSMS ツールバーの \[実行\] ボタンが強調表示されている。さらに \[結果\] ウィンドウで、TailspinToys データベースの暗号化の状態とキーに関する 2 件のレコードが強調表示されている。](media/ssms-sql-mi-database-encryption-keys-results.png "[結果]")
+    
+    > 既定では、サービスマネージドの透過的なデータ暗号化 (Transparent Data Encryption) が使用されます。透過的なデータ暗号化のための証明書は、このデータベースが含まれているサーバーに対して自動的に生成されます。
 
-11. Select **Execute** from the SSMS toolbar. You will see two records in the Results window, which provide information about the encryption state and keys used for encryption.
+12. Azure portal を再度開き、`TailspinToys` マネージド データベースの \[Advanced Data Security\] - \[Vulnerability Assessment\] ブレードに戻ります。ツールバーにある \[**Scan**\] を選択して、データベースの評価を新たに開始します。
+    
+    ![ツールバーで Vulnerability assessment の \[Scan\] ボタンが選択されている。](media/vulnerability-assessment-scan.png "[Scan]")
 
-    ![The Execute button on the SSMS toolbar is highlighted, and in the Results pane the two records about the encryption state and keys for the TailspinToys database are highlighted.](media/ssms-sql-mi-database-encryption-keys-results.png "Results")
+13. スキャンが完了したら、\[**Failed**\] タブを選択し、検索フィルター ボックスに「**VA1219**」と入力して、以前の不合格項目が \[Failed\] のリストからなくなっていることを確認します。
+    
+    ![\[Failed\] タブが強調表示され、検索フィルターに「VA1219」と入力されている。リストには結果なしと表示されている。](media/sql-mi-vulnerability-assessment-failed-filter-va1219.png "[Failed]")
 
-    > By default, service-managed transparent data encryption is used. A transparent data encryption certificate is automatically generated for the server that contains the database.
+14. 今度は \[**Passed**\] タブを選択し、**VA1219** チェックが "**PASS**" という状態とともにリストされていることを確認します。
+    
+    ![\[Passed\] タブが強調表示され、検索フィルターに「VA1219」と入力されている。検索結果で、VA1219 が "PASS" という状態とともに強調表示されている。](media/sql-mi-vulnerability-assessment-passed-va1219.png "[Passed]")
+    
+    > SQL 脆弱性評価を使用すると、潜在的なデータベース脆弱性を簡単に特定および修復し、データベース セキュリティを予防的に強化することができます。
 
-12. Return to the Azure portal and the Advanced Data Security - Vulnerability Assessment blade of the `TailspinToys` managed database. On the toolbar, select **Scan** to start a new assessment of the database.
+## 演習 6: 動的データ マスクを有効にする
 
-    ![The Vulnerability assessment scan button is selected in the toolbar.](media/vulnerability-assessment-scan.png "Scan")
+所要時間: 15 分
 
-13. When the scan completes, select the **Failed** tab, enter **VA1219** into the search filter box, and observe that the previous failure is no longer in the Failed list.
+この演習では、`TailspinToys` データベース内のクレジット カード番号に対して、[動的データ マスク](https://docs.microsoft.com/azure/sql-database/sql-database-dynamic-data-masking-get-started) (DDM) を有効にします。DDM は、権限を持たないユーザーに対して機密データをマスクすることにより、そのデータの公開を制限します。この機能を使用すると、アプリケーション レイヤーに対する影響を最小限に抑えながら、表示する機密データの量を指定して、機密データに対する未承認のアクセスを防ぐことができます。これはポリシーベースのセキュリティ機能であり、指定されたデータベース フィールドに対するクエリの結果セット内の機密データが表示されないようにします。その際、データベース内のデータが変更されることはありません。
 
-    ![The Failed tab is highlighted, and VA1219 is entered into the search filter. The list displays no results.](media/sql-mi-vulnerability-assessment-failed-filter-va1219.png "Failed")
+> 例えば、コール センターのサポート担当者は、クレジット カード番号の一部の数字から電話相手を特定できる場合がありますが、このようなデータ項目をサポート担当者にすべて公開すべきではありません。マスク ルールの設定によって、クエリの結果セットに含まれるクレジット カード番号の末尾 4 桁を除くすべての番号をマスクすることができます。もう 1 つの例として、開発者は適切なデータ マスクを定義して、個人情報 (PII) データを保護することにより、コンプライアンス規定に違反することなくトラブルシューティング目的で、運用環境に対するクエリを実行できます。
 
-14. Now, select the **Passed** tab, and observe the **VA1219** check is listed with a status of **PASS**.
+### タスク 1: クレジット カード 番号に対して DDM を有効にする
 
-    ![The Passed tab is highlighted, and VA1219 is entered into the search filter. VA1219 with a status of PASS is highlighted in the results.](media/sql-mi-vulnerability-assessment-passed-va1219.png "Passed")
+ADS Data Discovery \& Classification ツールを使用して `TailspinToys` データベース内のデータを検査した際、クレジット カード番号に対する機密ラベルを "Highly Confidential (極秘)" に設定しました。このタスクでは、また別の手順を取って、この情報を保護することにし、そのために `CreditCard` テーブル内の `CardNumber` フィールドに対して DDM を有効にします。DDM は、このテーブルに対するクエリによって完全なクレジット カード番号が返されることを防ぎます。
 
-    > Using the SQL Vulnerability Assessment, it is simple to identify and remediate potential database vulnerabilities, allowing you to improve your database security proactively.
+1. JumpBox VM で、前に開いた SQL Server Management Studio (SSMS) のウィンドウに戻ります。
 
-## Exercise 6: Enable Dynamic Data Masking
+2. **TailspinToys** データベース下の \[**テーブル**\] を展開し、`Sales.CreditCard` テーブルを見つけます。テーブルの列を展開し、`CardNumber` という名前の列があることを確認します。テーブルを右クリックして、コンテキスト メニューから \[**上位1000行を選択**\] を選びます。
+   
+   ![Sales.CreditCard テーブルのコンテキスト メニューで \[上位1000行を選択\]　という項目が強調表示されている。](media/ssms-sql-mi-credit-card-table-select.png "[上位1000行を選択]")
 
-Duration: 15 minutes
+3. 開かれたクエリ ウィンドウで、`CardNumber` フィールドを含んだ \[結果\] を確認します。このデータがプレーン テキストで表示されていることから、データベースへのクエリのためのアクセス権を持つユーザーなら誰でもこのデータを利用できてしまう点に注目してください。
+   
+   ![プレーン テキストのクレジット カード番号がクエリ結果で強調表示されている。](media/ssms-sql-mi-credit-card-table-select-results.png "[結果]")
 
-In this exercise, you enable [Dynamic Data Masking](https://docs.microsoft.com/azure/sql-database/sql-database-dynamic-data-masking-get-started) (DDM) on credit card numbers in the `TailspinToys` database. DDM limits sensitive data exposure by masking it to non-privileged users. This feature helps prevent unauthorized access to sensitive data by enabling customers to designate how much of the sensitive data to reveal with minimal impact on the application layer. It is a policy-based security feature that hides the sensitive data in the result set of a query over designated database fields, while the data in the database is not changed.
-
-> For example, a service representative at a call center may identify callers by several digits of their credit card number, but those data items should not be fully exposed to the service representative. A masking rule can be defined that masks all but the last four digits of any credit card number in the result set of any query. As another example, an appropriate data mask can be defined to protect personally identifiable information (PII) data, so that a developer can query production environments for troubleshooting purposes without violating compliance regulations.
-
-### Task 1: Enable DDM on credit card numbers
-
-When inspecting the data in the `TailspinToys` database using the ADS Data Discovery & Classification tool, you set the Sensitivity label for credit card numbers to Highly Confidential. In this task, you take another step to protect this information by enabling DDM on the `CardNumber` field in the `CreditCard` table. DDM prevents queries against that table from returning the full credit card number.
-
-1. On your JumpBox VM, return to the SQL Server Management Studio (SSMS) window you opened previously.
-
-2. Expand **Tables** under the **TailspinToys** database and locate the `Sales.CreditCard` table. Expand the table columns and observe that there is a column named `CardNumber`. Right-click the table, and choose **Select Top 1000 Rows** from the context menu.
-
-   ![The Select Top 1000 Rows item is highlighted in the context menu for the Sales.CreditCard table.](media/ssms-sql-mi-credit-card-table-select.png "Select Top 1000 Rows")
-
-3. In the query window that opens, review the Results, including the `CardNumber` field. Notice it is displayed in plain text, making the data available to anyone with access to query the database.
-
-   ![Plain text credit card numbers are highlighted in the query results.](media/ssms-sql-mi-credit-card-table-select-results.png "Results")
-
-4. To be able to test the mask being applied to the `CardNumber` field, you first create a user in the database to use for testing the masked field. In SSMS, select **New Query** and paste the following SQL script into the new query window:
-
+4. `CardNumber` フィールドに適用されているマスクをテストするには、まずマスクされたフィールドのテストに使用する、データベース内のユーザーを作成します。SSMS の \[**新しいクエリ**\] を選択し、新しいクエリのウィンドウに次の SQL スクリプトを貼り付けます。
+   
    ```sql
    USE [TailspinToys];
    GO
-
+   
    CREATE USER DDMUser WITHOUT LOGIN;
    GRANT SELECT ON [Sales].[CreditCard] TO DDMUser;
    ```
+   
+   > 上の SQL スクリプトはデータベース内に `DDMUser` という名前の新しいユーザーを作成し、そのユーザーに `Sales.CreditCard` テーブルに対する `SELECT` 権を付与します。
 
-   > The SQL script above creates a new user in the database named `DDMUser`, and grants that user `SELECT` rights on the `Sales.CreditCard` table.
+5. SSMS のツールバーから \[**実行**\] を選択し、クエリを実行します。\[メッセージ\] ペインに、コマンドが正常に完了したというメッセージが表示されます。
 
-5. Select **Execute** from the SSMS toolbar to run the query. You will get a message that the commands completed successfully in the Messages pane.
-
-6. With the new user created, run a quick query to observe the results. Select **New Query** again, and paste the following into the new query window.
-
+6. 新しいユーザーが作成されたので、簡単なクエリを実行して結果を確認しましょう。\[**新しいクエリ**\] をもう一度選択し、新しいクエリのウィンドウに以下を貼り付けます。
+   
    ```sql
    USE [TailspinToys];
    GO
-
+   
    EXECUTE AS USER = 'DDMUser';
    SELECT TOP 10 * FROM [Sales].[CreditCard];
    REVERT;
    ```
 
-7. Select **Execute** from the toolbar and examine the Results pane. Notice the credit card number, as above, is visible in plain text.
+7. ツールバーから \[**実行**\] を選択し、\[結果\] ペインを検証します。クレジット カード番号が、上の場合と同様、プレーン テキストで表示されることに注目してください。
+   
+   ![クエリ結果内のクレジット カード番号がマスクされていない](media/ssms-sql-mi-ddm-results-unmasked.png "クエリ結果")
 
-   ![The credit card number is unmasked in the query results.](media/ssms-sql-mi-ddm-results-unmasked.png "Query results")
-
-8. You now apply DDM on the `CardNumber` field to prevent it from being viewed in query results. Select **New Query** from the SSMS toolbar and paste the following query into the query window to apply a mask to the `CardNumber` field, and select **Execute**.
-
+8. それでは、`CardNumber` フィールドに DDM を適用して、クエリ結果に表示されないようにしましょう。SSMS のツールバーから \[**新しいクエリ**\] を選択し、`CardNumber` フィールドにマスクを適用する次のクエリをクエリ ウィンドウに貼り付けて、\[**実行**\] を選択します。
+   
    ```sql
    USE [TailspinToys];
    GO
-
+   
    ALTER TABLE [Sales].[CreditCard]
    ALTER COLUMN [CardNumber] NVARCHAR(25) MASKED WITH (FUNCTION = 'partial(0,"xxx-xxx-xxx-",4)')
    ```
 
-9. Run the `SELECT` query you opened in step 6 above again, and observe the results. Specifically, inspect the output in the `CardNumber` field. For reference, the query is below.
-
+9. 手順 6 で開いた `SELECT` クエリをもう一度実行し、結果を確かめます。特に、`CardNumber` フィールドの出力を詳しく確認します。参考のために、このクエリを下に示します。
+   
    ```sql
    USE [TailspinToys];
    GO
-
+   
    EXECUTE AS USER = 'DDMUser';
    SELECT TOP 10 * FROM [Sales].[CreditCard];
    REVERT;
    ```
+   
+   ![クエリ結果内のクレジット カード番号がマスクされている](media/ssms-sql-mi-ddm-results-masked.png "クエリ結果")
+   
+   > `CardNumber` が、適用済みのマスクを使用して表示されています。そのため、カード番号の末尾 4 桁のみが表示されています。動的データ マスクは、未承認ユーザーによる機密情報や制限付きの情報の表示を防止できる、強力な機能です。これはポリシーベースのセキュリティ機能であり、指定されたデータベース フィールドに対するクエリの結果セットに含まれる機密データが表示されないようにします。その際、データベース内のデータが変更されることはありません。
 
-   ![The credit card number is masked in the query results.](media/ssms-sql-mi-ddm-results-masked.png "Query results")
+### タスク 2: メール アドレスに DDM を適用する
 
-   > The `CardNumber` is now displayed using the mask applied to it, so only the last four digits of the card number are visible. Dynamic Data Masking is a powerful feature that enables you to prevent unauthorized users from viewing sensitive or restricted information. It's a policy-based security feature that hides the sensitive data in the result set of a query over designated database fields, while the data in the database is not changed.
+ADS の Data Discovery \& Classification レポートの結果では、メール アドレスが "Confidential" (機密) としてラベル付けされていました。このタスクでは、組み込み関数の 1 つを使ってメール アドレスに DDM を適用し、この情報の保護に役立てます。
 
-### Task 2: Apply DDM to email addresses
-
-From the findings of the Data Discovery & Classification report in ADS, you saw that email addresses are labeled Confidential. In this task, you use one of the built-in functions for making email addresses using DDM to help protect this information.
-
-1. For this, you target the `LoginEmail` field in the `[dbo].[Gamer]` table. Open a new query window and execute the following script:
-
+1. そのためには、`[dbo].[Gamer]` テーブルの `LoginEmail` フィールドをターゲットにします。新しいクエリのウィンドウを開き、次のスクリプトを実行します。
+   
    ```sql
    USE [TailspinToys];
    GO
-
+   
    SELECT TOP 10 * FROM [dbo].[Gamer]
    ```
+   
+   ![クエリ結果で完全なメール アドレスが表示されている](media/ddm-select-gamer-results.png "クエリ結果")
 
-   ![In the query results, full email addresses are visible.](media/ddm-select-gamer-results.png "Query results")
-
-2. Now, as you did above, grant the `DDMUser` `SELECT` rights on the [dbo].[Gamer]. In a new query window and enter the following script, and then select **Execute**:
-
+2. それでは上で行ったのと同じように、\[dbo\].\[Gamer\] に対する `SELECT` 権を `DDMUser` に付与します。新しいクエリのウィンドウに次のスクリプトを入力してから、\[**実行**\] を選択します。
+   
    ```sql
    USE [TailspinToys];
    GO
-
+   
    GRANT SELECT ON [dbo].[Gamer] to DDMUser;
    ```
 
-3. Next, apply DDM on the `LoginEmail` field to prevent it from being viewed in full in query results. Select **New Query** from the SSMS toolbar and paste the following query into the query window to apply a mask to the `LoginEmail` field, and then select **Execute**.
-
+3. 次は、`LoginEmail` フィールドに DDM を適用して、クエリ結果に完全には表示されないようにします。SSMS のツールバーから \[**新しいクエリ**\] を選択し、`LoginEmail` フィールドにマスクを適用する次のクエリをクエリ ウィンドウに貼り付けて、\[**実行**\] を選択します。
+   
    ```sql
    USE [TailspinToys];
    GO
-
+   
    ALTER TABLE [dbo].[Gamer]
    ALTER COLUMN [LoginEmail] NVARCHAR(250) MASKED WITH (FUNCTION = 'Email()');
    ```
+   
+   > **注**: 組み込みの `Email()` マスク関数が上でどのように使われているかを確認してください。これは SQL Server データベースで利用できる、各種の事前定義済マスクの 1 つです。
 
-   > **Note**: Observe the use of the built-in `Email()` masking function above. This is one of several pre-defined masks available in SQL Server databases.
-
-4. Run the `SELECT` query below, and observe the results. Specifically, inspect the output in the `LoginEmail` field. For reference, the query is below.
-
+4. 以下の `SELECT` クエリを実行し、結果を確かめます。特に、`LoginEmail` フィールドの出力を詳しく確認します。参考のために、このクエリを下に示します。
+   
    ```sql
    USE [TailspinToys];
    GO
-
+   
    EXECUTE AS USER = 'DDMUser';
    SELECT TOP 10 * FROM [dbo].[Gamer];
    REVERT;
    ```
+   
+   ![クエリ結果内のメール アドレスがマスクされている](media/ddm-select-gamer-results-masked.png "クエリ結果")
 
-   ![The email addresses are masked in the query results.](media/ddm-select-gamer-results-masked.png "Query results")
+## 演習 7: 読み取り専用クエリのためのオンライン セカンダリを使用する
 
-## Exercise 7: Use online secondary for read-only queries
+所要時間: 15 分
 
-Duration: 15 minutes
+この演習では、プライマリ データベースに対する大きなトランザクション負荷によって影響を生じさせることなしに、自動的に作成されたオンライン セカンダリを使用してレポーティングを行う方法について検証します。Business Critical サービス レベルの SQL MI に含まれる各データベースは、可用性 SLA を支えるため、自動的にいくつかの AlwaysON レプリカとともにプロビジョニングされています。[[読み取りスケールアウト](https://docs.microsoft.com/azure/sql-database/sql-database-read-scale-out)]を用いると、1 台の読み取り専用レプリカのキャパシティを利用して、Azure SQL Database の読み取り専用ワークロードの負荷分散を行えます。
 
-In this exercise, you examine how you can use the automatically created online secondary for reporting, without feeling the impacts of a heavy transactional load on the primary database. Each database in the SQL MI Business Critical tier is automatically provisioned with several AlwaysON replicas to support the availability SLA. Using [**Read Scale-Out**](https://docs.microsoft.com/azure/sql-database/sql-database-read-scale-out) allows you to load balance Azure SQL Database read-only workloads using the capacity of one read-only replica.
+### タスク 1: WWI Tailspin Toys の Web アプリケーションのランキング レポートを表示する
 
-### Task 1: View Leaderboard report in the WWI Tailspin Toys web application
+このタスクでは、App Service に展開した Web アプリケーションを使用して、Web レポートを開きます。
 
-In this task, you open a web report using the web application you deployed to your App Service.
+1. [Azure portal](https://portal.azure.com) で、\[Azure services\] リストから \[**Resource groups**\] を選択します。
+   
+   ![\[Azure services\] リストで \[Resource groups\] が強調表示されている。](media/azure-services-resource-groups.png "[Azure services]")
 
-1. In the [Azure portal](https://portal.azure.com), select **Resource groups** from the Azure services list.
+2. リストから hands-on-lab-SUFFIX リソース グループを選択します。
+   
+   ![Azure のナビゲーション ペインで \[Resource groups\] が選択され、"hands-on-lab-SUFFIX" リソース グループが強調表示されている。](./media/resource-groups.png "リソース グループのリスト")
 
-   ![Resource groups is highlighted in the Azure services list.](media/azure-services-resource-groups.png "Azure services")
+3. hands-on-lab-SUFFIX リソース グループで、リソースのリストから **tailspintoysUNIQUEID** という App Service を選択します。
+   
+   ![hands-on-lab-SUFFIX のリソース リストで App Service リソースが選択されている。](media/rg-app-service.png "hands-on-lab-SUFFIX リソース グループ")
 
-2. Select the hands-on-lab-SUFFIX resource group from the list.
+4. App Service の概要ブレードで **URL** を選択し、ブラウザーのウィンドウで Web アプリケーションを開きます。
+   
+   ![App service の URL が強調表示されている。](media/app-service-url.png "App Service の URL")
 
-   ![Resource groups is selected in the Azure navigation pane, and the "hands-on-lab-SUFFIX" resource group is highlighted.](./media/resource-groups.png "Resource groups list")
+5. WWI Tailspin Toys の Web アプリで、メニューから \[**Leaderboard**\] を選択します。
+   
+   ![Leaderboard ページで READ\_WRITE が強調表示されている。](media/tailspin-toys-leaderboard-read-write.png "Tailspin Toys の Web アプリ")
+   
+   > ページ上の文字列 `READ_WRITE` に注目してください。これは、ターゲット データベースの `ApplicationIntent` オプションに関連付けられている `Updateability` プロパティを読み込んだ結果の出力であり、`SELECT DATABASEPROPERTYEX(DB_NAME(), "Updateability")` という SQL クエリを使って取得できます。
 
-3. In the hands-on-lab-SUFFIX resource group, select the **tailspintoysUNIQUEID** App Service from the list of resources.
+### タスク 2:読み取り専用接続文字列を更新する
 
-   ![The App Service resource is selected from the list of resources in the hands-on-lab-SUFFIX resource group.](media/rg-app-service.png "hands-on-lab-SUFFIX resource group")
+このタスクでは、接続文字列内の `ApplicationIntent` オプションを使用して、`TailspinToys` データベースに対する読み取りスケールアウトを有効にします。このオプションは、接続が書き込みレプリカと読み取り専用レプリカのどちらにルーティングされるのかを規定します。具体的には、`ApplicationIntent` の値が `ReadWrite` (既定値) の場合は、接続がデータベースの読み取り/書き込みレプリカに向けられます。`ApplicationIntent` の値が `ReadOnly` の場合は、接続が読み取り専用レプリカにルーティングされます。
 
-4. On the App Service overview blade, select the **URL** to open the web application in a browser window.
+1. Azure portal の \[App Service\] ブレードに戻り、左側の \[Settings\] 以下の \[**Configuration**\] を選択します。
+   
+   ![\[Settings\] 以下の \[Configuration\] アイテムが選択されている。](media/app-service-configuration-menu.png "[Configuration]")
 
-   ![The App service URL is highlighted.](media/app-service-url.png "App service URL")
+2. \[Configuration\] ブレードで下にスクロールし、\[**Connection strings**\] セクション内で `TailspinToysReadOnlyContext` という名前の接続文字列を見つけてから、その右にある鉛筆 (編集) アイコンを選択します。
+   
+   ![読み取り専用接続文字列の横にある編集アイコンが強調表示されている。](media/app-service-configuration-connection-strings-read-only.png "[Connection strings]")
 
-5. In the WWI Tailspin Toys web app, select **Leaderboard** from the menu.
-
-   ![READ_WRITE is highlighted on the Leaderboard page.](media/tailspin-toys-leaderboard-read-write.png "Tailspin Toys Web App")
-
-   > Note the `READ_WRITE` string on the page. This is the output from reading the `Updateability` property associated with the `ApplicationIntent` option on the target database. This can be retrieved using the SQL query `SELECT DATABASEPROPERTYEX(DB_NAME(), "Updateability")`.
-
-### Task 2: Update read-only connection string
-
-In this task, you enable Read Scale-Out for the `TailspinToys`database, using the `ApplicationIntent` option in the connection string. This option dictates whether the connection is routed to the write replica or a read-only replica. Specifically, if the `ApplicationIntent` value is `ReadWrite` (the default value), the connection is directed to the database's read-write replica. If the `ApplicationIntent` value is `ReadOnly`, the connection is routed to a read-only replica.
-
-1. Return to the App Service blade in the Azure portal and select **Configuration** under Settings on the left-hand side.
-
-   ![The Configuration item is selected under Settings.](media/app-service-configuration-menu.png "Configuration")
-
-2. On the Configuration blade, scroll down and locate the connection string named `TailspinToysReadOnlyContext` within the **Connection strings** section, and select the Pencil (edit) icon on the right.
-
-   ![The edit icon next to the read-only connection string is highlighted.](media/app-service-configuration-connection-strings-read-only.png "Connection strings")
-
-3. In the Add/Edit connection string dialog, select the **Value** for the `TailspinToysReadOnlyContext` and paste the following parameter to the end of the connection string.
-
+3. \[Add/Edit connection string\] ダイアログで、`TailspinToysReadOnlyContext` の \[**Value**\] 列の値を選択し、接続文字列の末尾に次のパラメーターを貼り付けます。
+   
    ```sql
    ApplicationIntent=ReadOnly;
    ```
 
-4. The `TailspinToysReadOnlyContext` connection string should now look something like the following:
-
+4. 接続文字列 `TailspinToysReadOnlyContext` は、以下と類似したものになっているはずです。
+   
    ```sql
    Server=tcp:sqlmi-abcmxwzksiqoo.15b8611394c5.database.windows.net,1433;Database=TailspinToys;User ID=sqlmiuser;Password=Password.1234567890;Trusted_Connection=False;Encrypt=True;TrustServerCertificate=True;ApplicationIntent=ReadOnly;
    ```
 
-5. Select **OK**.
+5. \[**OK**\] を選択します。
 
-6. Select **Save** at the top of the Configuration blade, and select **Continue** when prompted about the application being restarted.
+6. \[Configuration\] ブレード上部の \[**Save**\] を選択します。アプリケーションが再起動されるというメッセージが表示されたら、\[**Continue**\] を選択します。
+   
+   ![\[Application settings\] ブレードの保存ボタンが強調表示されている。](media/app-service-configuration-save.png "[Save]")
 
-   ![The save button on the Application settings blade is highlighted.](media/app-service-configuration-save.png "Save")
+### タスク 3: Tailspin Toys の Web アプリのランキング レポートを再読み込みする
 
-### Task 3: Reload Leaderboard report in the Tailspin Toys web app
+このタスクでは、WWI の Tailspin Toys の Web アプリのランキング レポートを最新の情報に更新し、結果を確認します。
 
-In this task, you refresh the Leaderboard report in WWI's Tailspin Toys web app, and observe the result.
+1. 先ほど開いた Tailspin Toys のプレイヤー情報 Web サイトに戻り、\[**Leaderboard**\] ページを最新の情報に更新します。ページは以下と同様の表示になっているはずです。
+   
+   ![\[Reports\] ページで READ\_ONLY が強調表示されている。](media/tailspin-toys-leaderboard-read-only.png "Tailspin Toys の Web アプリ")
+   
+   > `updateability` オプションが `READ_ONLY` として表示されていることに注目してください。データベース接続文字列への簡単な追加を行うことで、読み取り専用クエリを Business-Critical の SQL MI データベースのオンライン セカンダリに送信できるようになります。これにより、1 台の読み取り専用レプリカのキャパシティを利用して、読み取り専用ワークロードの負荷分散を行うことが可能になります。SQL MI の Business Critical クラスターは、組み込みの読み取りスケールアウト機能を通じて、無償の読み取り専用ノードを提供します。このノードは、プライマリ ワークロードのパフォーマンスに影響を与えないことが求められる、読み取り専用クエリの実行に利用できます。
 
-1. Return to the Tailspin Toys gamer information website you opened previously, and refresh the **Leaderboard** page. The page should now look similar to the following:
+## ハンズオン ラボの後に
 
-   ![READ_ONLY is highlighted on the Reports page.](media/tailspin-toys-leaderboard-read-only.png "Tailspin Toys Web App")
+所要時間: 10 分
 
-   > Notice the `updateability` option is now displaying as `READ_ONLY`. With a simple addition to your database connection string, you can send read-only queries to the online secondary of your SQL MI Business-critical database, allowing you to load-balance read-only workloads using the capacity of one read-only replica. The SQL MI Business Critical cluster has built-in Read Scale-Out capability that provides free-of-charge built-in read-only node that can be used to run read-only queries that should not affect the performance of your primary workload.
+この演習では、今回のハンズオン ラボで利用するために作成したすべての Azure リソースのプロビジョニング解除を実行します。
 
-## After the hands-on lab
+### タスク 1: Azure リソース グループを削除する
 
-Duration: 10 minutes
+1. Azure portal の左側メニューから \[**Resource groups**\] を選択し、**hands-on-lab-SUFFIX** リソース グループを見つけて削除します。
+   
+   > **注**: SQL MI を含んだリソース グループの削除は、必ずしも 1 回目にうまくいくとは限りません。最初に削除を試みた後に、SQL MI インスタンスとともに、いくつかのネットワーキング コンポーネント (ルート テーブル、SQL MI NSG、VNet) がリソース グループに残ることがあります。こうしたケースでは、最初のプロセスが完了するのを待ってから、もう一度リソース グループの削除を試みてください。場合によっては、数時間以上の間隔を置いてから削除を試みる必要があります。
 
-In this exercise, you de-provision all Azure resources that you created in support of this hands-on lab.
+### タスク 2:wide-world-importers のサービス プリンシパルを削除する
 
-### Task 1: Delete Azure resource groups
+1. Azure portal で \[**Azure Active Directory**\] を選んでから、\[**App registrations**\] を選択します。
 
-1. In the Azure portal, select **Resource groups** from the left-hand menu, and locate and delete the **hands-on-lab-SUFFIX** following resource group.
+2. アプリケーション **wide-world-importers** を選び、アプリケーション ブレードの \[**Delete**\] を選択します。
 
-   > **Note**: Deleting a resource group containing SQL MI does not always work the first time, resulting in a few networking components (route table, SQL MI NSG, and VNet) remaining in the resource group, along with the SQL MI instance, after the first delete attempt. In this case, wait for the first process to complete, and then attempt to delete the resource group a second time. You may need to allow several hours or more between delete attempts.
-
-### Task 2: Delete the wide-world-importers service principal
-
-1. In the Azure portal, select **Azure Active Directory** and then select **App registrations**.
-
-2. Select the **wide-world-importers** application, and select **Delete** on the application blade.
-
-You should follow all steps provided _after_ attending the Hands-on lab.
+ここで挙げられた手順のすべては、ハンズオン ラボの "参加後" に行う必要があります。

@@ -1,4 +1,4 @@
-![Microsoft Cloud Workshops](https://github.com/Microsoft/MCW-Template-Cloud-Workshop/raw/master/Media/ms-cloud-workshop.png "Microsoft Cloud Workshops")
+![マイクロソフト クラウド ワークショップ](https://github.com/Microsoft/MCW-Template-Cloud-Workshop/raw/master/Media/ms-cloud-workshop.png "マイクロソフト クラウド ワークショップ")
 
 <div class="MCWHeader1">
 Migrating SQL databases to Azure
@@ -12,250 +12,251 @@ Whiteboard design session student guide
 June 2020
 </div>
 
-Information in this document, including URL and other Internet Web site references, is subject to change without notice. Unless otherwise noted, the example companies, organizations, products, domain names, e-mail addresses, logos, people, places, and events depicted herein are fictitious, and no association with any real company, organization, product, domain name, e-mail address, logo, person, place or event is intended or should be inferred. Complying with all applicable copyright laws is the responsibility of the user. Without limiting the rights under copyright, no part of this document may be reproduced, stored in or introduced into a retrieval system, or transmitted in any form or by any means (electronic, mechanical, photocopying, recording, or otherwise), or for any purpose, without the express written permission of Microsoft Corporation.
+このドキュメントに記載されている情報 (URL 等のインターネット Web サイトに関する情報を含む) は、将来予告なしに変更されることがあります。特に断りがない限り、ここで使用している会社、組織、製品、ドメイン名、電子メール アドレス、ロゴ、人物、場所、イベントの例は、架空のものであり、実在する会社、組織、製品、ドメイン名、電子メール アドレス、ロゴ、人物、場所、イベントなどとは一切関係ありません。お客様ご自身の責任において、適用されるすべての著作権関連法規に従ったご使用を願います。このドキュメントのいかなる部分も、米国 Microsoft Corporation の書面による許諾を受けることなく、その目的を問わず、どのような形態であっても、複製または譲渡することは禁じられています。ここでいう形態とは、複写や記録など、電子的な、または物理的なすべての手段を含みます。ただしこれは、著作権法上のお客様の権利を制限するものではありません。
 
-Microsoft may have patents, patent applications, trademarks, copyrights, or other intellectual property rights covering subject matter in this document. Except as expressly provided in any written license agreement from Microsoft, the furnishing of this document does not give you any license to these patents, trademarks, copyrights, or other intellectual property.
+マイクロソフトは、このドキュメントに記載されている内容に関し、特許、特許申請、商標、著作権、またはその他の無体財産権を有する場合があります。別途マイクロソフトのライセンス契約上に明示の規定のない限り、このドキュメントはこれらの特許、商標、著作権、またはその他の無体財産権に関する権利をお客様に許諾するものではありません。
 
-The names of manufacturers, products, or URLs are provided for informational purposes only and Microsoft makes no representations and warranties, either expressed, implied, or statutory, regarding these manufacturers or the use of the products with any Microsoft technologies. The inclusion of a manufacturer or product does not imply endorsement of Microsoft of the manufacturer or product. Links may be provided to third party sites. Such sites are not under the control of Microsoft and Microsoft is not responsible for the contents of any linked site or any link contained in a linked site, or any changes or updates to such sites. Microsoft is not responsible for webcasting or any other form of transmission received from any linked site. Microsoft is providing these links to you only as a convenience, and the inclusion of any link does not imply endorsement of Microsoft of the site or the products contained therein.
+製造元や製品の名前、URL は情報の提供のみを目的としており、マイクロソフトは、これらの製造元、またはマイクロソフトの技術での製品の使用について、明示的、黙示的、または法的にいかなる表示または保証も行いません。製造元または製品の使用は、マイクロソフトによるその製造元または製品の推奨を意味するものではありません。サード パーティのサイトへのリンクが提供されている場合があります。このようなサイトはマイクロソフトの管理下にはなく、マイクロソフトは、リンクされたサイトの内容またはリンクされたサイトに含まれるリンク、あるいはこのようなサイトの変更または更新について責任を負いません。マイクロソフトは、リンクされたサイトから受信された Web キャストまたは他のいかなる形態の転送にも責任を負いません。マイクロソフトは、これらのリンクを便宜のみを目的として提供しており、いかなるリンクの使用も、マイクロソフトによるサイトまたはそこに含まれる製品の推奨を意味するものではありません。
 
-© 2020 Microsoft Corporation. All rights reserved.
+© 2020 Microsoft Corporation.All rights reserved.
 
-Microsoft and the trademarks listed at <https://www.microsoft.com/en-us/legal/intellectualproperty/Trademarks/Usage/General.aspx> are trademarks of the Microsoft group of companies. All other trademarks are property of their respective owners.
+Microsoft および <https://www.microsoft.com/en-us/legal/intellectualproperty/Trademarks/Usage/General.aspx> に記載されている商標は、Microsoft グループの商標です。その他すべての商標は、該当する各社が所有しています。
 
-**Contents**
+**目次**
 
-- [Migrating SQL databases to Azure whiteboard design session student guide](#migrating-sql-databases-to-azure-whiteboard-design-session-student-guide)
-  - [Abstract and learning objectives](#abstract-and-learning-objectives)
-  - [Step 1: Review the customer case study](#step-1-review-the-customer-case-study)
-    - [Customer situation](#customer-situation)
-    - [Customer needs](#customer-needs)
-    - [Customer objections](#customer-objections)
-    - [Infographic for common scenarios](#infographic-for-common-scenarios)
-  - [Step 2: Design a proof of concept solution](#step-2-design-a-proof-of-concept-solution)
-  - [Step 3: Present the solution](#step-3-present-the-solution)
-  - [Wrap-up](#wrap-up)
-  - [Additional references](#additional-references)
+- [Azure への SQL データベースの移行のためのホワイトボード設計セッション受講者ガイド](#azure-への-sql-データベースの移行のためのホワイトボード設計セッション受講者ガイド)
+    - [要約と学習目的](#要約と学習目的)
+    - [ステップ 1: 顧客のケース スタディの確認](#ステップ-1-顧客のケース-スタディの確認)
+        - [顧客の状況](#顧客の状況)
+        - [お客様のニーズ](#お客様のニーズ)
+        - [顧客の反論](#顧客の反論)
+        - [一般的なシナリオのインフォグラフィック](#一般的なシナリオのインフォグラフィック)
+    - [ステップ 2: 概念実証ソリューションの設計](#ステップ-2-概念実証ソリューションの設計)
+    - [ステップ 3: ソリューションをプレゼンテーションする](#ステップ-3-ソリューションをプレゼンテーションする)
+    - [まとめ](#まとめ)
+    - [追加リファレンス](#追加リファレンス)
 
-# Migrating SQL databases to Azure whiteboard design session student guide
+# Azure への SQL データベースの移行のためのホワイトボード設計セッション受講者ガイド
 
-## Abstract and learning objectives
+## 要約と学習目的
 
-In this whiteboard design session, you work in a group to develop a plan for migrating on-premises VMs and SQL Server 2008 R2 databases into a combination of IaaS and PaaS services in Azure. You provide guidance on performing assessments to reveal any feature parity and compatibility issues between the customer's SQL Server 2008 R2 databases and the managed database offerings in Azure. You then design a solution for migrating their on-premises services, including VMs and databases, into Azure, with minimal or no down-time. Finally, you provide guidance on how to enable some of the advanced SQL features available in Azure to improve security and performance in the customer's applications.
+このホワイトボード設計セッションでは、オンプレミスの VM と SQL Server 2008 R2 データベースを Azure 内の IaaS サービスと PaaS サービスの組み合わせに移行する計画をグループで作成します。トレーナーは、評価を実施して、顧客の SQL Server 2008 R2 データベースと Azure のマネージド データベース オファリングとの間の機能のパリティと互換性の問題を明らかにするためのガイダンスを提供します。次に、最小限のダウンタイムまたはゼロ ダウンタイムで顧客の VM およびデータベースを含むオンプレミス サービスを Azure に移行するためのソリューションを設計します。最後に、Azure で高度な SQL 機能のいくつかを有効にして、顧客のアプリケーションにおけるセキュリティとパフォーマンスを向上する方法についてのガイダンスを提供します。
 
-At the end of this whiteboard design session, you will be better able to design a cloud migration solution for business-critical applications and databases.
+このホワイトボード設計セッションを完了すると、ビジネス クリティカルなアプリケーションとデータベースのクラウド移行ソリューションをより効果的に設計できるようになります。
 
-## Step 1: Review the customer case study
+## ステップ 1: 顧客のケース スタディの確認
 
-**Outcome**
+**成果**
 
-Analyze your customer's needs.
+顧客のニーズを分析する
 
-Timeframe: 15 minutes
+所要時間: 15 分
 
-Directions: With all participants in the session, the facilitator/SME presents an overview of the customer case study along with technical tips.
+指示: セッションの参加者全員と共に、ファシリテーター/SME は、顧客のケース スタディの概要を技術的なヒントと併せてプレゼンテーションします。
 
-1. Meet your table participants and trainer.
+1. テーブルの参加者およびトレーナーと打ち合わせを行います。
 
-2. Read all of the directions for steps 1-3 in the student guide.
+2. 受講者ガイドのステップ 1 ～ 3 の指示をすべて読みます。
 
-3. As a table team, review the following customer case study.
+3. テーブル チームとして、次の顧客のケース スタディを確認します。
 
-### Customer situation
+### 顧客の状況
 
-Tailspin Toys, a subsidiary of Wide World Importers (WWI), is the developer of several popular online video games. Founded in 2010, the company has experienced exponential growth since releasing the first installment of their most popular game franchise to include online multiplayer gameplay. They have since built upon this success by adding online capabilities to the majority of their game portfolio.
+Wide World Importers (WWI) の子会社である Tailspin Toys は、いくつかの人気のあるオンライン ゲームを開発した企業です。2010 年に設立された同社は、オンラインの多人数ゲームを含んだ、非常に人気のあるゲーム シリーズの第一弾リリース以降、急激な成長を遂げました。以来、同社はゲーム ポートフォリオの大部分にオンライン機能を追加することで、その成功を積み重ねてきました。
 
-To facilitate online gameplay, they decided to take a conservative approach, hosting the gaming services on-premises using rented hardware. This approach allowed them to enter the online gaming market with a minimal upfront investment and lower risk. For each game, their gaming services setup consists of three virtual machines running the gaming software and five game databases hosted on a single SQL Server 2008 R2 Enterprise instance. They are using the Service Broker feature of SQL Server for sending messages between gaming databases. In addition to the dedicated gaming VMs and databases, their gaming services include authentication and gateway VMs and databases, which are shared across all their games.
+オンライン ゲームプレイを促進するために、同社は保守的なアプローチを取ることにし、レンタルのハードウェアを使用してオンプレミスでゲーミング サービスをホストしました。このアプローチによって、最小限の初期投資でオンライン ゲーム市場に参入し、リスクを低減することができました。各ゲームに対して、同社のゲーミング サービスのセットアップは、ゲーミング ソフトウェアを実行する 3 台の仮想マシンと、単一の SQL Server 2008 R2 Enterprise インスタンス上でホストされる 5 台のゲーム データベースで構成されます。これらは、ゲーミング データベース間でメッセージを送信するために SQL Server の Service Broker 機能を使用します。専用のゲーミング VM およびデータベースに加えて、同社のゲーミング サービスには認証およびゲートウェイの VM およびデータベースが含まれており、すべてのゲームで共有されています。
 
-Molly Fischer, the CIO of WWI, stated that the response to adding online gameplay has far exceeded their initial estimates. While the increased popularity of their games has been good for profitability, the rapid increase in demand for their services has made supporting the current setup problematic. At its foundation, Tailspin Toys is a game development company, made up primarily of software developers. The few dedicated database and infrastructure resources they do have are struggling to keep up with an ever-expanding workload. Increasingly, game developers have had to step in to assist in supporting the infrastructure, which is taking time away from game development and has resulted in several missed release timelines. Molly has expressed concerns over adding additional non-developer resources, as she feels this is outside of their core business. She is hoping that migrating their services from on-premises to the cloud can help to alleviate some of their infrastructure management issues, while simultaneously helping them to refocus their efforts on delivering business value by releasing new and improved games.
+WWI の CIO である Molly Fischer 氏は、オンライン ゲームプレイを追加したことで、当初の予想をはるかに上回る反応があったと語りました。ゲームの人気上昇で収益性は向上しましたが、サービスの需要の急激な増加によって、現在のセットアップをサポートする上で問題が生じるようになりました。Tailspin Toys は基本的にゲーム開発企業であり、主にソフトウェア開発者によって構成されています。データベースおよびインフラストラクチャ専門のリソースは少数で、拡大を続けるワークロードに対応するのに苦戦しています。ゲーム開発者がインフラストラクチャのサポートを支援するために介入しなければならないことがますます増え、ゲーム開発にあてる時間が奪われ、リリースのタイムラインを守れなくなる事態が何度か生じました。Molly 氏は、コア ビジネスの範囲外のことになるため、追加の非開発者リソースを投入することに対する懸念を表しています。彼女は、サービスをオンプレミスからクラウドに移行することによって、インフラストラクチャ管理タスクをいくらか軽減できると同時に、新しい改良されたゲームをリリースすることでビジネス価値を提供するという同社の取り組みに再度集中できるようになることを期待しています。
 
-Compounding this problem is the release schedule for new versions of their most popular games. They have a target schedule of releasing a new version every 12 - 18 months, which means adding new VMs and a database server for each new version they release, while also maintaining the services for all previous game versions. Each new release results in increased rental equipment costs, as well as a steadily growing workload on their already overburdened staff. Internally, they have discussed end-of-life scenarios for older game versions, but the number of players remains high for many of these games, so no decisions have been made about when to end support for those games.
+この問題をさらに複雑化させているのが、一番人気のゲームの新しいバージョンのリリース スケジュールです。同社には 12 ～ 18 か月ごとに新しいバージョンをリリースするという目標スケジュールがありますが、これはリリースする新しいバージョンごとに新しい VM 数台とデータベース サーバー 1 台を追加することを意味し、その一方で以前のゲーム バージョンすべてのサービスを維持し続ける必要があります。新しいリリースごとに、レンタル機器のコストが増加し、ただでさえ過剰負担状態にある従業員のワークロードをさらに着実に増やしていくことになります。同社は社内で古いゲーム バージョンのサポート終了シナリオについて話し合いましたが、これらのゲームの多くで依然として多くのプレイヤーが存在しているため、これらのゲームをいつサポート終了にするかについての決定は結局行われませんでした。
 
-WWI indicated that their current hardware rental agreement ends in three months, and they're hoping to avoid signing another contract by migrating their existing VMs into Azure. They understand three months is a short timeframe, but believe a lift-and-shift approach of their gaming service VMs might be possible if they dedicate the appropriate resources. They already have VM images for each of their games that could be used in the process. They would like to know more about what a lift-and-shift might involve so they can plan resource allocation accordingly. They are also interested in learning more if this approach could be used to allow them to better scale the VM and database deployments on a per-game basis. Currently, they use the same number of VMs and databases for each game and version but have frequently run into issues hosting more gamers for popular games. They would like the ability to scale up to meet demand on new releases and more popular games, while also being able to scale down for older and less popular games. They would also like to investigate the possibility of globally distributing their gaming services to address latency issues reported by gamers accessing their services from other locations around the world.
+WWI は、現在のハードウェア レンタル契約が 3 か月で終了するため、契約更新はせず、既存の VM を Azure に移行したいと考えています。3 か月という期間はいかにも短いことは重々承知の上で、適切なリソースを専用に割り当てるなら、ゲーミング サービス VM のリフト アンド シフト アプローチが実現可能なのではないかと期待しています。同社には既に、このプロセスに使用できる、各ゲームの VM イメージがあります。彼らはリフト アンド シフトに関係する作業についてさらに詳しく知って、それに基づいてリソース割り当てを計画することを望んでいます。さらに、このアプローチを使用して VM およびデータベース展開をゲームごとにさらに適切にスケーリングできるかということも知りたいと願っています。現在、各ゲームとバージョンに同じ数の VM とデータベースを使用していますが、人気のあるゲームではより多くのゲーマーをホストしなければならないという問題にしばしば直面しています。新しいリリースとより人気のあるゲームの需要を満たすためにスケールアップし、古い、人気の低いゲームではスケールダウンできる能力を必要としています。また、ゲーミング サービスをグローバルに配信することで、世界中のさまざまな場所からサービスにアクセスするゲーマーによって報告される待機時間の問題を解決できるかどうかということも調査することを望んでいます。
 
-Of great concern to the leadership team at WWI is the rapidly approaching end of support date for SQL Server 2008 R2. For their databases, they are interested in hearing more about fully-managed platform-as-a-service (PaaS) options in Azure. They lack any employees with actual database administration skills, so they feel this would be an excellent first step towards reducing their infrastructure workload. They have requested assistance in assessing any compatibility issues between their current databases and PaaS options in Azure. They have read that the Service Broker feature of SQL Server is not available in Azure. They are using this functionality for several critical gaming processes, and cannot afford to lose this capability when migrating their gaming databases to the cloud. They have also stated that, at this time, they do not have the resources to rearchitect the gaming services to use an alternative message broker.
+WWI のリーダーシップ チームにとっての大きな懸念は、SQL Server 2008 R2 のサポート終了日が足早に迫っていることです。同社のデータベース向けに、Azure のフルマネージドの PaaS (サービスとしてのプラットフォーム) オプションについて詳しく知りたいと考えています。実際のデータベース管理スキルを持つ従業員がいないため、これはインフラストラクチャのワークロードを減らすための優れた最初の一歩になると感じています。同社は、現在のデータベース と Azure の Paas オプション間の互換性の問題を評価するための支援を要請しました。彼らは、SQL Server の Service Broker 機能が Azure では利用できないことを知りました。同社はいくつかの重要なゲーミング プロセスでこの機能を使用しており、ゲーミング データベースをクラウドに移行する際にこの機能を失うわけにはいきません。また、この時にゲーミング サービスを再設計して別のメッセージ ブローカーを使用するためのリソースがないということも述べています。
 
-In addition to their gaming services, WII is also interested in migrating their data warehouse and its associated services to the cloud. They currently host their data warehouse on a dedicated SQL Server 2008 R2 instance. The data warehouse is presently around 20TB in size and is growing at a rate of about 250GB per month. They collect numerous game telemetry data points, including remote monitoring and analysis of game servers and user telemetry (i.e., data on the behavior of players, such as their interaction with games and with other players). Code embedded in the gaming software transmits data to the gaming databases. That telemetry data is loaded hourly using SQL Server Integration Services (SSIS) packages. Using the data in their data warehouse, they build SQL Server Analysis Services (SSAS) cubes and create reports using SQL Server Reporting Services (SSRS). The SSRS reports are deployed to sites in their SharePoint environment. They also noted that their customer service personnel and developers connect to the data warehouse for various activities.
+ゲーミング サービスに加えて、WWI はデータ ウェアハウスとその関連するサービスをクラウドに移行することにも関心を持っています。現在、専用の SQL Server 2008 R2 インスタンスにデータ ウェアハウスをホストしています。データ ウェアハウスのサイズは現在約 20 TB で、毎月約 250 GB のペースで増加しています。ゲーム サーバーのリモート監視および分析とユーザー テレメトリ (ゲームおよびその他の対話との対話などのプレイヤーの動作に関するデータ) を含む多数のゲーム テレメトリ データ ポイントを収集しています。ゲーミング ソフトウェアに埋め込まれたコードは、ゲーミング データベースにデータを転送します。そのテレメトリ データは、SQL Server Integration Services (SSIS) によって 1 時間ごとに読み込まれます。データ ウェアハウス内のデータを使用して、同社は SQL Server Analysis Services (SSAS) キューブを構築し、SQL Server Reporting Services (SSRS) を使用してレポートを作成します。SSRS レポートは SharePoint 環境内のサイトに展開されます。また、カスタマー サービス担当者と開発者がさまざまな活動のためにデータ ウェアハウスに接続することにも気付いています。
 
-They also mentioned that they have some reports that are run directly against the gaming databases so that they can analyze real-time user telemetry and gaming metrics. While there are not many of these reports, they are essential to the developers and business users. They have noticed that at times of peak gaming activity, running these reports can be very slow, and they have occasionally seen impacts on gaming performance. They are interested to learn if there is any way they can continue to run these reports, but do it in a way that will alleviate the performance impact they've experienced.
+さらに、リアルタイムのユーザー テレメトリとゲーミング メトリックを分析できるように、いくつかのレポートはゲーミング データベースに対して直接実行されている点についても言及しました。このようなレポートは多くありませんが、開発者とビジネス ユーザーにとっては重要なものです。ゲーミング アクティビティのピーク時期に、これらのレポートの実行が非常に低速になり、ゲーミング パフォーマンスにも時折影響を及ぼしていることが観察されています。彼らは、これまでに経験しているパフォーマンスへの影響を軽減するような方法で、これらのレポートを引き続き実行する方法がないかどうかを知りたいと思っています。
 
-WWI is excited to learn more about how migrating to the cloud can help them improve their overall processes, as well as address the concerns and issues they have with their on-premises setup. They are looking for a proof-of-concept (PoC) for migrating their gaming VMs and databases into the cloud. Their end goal is to migrate their whole service to the cloud, so they would also like to understand better what their overall architecture might look after migrating to the cloud.
+WWI は、クラウドへの移行により、どのように全体的なプロセスを改善すると共に、オンプレミスのセットアップで抱えている懸念事項や問題を解決できることについてさらに詳しく知りたいとして、期待を高めています。目下、ゲーミング VM とデータベースをクラウドに移行するための概念実証 (PoC) を実施しようとしています。最終目標はサービス全体をクラウドに移行することであるため、クラウドへの移行後に全体的なアーキテクチャがどのようになるかをさらに詳しく理解したいと考えています。
 
-To assist you in better understanding their current environment, WWI has provided the following architecture diagram of their on-premises gaming services implementation.
+現在の環境をより良く理解できるようにするため、WWI はオンプレミスのゲーミング サービス実装の以下のアーキテクチャ図を提供しています。
 
-![Current architecture diagram.](media/current-architecture.png "Current architecture")
+![現在のアーキテクチャ図。](media/current-architecture.png "現在のアーキテクチャ")
 
-### Customer needs
+### お客様のニーズ
 
-1. We want to migrate all our gaming services infrastructure into the cloud, using PaaS services where possible. We would like to know if this can be accomplished in three months to avoid renewing our equipment rental contract.
+1. 可能な限り PaaS サービスを使用して、すべてのゲーミング サービス インフラストラクチャをクラウドに移行したい。機器レンタル契約を更新しなくてよいように、3 か月以内にこれを実行可能かどうかを知りたい。
 
-2. In addition to our gaming services, we would like to migrate our existing data warehouse to Azure to take advantage of the ability to scale out along with some new SQL features available there. As part of this request, we would like to know more about:
+2. ゲーミング サービスに加えて、既存のデータ ウェアハウスを Azure に移行して、そこで利用可能ないくつかの新しい SQL 機能によってスケールアウトする機能を活用したい。この要請の一環として、以下のことについて知りたい:
+   
+   - より多くの要求を処理できるようデータ ウェアハウスをスケールアウトする機能の追加。
+   - SSIS パッケージ、SSAS キューブ、および SSRS レポートのアップグレード パス。
 
-   - Adding the ability to scale out the data warehouse to serve more requests.
-   - The upgrade path for our SSIS packages, SSAS cubes, and SSRS reports.
+3. 移行コストを可能な限り最小限に抑える方法についての推奨事項を知りたい。
 
-3. We want recommendations for how to minimize migration costs as much as possible.
+4. 当社のデータベースのセキュリティ体制を改善したい、また潜在的な脆弱性とコンプライアンスの問題について知りたい。
 
-4. We want to improve the security posture of our databases and learn more about potential vulnerabilities and compliance issues.
+5. 世界中のその他の地域のゲーマーから高待機時間の不満が寄せられており、高使用率のピーク時にはゲームに参加できないという報告もある。当社のゲーミング サービスをクラウドに移行することで、以下の点を含む全体的なゲーミング エクスペリエンスを向上することを希望している。
+   
+   - 世界中のさまざまな場所から当社のサービスにアクセスするゲーマーの待機時間を削減する。
+   - ピーク時または新しいゲームのリリース時により多くのプレイヤーをホストできるようにする。
+   - 冗長性を追加してゲーミング サービスの高可用性を確保する
 
-5. We have had complaints of high latency from gamers in other regions throughout the world, along with reports that players are unable to join games during peaks of high usage. By migrating our gaming services to the cloud, we are looking to improve the overall gaming experience, including:
+6. 地域的な障害発生時には、数分以内にゲーミング サービスを再開し、48 時間以内にデータ ウェアハウスを回復したい。
 
-   - Reducing latency for gamers accessing our services from various places around the world.
-   - Improving our ability to host more players during peak times or when new game releases.
-   - Adding redundancy to ensure high-availability for our gaming services.
+### 顧客の反論
 
-6. In the event of a regional outage, we would like to be able to resume gaming services within minutes and recover the data warehouse within 48 hours.
+1. Azure で SQL データベースをホストするための複数のオプションがあるように見える。それぞれのオプションはどのようなものか、また違いは何か? すべてのオプションはオンプレミスの SQL Server インスタンスとして同じ機能をサポートするのか、それとも移行前に注意すべきサポートされない機能があるのか? Azure の PaaS データベースで引き続き Service Broker を使用できるのか?
 
-### Customer objections
+2. Azure のさまざまな SQL Database ホスティング オプションのうちどれが当社の現在の SQL Server 2008 R2 データベースで動作するかを評価するためのツールはあるか? その他の SQL バージョンに対して対象となるワークロードをテストする方法があるか? 移行を試行する前に潜在的な問題や非互換性を識別するためのツールがあるか?
 
-1. It appears that there are multiple options for hosting SQL databases in Azure. What are all the different options, and how do they differ? Do they all support the same features as an on-premises SQL Server instance, or are there unsupported features we should be aware of before migrating? Will we be able to continue using Service Broker with a PaaS database in Azure?
+3. クラウドへの移行において、バックエンドのネットワークを完全に分離して、セキュリティで保護されたチャネルを介したフロントエンド接続のみを有効にした状態で、オンプレミスの開発環境に接続し、そこからトラブルシューティングを行う機能を保持できるか?
 
-2. Are there tools that allow us to evaluate which of the various SQL Database hosting options in Azure will work with our current SQL Server 2008 R2 databases? Is there a way we can test targeted workloads against other versions of SQL? Are there tools that can help us identify potential issues and incompatibilities before we attempt a migration?
+4. 特定のクラウド ベンダーに囲い込まれたくない。データベースをホストするために PaaS サービスを使用しつつ、同時に有効な出口戦略を持つことは可能か? あるいは、データベースのホストにあたっては あくまで Azure での VM の使用に限定しなくてはならないのか?
 
-3. In moving to the cloud, will we retain the ability to connect to and troubleshoot from our on-premises dev environment, while keeping our back-end networking fully isolated and only enabling talking to the front-end through a secured channel?
+### 一般的なシナリオのインフォグラフィック
 
-4. We do not want to be locked into a specific cloud vendor. Is it possible to use PaaS services for hosting our databases, and still have a valid exit strategy, or will this mean we should stick to using VMs in Azure for hosting our databases?
+![一般的なシナリオのインフォグラフィックが表示されている。](media/common-scenario-infographic.png "一般的なシナリオ")
 
-### Infographic for common scenarios
+## ステップ 2: 概念実証ソリューションの設計
 
-![An infographic for common scenarios is displayed.](media/common-scenario-infographic.png "Common scenario")
+**成果**
 
-## Step 2: Design a proof of concept solution
+ソリューションを設計し、そのソリューションを 15 分のチョークトーク形式で顧客の対象者にプレゼンテーションする準備をする
 
-**Outcome**
+所要時間: 60 分
 
-Design a solution and prepare to present the solution to the target customer audience in a 15-minute chalk-talk format.
+**ビジネス ニーズ**
 
-Timeframe: 60 minutes
+指示: テーブルのすべての参加者と共に以下の質問に回答し、回答をフリップ チャートに一覧にします。
 
-**Business needs**
+1. このソリューションを誰にプレゼンテーションするべきか。顧客の対象者は誰か。意思決定者は誰か。
 
-Directions: With all participants at your table, answer the following questions and list the answers on a flip chart:
+2. ソリューションで解決する必要がある顧客のビジネス ニーズは何か。
 
-1. Who should you present this solution to? Who is your target customer audience? Who are the decision makers?
+**設計**
 
-2. What customer business needs do you need to address with your solution?
+指示: テーブルのすべての参加者と共に、フリップ チャートの次の質問に回答します。
 
-**Design**
+_アーキテクチャの概要_
 
-Directions: With all participants at your table, respond to the following questions on a flip chart:
+1. 詳細には触れずに (詳細には以降のセクションで対応)、ゲーム データベース、ゲーミング サービス VM、データ ウェアハウス、および関連するサービスに関する最上位の要件に対応するための初期ビジョンを図示する。この図は作業の進行に伴って詳細にしていく。
 
-_High-level architecture_
+2. 移行コストをどのように最小限に抑えられるか?
 
-1. Without getting into the details (the following sections address the particulars), diagram your initial vision for handling the top-level requirements for the game databases, gaming services VMs, data warehouse, and associated services. You will refine this diagram as you proceed.
+3. WWI のゲーミング サービスを 3 か月以内に移行することは可能か?
 
-2. How can migration costs be minimized?
+4. どのような機能を POC に含める必要があるか?
 
-3. Is it possible to migrate WWI's gaming services within three months?
+_ゲーム データベース_
 
-4. What functionality should you include in the PoC?
+1. WWI が Azure で SQL データベースをホストするために PaaS または IaaS オプションのどちらを使用するかを決定する際に考慮すべき要素にはどのようなものがあるか?
 
-_Game databases_
+2. Azure で SQL データベースをホストするためのオプションのうち、同社のゲーミング サービスをホストするためにどれを推奨するか、それが最適な選択肢であると考える理由は何か? どのような価格レベルを推奨するか?
 
-1. What are the factors that WWI should consider when deciding between PaaS or IaaS options for hosting their SQL databases in Azure?
+3. データ移行にどのように対応するか? 評価からデータ移行にいたるまでの段階的な説明を提供してください。
 
-2. From the options for hosting SQL databases in Azure, which would you recommend for hosting their gaming databases, and why do you think that the best choice? What pricing tier would you recommend?
+4. WWI のセキュリティ体制を改善するために Azure SQL Managed Instance で利用可能な機能にはどのようなものがあるか?
 
-3. How would you handle the data migration? Provide step-by-step instructions from assessment to data migration.
+5. ゲーミング データベースに対して直接実行される読み取り専用レポートの影響を低減するために利用できる PaaS データベース サービスの機能はあるか?
 
-4. What are some of the features available in Azure SQL Managed Instance that can help improve the security posture of WWI?
+_ゲーミング サービス_
 
-5. Are there features of a PaaS database service that could help to reduce the impact of read-only reports running directly against their gaming databases?
+1. WWI ではどのようにゲーミング サービス VM の Azure への移行に対応するべきか?
 
-_Gaming services_
+2. 世界のその他の地域のゲーマーが経験している待機時間の問題を解決するためにどのような対策を推奨するか?
 
-1. How should WWI handle migrating their gaming services VMs into Azure?
+3. ゲーミング サービスをスケールアップまたはスケールダウンするための機能はどのようなものであるべきか?
 
-2. What would you recommend for addressing the latency issues experienced by gamers from other regions of the world?
+4. ゲーミング サービスの高可用性を実現するにはどうすればよいか?
 
-3. How should the ability to scale gaming services up or down be handled?
+_データ ウェアハウスとレポート_
 
-4. How can the gaming services be made highly-available?
+1. Azure でのデータ ウェアハウスのためのターゲット プラットフォームとして何を推奨するか?
 
-_Data warehouse and reporting_
+2. より多くの要求を処理できるようデータ ウェアハウスを読み取りスケールアウトするにはどうすればよいか?
 
-1. What would you recommend as the target platform for their data warehouse in Azure?
+3. SSIS パッケージ、SSAS キューブ、および SSRS レポートのアップグレード パスはどのようなものか?
 
-2. How could they read-scale out their data warehouse to serve more requests?
+_地域的な障害_
 
-3. What is the upgrade path for their SSIS packages, SSAS cubes, and SSRS reports?
+1. ゲーミング サービスを指定された RTO/RPO 内で回復するにはどうすればよいか?
 
-_Regional outages_
+**準備**
 
-1. How can their gaming services be recovered within the specified RTO/RPO?
+指示: テーブルのすべての参加者と共に、以下を行います。
 
-**Prepare**
+1. 提案したソリューションでは対応していない顧客ニーズを特定する。
 
-Directions: With all participants at your table:
+2. ソリューションの利点を特定する。
 
-1. Identify any customer needs that are not addressed with the proposed solution.
+3. 顧客の反論にどのように回答するかを決定する。
 
-2. Identify the benefits of your solution.
+顧客に対する 15 分のチョークトーク形式のプレゼンテーションを準備する。
 
-3. Determine how you will respond to the customer's objections.
+## ステップ 3: ソリューションをプレゼンテーションする
 
-Prepare a 15-minute chalk-talk style presentation to the customer.
+**成果**
 
-## Step 3: Present the solution
+顧客の対象者にソリューションを 15 分のチョークトーク形式でプレゼンテーションする
 
-**Outcome**
+所要時間: 30 分
 
-Present a solution to the target customer audience in a 15-minute chalk-talk format.
+**プレゼンテーション**
 
-Timeframe: 30 minutes
+指示:
 
-**Presentation**
+1. 別のテーブルとペアを組む
 
-Directions:
+2. 一方のテーブルはマイクロソフト チーム、他方のテーブルは顧客とする
 
-1. Pair with another table.
+3. マイクロソフト チームは提案ソリューションを顧客にプレゼンテーションする
 
-2. One table is the Microsoft team and the other table is the customer.
+4. 顧客は反論リストから反論を 1 つ行う
 
-3. The Microsoft team presents their proposed solution to the customer.
+5. マイクロソフト チームは反論に回答する
 
-4. The customer makes one of the objections from the list of objections.
+6. 顧客チームはマイクロソフト チームにフィードバックを提供する
 
-5. The Microsoft team responds to the objection.
+7. テーブル間で役割を切り替えて、ステップ 2 ～ 6 を繰り返す
 
-6. The customer team gives feedback to the Microsoft team.
+## まとめ
 
-7. Tables switch roles and repeat Steps 2-6.
+所要時間: 15 分
 
-## Wrap-up
+指示: より大きなグループでテーブルに再度集まり、ファシリテーター/SME がこのケース スタディの推奨ソリューションを共有するのを聞きます。
 
-Timeframe: 15 minutes
+## 追加リファレンス
 
-Directions: Tables reconvene with the larger group to hear the facilitator/SME share the preferred solution for the case study.
+| | |
+|----------|----------
+| **説明** | **リンク**
+| Azure で適切な SQL Server オプションを選択する| <https://docs.microsoft.com/azure/azure-sql/azure-sql-iaas-vs-paas-what-is-overview>
+| サービスとしての SQL Database プラットフォーム| <https://docs.microsoft.com/azure/azure-sql/database/sql-database-paas-overview>
+| ビジネス継続性| <https://docs.microsoft.com/azure/azure-sql/database/business-continuity-high-availability-disaster-recover-hadr-overview>
+| 高可用性| <https://docs.microsoft.com/azure/azure-sql/database/high-availability-sla>
+| 自動バックアップ| <https://docs.microsoft.com/azure/azure-sql/database/automated-backups-overview>
+| 長期的なバックアップ保有期間| <https://docs.microsoft.com/azure/azure-sql/database/long-term-retention-overview>
+| 自動フェールオーバー| <https://docs.microsoft.com/azure/azure-sql/database/auto-failover-group-overview>
+| リソースのスケーリング| <https://docs.microsoft.com/azure/azure-sql/database/scale-resources>
+| 機能比較: Azure SQL Database と SQL Server| <https://docs.microsoft.com/azure/azure-sql/database/features-comparison>
+| Azure SQL Managed Instance| <https://docs.microsoft.com/azure/azure-sql/managed-instance/sql-managed-instance-paas-overview>
+| SQL MI 用の接続アーキテクチャ| <https://docs.microsoft.com/azure/azure-sql/managed-instance/connectivity-architecture-overview>
+| アプリを SQL MI に接続する| <https://docs.microsoft.com/azure/azure-sql/managed-instance/connect-application-instance>
+| Azure SQL Database サービス レベル| <https://docs.microsoft.com/azure/azure-sql/database/service-tiers-general-purpose-business-critical>
+| Azure SQL MI の概要| <https://docs.microsoft.com/azure/azure-sql/managed-instance/quickstart-content-reference-guide>
+| データベース移行ガイド| <https://datamigration.microsoft.com>
+| Database Migration Assistant| <https://docs.microsoft.com/sql/dma/dma-overview?view=azuresqldb-mi-current>
+| Azure Database Migration Service| <https://docs.microsoft.com/azure/dms/dms-overview>
+| SQL Server から Azure SQL Managed Instance への移行| <https://datamigration.microsoft.com/scenario/sql-to-azuresqldbmi>
+| Azure SQL Managed Instance への移行| <https://docs.microsoft.com/azure/dms/tutorial-sql-server-to-managed-instance?toc=/azure/sql-database/toc.json>
+| DMS を使用した SQL Server から Azure SQL Managed Instance への移行| <https://docs.microsoft.com/azure/dms/tutorial-sql-server-managed-instance-online?view=sql-server-2017>
+| Azure SQL Database の価格| <https://azure.microsoft.com/pricing/details/sql-database/managed>
+| Azure SQL Database のセキュリティ機能の概要| <https://docs.microsoft.com/azure/azure-sql/database/security-overview>
+| Advanced Data Security| <https://docs.microsoft.com/azure/azure-sql/database/advanced-data-security>
+| データの検出および分類| <https://docs.microsoft.com/azure/azure-sql/database/data-discovery-and-classification-overview>
+| SQL 脆弱性評価サービス| <https://docs.microsoft.com/azure/azure-sql/database/sql-vulnerability-assessment>
+| 脅威検出| <https://docs.microsoft.com/azure/azure-sql/database/threat-detection-overview>
+| SQL Database 読み取りスケールアウト| <https://docs.microsoft.com/azure/azure-sql/database/read-scale-out>
 
-## Additional references
-
-|                                                               |                                                                                                                            |
-| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| **Description**                                               | **Link**                                                                                                                   |
-| Choosing the right SQL Server option in Azure                 | <https://docs.microsoft.com/azure/azure-sql/azure-sql-iaas-vs-paas-what-is-overview>                                       |
-| SQL Database Platform as a Service                            | <https://docs.microsoft.com/azure/azure-sql/database/sql-database-paas-overview>                                           |
-| Business continuity                                           | <https://docs.microsoft.com/azure/azure-sql/database/business-continuity-high-availability-disaster-recover-hadr-overview> |
-| High availability                                             | <https://docs.microsoft.com/azure/azure-sql/database/high-availability-sla>                                                |
-| Automated backups                                             | <https://docs.microsoft.com/azure/azure-sql/database/automated-backups-overview>                                           |
-| Long-term back retention                                      | <https://docs.microsoft.com/azure/azure-sql/database/long-term-retention-overview>                                         |
-| Auto-failover                                                 | <https://docs.microsoft.com/azure/azure-sql/database/auto-failover-group-overview>                                         |
-| Scale resources                                               | <https://docs.microsoft.com/azure/azure-sql/database/scale-resources>                                                      |
-| Feature comparison: Azure SQL Database versus SQL Server      | <https://docs.microsoft.com/azure/azure-sql/database/features-comparison>                                                  |
-| Azure SQL Managed Instance                                    | <https://docs.microsoft.com/azure/azure-sql/managed-instance/sql-managed-instance-paas-overview>                           |
-| Connectivity architecture for SQL MI                          | <https://docs.microsoft.com/azure/azure-sql/managed-instance/connectivity-architecture-overview>                           |
-| Connecting an app to SQL MI                                   | <https://docs.microsoft.com/azure/azure-sql/managed-instance/connect-application-instance>                                 |
-| Azure SQL Database service tiers                              | <https://docs.microsoft.com/azure/azure-sql/database/service-tiers-general-purpose-business-critical>                      |
-| Getting started with Azure SQL MI                             | <https://docs.microsoft.com/azure/azure-sql/managed-instance/quickstart-content-reference-guide>                           |
-| Database Migration Guide                                      | <https://datamigration.microsoft.com>                                                                                      |
-| Database Migration Assistant                                  | <https://docs.microsoft.com/sql/dma/dma-overview?view=azuresqldb-mi-current>                                               |
-| Azure Database Migration Service                              | <https://docs.microsoft.com/azure/dms/dms-overview>                                                                        |
-| Migrate SQL Server to an Azure SQL Managed Instance           | <https://datamigration.microsoft.com/scenario/sql-to-azuresqldbmi>                                                         |
-| Migrate to Azure SQL Managed Instance                         | <https://docs.microsoft.com/azure/dms/tutorial-sql-server-to-managed-instance?toc=/azure/sql-database/toc.json>            |
-| Migrate SQL Server to an Azure SQL Managed Instance using DMS | <https://docs.microsoft.com/azure/dms/tutorial-sql-server-managed-instance-online?view=sql-server-2017>                    |
-| Azure SQL Database pricing                                    | <https://azure.microsoft.com/pricing/details/sql-database/managed>                                                         |
-| Overview of Azure SQL Database security capabilities          | <https://docs.microsoft.com/azure/azure-sql/database/security-overview>                                                    |
-| Advanced data security                                        | <https://docs.microsoft.com/azure/azure-sql/database/advanced-data-security>                                               |
-| Data discovery and classification                             | <https://docs.microsoft.com/azure/azure-sql/database/data-discovery-and-classification-overview>                           |
-| SQL Vulnerability Assessment service                          | <https://docs.microsoft.com/azure/azure-sql/database/sql-vulnerability-assessment>                                         |
-| Threat detection                                              | <https://docs.microsoft.com/azure/azure-sql/database/threat-detection-overview>                                            |
-| SQL Database Read Scale-Out                                   | <https://docs.microsoft.com/azure/azure-sql/database/read-scale-out>                                                       |
