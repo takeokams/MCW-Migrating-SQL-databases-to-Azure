@@ -126,7 +126,7 @@ Microsoft および <https://www.microsoft.com/en-us/legal/intellectualproperty/
    
    ![選択されたサブスクリプションで SQL MI を作成できないことを知らせるメッセージが表示されている。](media/sql-mi-creation-not-available.png "SQL MI を作成できないことを知らせるメッセージ")
    
-   > **注**: "Managed instance creation is not available for the chosen subscription type" というメッセージが表示されている場合、[SQL Managed Instance のクォータを増加させる](https://docs.microsoft.com/azure/sql-database/sql-database-managed-instance-resource-limits#obtaining-a-larger-quota-for-sql-managed-instance)手順を実行してから、次のステップに進みます。
+   > **注**: Business Critical、vCore 16、32 GBで、指定のリージョンをセットして確認してください。もし東日本リージョンなどで作成できない場合は、米国など他のリージョンを指定することで作成できることがあります。その際は、先に作成したリソース グループのリージョンもそれに合わせる必要があります。リージョンを変更することだけで対応できないような"Managed instance creation is not available for the chosen subscription type" というメッセージが表示されている場合、[SQL Managed Instance のクォータを増加させる](https://docs.microsoft.com/azure/sql-database/sql-database-managed-instance-resource-limits#obtaining-a-larger-quota-for-sql-managed-instance)手順を実行してから、次のステップに進みます。
 
 5. これで、ARM テンプレートの展開を開始する準備が整いました。下の \[Deploy to Azure\] ボタンを選択して、Azure portal で \[Custom deployment\] 画面を開きます。
    
@@ -158,6 +158,6 @@ Microsoft および <https://www.microsoft.com/en-us/legal/intellectualproperty/
    
    ![\[hands-on-lab-SUFFIX\] リソース グループの左側のメニューでメニュー項目 \[Deployments\] が選択され、展開名 Microsoft.Template が強調表示されている。](media/resource-group-deployments.png "リソース グループの展開")
 
-> 数時間後に再び確認して、SQL MI のプロビジョニングの進捗状況を監視します。プロビジョニングが 7 時間以上続いている場合は、Azure portal でサポート チケットを発行して、プロビジョニング プロセスのブロック解除を Microsoft サポートに依頼する必要がある可能性があります。
+> 数時間後に再び確認して、SQL MI のプロビジョニングの進捗状況を監視します。プロビジョニングが 7 時間以上続いている場合は、Azure portal でサポート チケットを発行して、プロビジョニング プロセスのブロック解除を Microsoft サポートに依頼する必要がある可能性があります。タイムアウトする場合は、[手動によるリソースのセットアップ ガイド](./Manual-resource-setup.md)を参考に、SQL MIを作成してください。SQL 2008 VM内のDBも作成されていない可能性があるので、その際はTailspinToys DBも作成してください。
 
 ここで挙げられた手順のすべては、ハンズオン ラボの "参加前" に行う必要があります。

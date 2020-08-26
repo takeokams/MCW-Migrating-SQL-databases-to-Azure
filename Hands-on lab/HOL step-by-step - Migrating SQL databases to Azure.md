@@ -348,11 +348,11 @@ SQL MI では、Azure SQL Database のいくつかの機能を検証します。
    
    ![\[アカウント変更の確認\] ダイアログの \[はい\] ボタンが強調表示されている。](media/confirm-account-change.png "[アカウント変更の確認]")
 
-6. SQL Server (MSSQLSERVER) サービスの \[**ログオン**\] の値が `./sqlmiuser` に変更されたことを確認してください。
+6. SQL Server (MSSQLSERVER) サービスの \[**ログオン**\] の値が `.\sqlmiuser` に変更されたことを確認してください。
    
    ![SQL Server サービスのリストで、SQL Server (MSSQLSERVER) サービスが強調表示されている。](media/sql-server-service.png "SQL Server サービス")
 
-7. SQL Server Configurat ion Manager を閉じます。
+7. SQL Server Configuration Manager を閉じます。
 
 ### タスク 3: WWI TailspinToys データベースのバックアップを作成する
 
@@ -490,7 +490,7 @@ SQL MI では、Azure SQL Database のいくつかの機能を検証します。
 
 このタスクでは、DMS で新しいオンライン データ移行プロジェクトを WWI の `TailspinToys` データベース用に作成します。
 
-1. [Azure portal](https://portal.azure.com) で、左側のナビゲーション メニューから \[**Resource groups**\] を選んで **hands-on-lab-SUFFIX** リソース グループを選択し、続いてリソースのリストから **wwi-dms** Azure Database Migration Service を選択して、Azure Database Migration Service に移動します。
+1. [Azure portal](https://portal.azure.com) で、左側のナビゲーション メニューから \[**Resource groups**\] を選んで **hands-on-lab-SUFFIX** リソース グループを選択し、続いてリソースのリストから **wwi-dms** Azure Database Migration Service を選択して、Azure Database Migration Service に移動します。( **tailspin-dms** となっていることがあります)
    
    ![hands-on-lab-SUFFIX リソース グループのリソース リストで tailspin-dms Azure Database Migration Service が強調表示されている。](media/resource-group-dms-resource.png "リソース")
 
